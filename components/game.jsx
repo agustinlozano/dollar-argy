@@ -149,85 +149,103 @@ export function CrossyRoad() {
   const currentPosition = useRef({ currentRow: 0, currentTile: 0 });
 
   // Initialize game
-  // useEffect(() => {
-  //   // Create initial rows of grass
-  //   const initialRows = [];
-  //   for (let i = -9; i <= 10; i++) {
-  //     if (i < 0) {
-  //       initialRows.push({ type: "grass", rowIndex: i });
-  //     } else {
-  //       // Alternate between grass and road for testing
-  //       initialRows.push({ type: i % 2 === 0 ? "grass" : "road", rowIndex: i });
-  //     }
-  //   }
-  //   setRows(initialRows);
-  // }, []);
+  useEffect(() => {
+    // Create initial rows of grass
+    const initialRows = [];
+    for (let i = -9; i <= 10; i++) {
+      if (i < 0) {
+        initialRows.push({ type: "grass", rowIndex: i });
+      } else {
+        // Alternate between grass and road for testing
+        initialRows.push({ type: i % 2 === 0 ? "grass" : "road", rowIndex: i });
+      }
+    }
+    setRows(initialRows);
+  }, []);
 
-  // Procesa el siguiente movimiento cuando el actual termina
+  // Process next move from queue
   const processNextMove = () => {
+    console.log("Processing next move, queue:", movesQueue.current);
+
     if (movesQueue.current.length === 0) {
       setIsMoving(false);
       return;
     }
 
-    setIsMoving(true);
     const direction = movesQueue.current.shift();
     const tileSize = GAME_CONSTANTS.tileSize;
 
-    // Actualiza la posición lógica
-    if (direction === "forward") currentPosition.current.currentRow += 1;
-    if (direction === "backward") currentPosition.current.currentRow -= 1;
-    if (direction === "left") currentPosition.current.currentTile -= 1;
-    if (direction === "right") currentPosition.current.currentTile += 1;
+    // Update logical position
+    let newRow = currentPosition.current.currentRow;
+    let newTile = currentPosition.current.currentTile;
 
-    // Actualiza la posición visual
-    let newX = currentPosition.current.currentTile * tileSize;
-    let newY = currentPosition.current.currentRow * tileSize;
-    setPlayerPosition({ x: newX, y: newY });
+    if (direction === "forward") newRow += 1;
+    if (direction === "backward") newRow -= 1;
+    if (direction === "left") newTile -= 1;
+    if (direction === "right") newTile += 1;
 
-    // Actualiza la rotación
+    // Update current position reference
+    currentPosition.current = { currentRow: newRow, currentTile: newTile };
+
+    // Update visual position and rotation
+    const newX = newTile * tileSize;
+    const newY = newRow * tileSize;
+
     let newRotation = 0;
     if (direction === "forward") newRotation = 0;
     if (direction === "left") newRotation = Math.PI / 2;
     if (direction === "right") newRotation = -Math.PI / 2;
     if (direction === "backward") newRotation = Math.PI;
+
+    console.log(`Moving ${direction} to position:`, { x: newX, y: newY });
+
+    // Set new position and rotation to trigger animation
+    setPlayerPosition({ x: newX, y: newY });
     setPlayerRotation(newRotation);
+    setIsMoving(true);
 
-    // Actualiza el score si avanza
+    // Update score if moving forward
     if (direction === "forward") {
-      setScore(currentPosition.current.currentRow);
+      setScore(newRow);
 
-      // Añadir más filas si es necesario
-      if (currentPosition.current.currentRow > rows.length - 10) {
-        // Lógica para añadir más filas
+      // Add more rows if needed
+      if (newRow > rows.length - 10) {
         addMoreRows();
       }
     }
   };
 
-  // Maneja cuando termina un movimiento
+  // Handler for when a move animation completes
   const handleMoveComplete = () => {
-    processNextMove();
+    console.log("Move complete callback received");
+    // Wait a small timeout to ensure state updates are processed
+    setTimeout(() => {
+      processNextMove();
+    }, 50);
   };
 
-  // Función para añadir filas adicionales (similar al addRows del código original)
+  // Add more rows (placeholder function)
   const addMoreRows = () => {
-    // Tu lógica para generar nuevas filas aleatorias
-    // ...
+    // Add your logic for generating new rows
+    console.log("Would add more rows here");
   };
 
-  // Función para encolar un nuevo movimiento
+  // Queue a new movement
   const queueMove = (direction) => {
-    // Podrías añadir validaciones como en el código original para comprobar
-    // si es un movimiento válido antes de añadirlo a la cola
+    console.log("Queueing move:", direction);
 
+    // You could add validation here
+
+    // Add move to queue
     movesQueue.current.push(direction);
 
+    // If not currently moving, process this move immediately
     if (!isMoving) {
       processNextMove();
     }
   };
 
+  // Handler for control button clicks
   const handleMove = (direction) => {
     queueMove(direction);
   };

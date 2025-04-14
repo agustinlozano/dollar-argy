@@ -2,8 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 
-// Player component with animation
-export function Player({ position, rotation, jumpHeight = 8 }) {
+export function Player({ position, rotation, jumpHeight = 8, onMoveComplete }) {
   const playerRef = useRef();
   const groupRef = useRef();
 
@@ -11,41 +10,27 @@ export function Player({ position, rotation, jumpHeight = 8 }) {
   const [targetPosition, setTargetPosition] = useState({ x: 0, y: 0 });
   const [targetRotation, setTargetRotation] = useState(0);
   const [isMoving, setIsMoving] = useState(false);
-  const [progress, setProgress] = useState(0);
   const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
   const [startRotation, setStartRotation] = useState(0);
 
-  // Clock for animation timing
-  const clock = useRef({
+  // Animation progress
+  const animationState = useRef({
+    progress: 0,
     time: 0,
     running: false,
+    stepTime: 0.2, // Seconds per step
   });
 
-  // When position prop changes, start animation
+  // Initialize player position on first render
   useEffect(() => {
     if (playerRef.current) {
-      setTargetPosition({ x: position.x, y: position.y });
-      setTargetRotation(rotation);
-
-      if (!isMoving) {
-        setStartPosition({
-          x: playerRef.current.position.x,
-          y: playerRef.current.position.y,
-        });
-        setStartRotation(groupRef.current.rotation.z);
-        setIsMoving(true);
-        clock.current.time = 0;
-        clock.current.running = true;
-      }
-    }
-  }, [position, rotation]);
-
-  // Initial positioning
-  useEffect(() => {
-    if (playerRef.current && !isMoving) {
       playerRef.current.position.x = position.x;
       playerRef.current.position.y = position.y;
-      groupRef.current.rotation.z = rotation;
+
+      if (groupRef.current) {
+        groupRef.current.rotation.z = rotation;
+      }
+
       setTargetPosition({ x: position.x, y: position.y });
       setStartPosition({ x: position.x, y: position.y });
       setTargetRotation(rotation);
@@ -53,50 +38,107 @@ export function Player({ position, rotation, jumpHeight = 8 }) {
     }
   }, []);
 
+  // Detect changes in target position or rotation
+  useEffect(() => {
+    if (!playerRef.current) return;
+
+    // Only start a new movement if the position actually changed
+    if (
+      targetPosition.x === position.x &&
+      targetPosition.y === position.y &&
+      targetRotation === rotation
+    ) {
+      return;
+    }
+
+    // Set new target position and rotation
+    setTargetPosition({ x: position.x, y: position.y });
+    setTargetRotation(rotation);
+
+    // Set current position as start position
+    setStartPosition({
+      x: playerRef.current.position.x,
+      y: playerRef.current.position.y,
+    });
+
+    // Set current rotation as start rotation
+    setStartRotation(groupRef.current.rotation.z);
+
+    // Start animation
+    setIsMoving(true);
+    animationState.current.time = 0;
+    animationState.current.progress = 0;
+    animationState.current.running = true;
+
+    // Debug
+    console.log(
+      "Starting move from",
+      { x: playerRef.current.position.x, y: playerRef.current.position.y },
+      "to",
+      { x: position.x, y: position.y }
+    );
+  }, [position, rotation]);
+
   // Animation frame
   useFrame((state, delta) => {
-    if (isMoving && clock.current.running) {
-      // Update time and progress
-      clock.current.time += delta;
-      const stepTime = 0.2; // Same as in original code (seconds)
-      const newProgress = Math.min(1, clock.current.time / stepTime);
-      setProgress(newProgress);
+    if (!isMoving || !animationState.current.running) return;
 
-      // Update position with lerp
+    // Update animation time and progress
+    animationState.current.time += delta;
+    const progress = Math.min(
+      1,
+      animationState.current.time / animationState.current.stepTime
+    );
+    animationState.current.progress = progress;
+
+    // Update position with smooth interpolation
+    if (playerRef.current) {
+      playerRef.current.position.x = THREE.MathUtils.lerp(
+        startPosition.x,
+        targetPosition.x,
+        progress
+      );
+
+      playerRef.current.position.y = THREE.MathUtils.lerp(
+        startPosition.y,
+        targetPosition.y,
+        progress
+      );
+
+      // Add bounce effect
+      playerRef.current.position.z = Math.sin(progress * Math.PI) * jumpHeight;
+    }
+
+    // Update rotation with smooth interpolation
+    if (groupRef.current) {
+      groupRef.current.rotation.z = THREE.MathUtils.lerp(
+        startRotation,
+        targetRotation,
+        progress
+      );
+    }
+
+    // Check if animation is complete
+    if (progress >= 1) {
+      // Reset animation state
+      animationState.current.running = false;
+      setIsMoving(false);
+
+      // Make sure final position is exact
       if (playerRef.current) {
-        playerRef.current.position.x = THREE.MathUtils.lerp(
-          startPosition.x,
-          targetPosition.x,
-          newProgress
-        );
-
-        playerRef.current.position.y = THREE.MathUtils.lerp(
-          startPosition.y,
-          targetPosition.y,
-          newProgress
-        );
-
-        // Add the bounce effect using sine wave
-        playerRef.current.position.z =
-          Math.sin(newProgress * Math.PI) * jumpHeight;
+        playerRef.current.position.x = targetPosition.x;
+        playerRef.current.position.y = targetPosition.y;
+        playerRef.current.position.z = 0;
       }
 
-      // Update rotation with lerp
       if (groupRef.current) {
-        groupRef.current.rotation.z = THREE.MathUtils.lerp(
-          startRotation,
-          targetRotation,
-          newProgress
-        );
+        groupRef.current.rotation.z = targetRotation;
       }
 
-      // End animation when complete
-      if (newProgress >= 1) {
-        setIsMoving(false);
-        clock.current.running = false;
-
-        // Notify parent component that movement is complete if needed
-        // onMoveComplete && onMoveComplete();
+      // Notify parent that move is complete
+      console.log("Move complete!");
+      if (onMoveComplete) {
+        onMoveComplete();
       }
     }
   });
