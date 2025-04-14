@@ -3,6 +3,7 @@ import { useState } from "react";
 import Controls from "@/components/game-controls";
 import Score from "@/components/game-score";
 import GameOverModal from "@/components/game-over";
+import { ModeToggle } from "@/app/theme-toggle";
 
 export default function GamePage() {
   const [score, setScore] = useState(0);
@@ -23,6 +24,7 @@ export default function GamePage() {
       <Score value={score} />
       <Controls onMove={handleMove} />
       <GameOverModal score={score} visible={gameOver} onRetry={handleRetry} />
+      <ModeToggle />
     </div>
   );
 }
