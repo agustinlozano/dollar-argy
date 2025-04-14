@@ -1,10 +1,23 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
+import { useTexture } from "@react-three/drei";
 
-export function Player({ position, rotation, jumpHeight = 8, onMoveComplete }) {
+export const Player = forwardRef(function PlayerBill(
+  { position, rotation, jumpHeight = 8, onMoveComplete },
+  ref
+) {
   const playerRef = useRef();
   const groupRef = useRef();
+
+  // Forward the ref to the parent component
+  useImperativeHandle(ref, () => playerRef.current);
 
   // Animation state
   const [targetPosition, setTargetPosition] = useState({ x: 0, y: 0 });
@@ -69,14 +82,6 @@ export function Player({ position, rotation, jumpHeight = 8, onMoveComplete }) {
     animationState.current.time = 0;
     animationState.current.progress = 0;
     animationState.current.running = true;
-
-    // Debug
-    console.log(
-      "Starting move from",
-      { x: playerRef.current.position.x, y: playerRef.current.position.y },
-      "to",
-      { x: position.x, y: position.y }
-    );
   }, [position, rotation]);
 
   // Animation frame
@@ -136,7 +141,6 @@ export function Player({ position, rotation, jumpHeight = 8, onMoveComplete }) {
       }
 
       // Notify parent that move is complete
-      console.log("Move complete!");
       if (onMoveComplete) {
         onMoveComplete();
       }
@@ -146,41 +150,18 @@ export function Player({ position, rotation, jumpHeight = 8, onMoveComplete }) {
   return (
     <group ref={playerRef} position={[0, 0, 0]}>
       <group ref={groupRef} rotation={[0, 0, 0]}>
-        {/* Player body */}
+        {/* Bill body */}
         <mesh castShadow receiveShadow position={[0, 0, 10]}>
-          <boxGeometry args={[15, 15, 20]} />
-          <meshLambertMaterial color="white" flatShading />
+          <boxGeometry args={[50, 25, 10]} />
+          <meshLambertMaterial color="#85BB65" flatShading />
         </mesh>
 
         {/* Player cap */}
         <mesh castShadow receiveShadow position={[0, 0, 21]}>
-          <boxGeometry args={[2, 4, 2]} />
+          <boxGeometry args={[1, 1, 1]} />
           <meshLambertMaterial color="#f0619a" flatShading />
         </mesh>
       </group>
     </group>
   );
-}
-
-// Old Player component
-// function Player({ position, rotation }) {
-//   const playerRef = useRef();
-
-//   return (
-//     <group ref={playerRef} position={[position.x, position.y, 0]}>
-//       <group rotation={[0, 0, rotation]}>
-//         {/* Player body */}
-//         <mesh castShadow receiveShadow position={[0, 0, 10]}>
-//           <boxGeometry args={[15, 15, 20]} />
-//           <meshLambertMaterial color="white" flatShading />
-//         </mesh>
-
-//         {/* Player cap */}
-//         <mesh castShadow receiveShadow position={[0, 0, 21]}>
-//           <boxGeometry args={[2, 4, 2]} />
-//           <meshLambertMaterial color="#f0619a" flatShading />
-//         </mesh>
-//       </group>
-//     </group>
-//   );
-// }
+});
