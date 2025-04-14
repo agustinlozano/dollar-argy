@@ -144,46 +144,92 @@ export function CrossyRoad() {
   const [playerRotation, setPlayerRotation] = useState(0);
   const [score, setScore] = useState(0);
   const [rows, setRows] = useState([]);
+  const [isMoving, setIsMoving] = useState(false);
+  const movesQueue = useRef([]);
+  const currentPosition = useRef({ currentRow: 0, currentTile: 0 });
 
   // Initialize game
-  useEffect(() => {
-    // Create initial rows of grass
-    const initialRows = [];
-    for (let i = -9; i <= 10; i++) {
-      if (i < 0) {
-        initialRows.push({ type: "grass", rowIndex: i });
-      } else {
-        // Alternate between grass and road for testing
-        initialRows.push({ type: i % 2 === 0 ? "grass" : "road", rowIndex: i });
+  // useEffect(() => {
+  //   // Create initial rows of grass
+  //   const initialRows = [];
+  //   for (let i = -9; i <= 10; i++) {
+  //     if (i < 0) {
+  //       initialRows.push({ type: "grass", rowIndex: i });
+  //     } else {
+  //       // Alternate between grass and road for testing
+  //       initialRows.push({ type: i % 2 === 0 ? "grass" : "road", rowIndex: i });
+  //     }
+  //   }
+  //   setRows(initialRows);
+  // }, []);
+
+  // Procesa el siguiente movimiento cuando el actual termina
+  const processNextMove = () => {
+    if (movesQueue.current.length === 0) {
+      setIsMoving(false);
+      return;
+    }
+
+    setIsMoving(true);
+    const direction = movesQueue.current.shift();
+    const tileSize = GAME_CONSTANTS.tileSize;
+
+    // Actualiza la posición lógica
+    if (direction === "forward") currentPosition.current.currentRow += 1;
+    if (direction === "backward") currentPosition.current.currentRow -= 1;
+    if (direction === "left") currentPosition.current.currentTile -= 1;
+    if (direction === "right") currentPosition.current.currentTile += 1;
+
+    // Actualiza la posición visual
+    let newX = currentPosition.current.currentTile * tileSize;
+    let newY = currentPosition.current.currentRow * tileSize;
+    setPlayerPosition({ x: newX, y: newY });
+
+    // Actualiza la rotación
+    let newRotation = 0;
+    if (direction === "forward") newRotation = 0;
+    if (direction === "left") newRotation = Math.PI / 2;
+    if (direction === "right") newRotation = -Math.PI / 2;
+    if (direction === "backward") newRotation = Math.PI;
+    setPlayerRotation(newRotation);
+
+    // Actualiza el score si avanza
+    if (direction === "forward") {
+      setScore(currentPosition.current.currentRow);
+
+      // Añadir más filas si es necesario
+      if (currentPosition.current.currentRow > rows.length - 10) {
+        // Lógica para añadir más filas
+        addMoreRows();
       }
     }
-    setRows(initialRows);
-  }, []);
+  };
+
+  // Maneja cuando termina un movimiento
+  const handleMoveComplete = () => {
+    processNextMove();
+  };
+
+  // Función para añadir filas adicionales (similar al addRows del código original)
+  const addMoreRows = () => {
+    // Tu lógica para generar nuevas filas aleatorias
+    // ...
+  };
+
+  // Función para encolar un nuevo movimiento
+  const queueMove = (direction) => {
+    // Podrías añadir validaciones como en el código original para comprobar
+    // si es un movimiento válido antes de añadirlo a la cola
+
+    movesQueue.current.push(direction);
+
+    if (!isMoving) {
+      processNextMove();
+    }
+  };
 
   const handleMove = (direction) => {
-    console.log("Moving:", direction);
-
-    // Simple movement logic based on original game
-    const tileSize = GAME_CONSTANTS.tileSize;
-    switch (direction) {
-      case "forward":
-        setPlayerPosition((prev) => ({ ...prev, y: prev.y + tileSize }));
-        setPlayerRotation(0);
-        setScore((prev) => prev + 1);
-        break;
-      case "backward":
-        setPlayerPosition((prev) => ({ ...prev, y: prev.y - tileSize }));
-        setPlayerRotation(Math.PI);
-        break;
-      case "left":
-        setPlayerPosition((prev) => ({ ...prev, x: prev.x - tileSize }));
-        setPlayerRotation(Math.PI / 2);
-        break;
-      case "right":
-        setPlayerPosition((prev) => ({ ...prev, x: prev.x + tileSize }));
-        setPlayerRotation(-Math.PI / 2);
-        break;
-    }
+    queueMove(direction);
   };
 
   return (
@@ -207,7 +253,11 @@ export function CrossyRoad() {
           )
         )}
 
-        <Player position={playerPosition} rotation={playerRotation} />
+        <Player
+          position={playerPosition}
+          rotation={playerRotation}
+          onMoveComplete={handleMoveComplete}
+        />
 
         {/* Optional - For debugging */}
         <axesHelper args={[100]} />
