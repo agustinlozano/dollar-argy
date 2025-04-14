@@ -1,9 +1,10 @@
-import Gameboard from "@/components/gameboard";
+import { CrossyRoad } from "@/components/game";
+// import Gameboard from "@/components/gameboard";
 
 export default function Home() {
   return (
-    <main className="grid font-[family-name:var(--font-geist-sans)]">
-      <Gameboard />
+    <main className="flex flex-col items-center justify-center">
+      <CrossyRoad />
     </main>
   );
 }
