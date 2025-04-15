@@ -19,7 +19,7 @@ export function ModeToggle() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          className="absolute top-5 right-5"
+          className="absolute top-5 right-5 z-10"
           variant="outline"
           size="icon"
         >
