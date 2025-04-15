@@ -1,3 +1,5 @@
+import { useRef, useEffect } from "react";
+
 // type RoadVariant = "default" | "desert" | "neon";
 
 // interface RoadProps {
@@ -30,27 +32,62 @@ export function Road({ rowIndex, variant = "default" }) {
   const tilesPerRow =
     GAME_CONSTANTS.maxTileIndex - GAME_CONSTANTS.minTileIndex + 1;
   const tileSize = GAME_CONSTANTS.tileSize;
-  const { middle, sides } = roadColors[variant];
+  const { middle, sides, line = "white" } = roadColors[variant];
+
+  const totalWidth = tilesPerRow * tileSize;
+
+  // Crear geometría de línea con longitud completa
+  const lineRef = useRef(null);
+
+  useEffect(() => {
+    if (lineRef.current) {
+      lineRef.current.computeLineDistances(); // Necesario para lineDashedMaterial
+    }
+  }, []);
 
   return (
     <group position={[0, rowIndex * tileSize, 0]}>
       {/* Middle section */}
       <mesh receiveShadow position={[0, 0, 1.5]}>
-        <boxGeometry args={[tilesPerRow * tileSize, tileSize, 3]} />
+        <boxGeometry args={[totalWidth, tileSize, 5]} />
         <meshLambertMaterial color={middle} flatShading />
       </mesh>
 
       {/* Left section */}
-      <mesh position={[-tilesPerRow * tileSize, 0, 1.5]}>
-        <boxGeometry args={[tilesPerRow * tileSize, tileSize, 3]} />
+      <mesh position={[-totalWidth, 0, 1.5]}>
+        <boxGeometry args={[totalWidth, tileSize, 5]} />
         <meshLambertMaterial color={sides} flatShading />
       </mesh>
 
       {/* Right section */}
-      <mesh position={[tilesPerRow * tileSize, 0, 1.5]}>
-        <boxGeometry args={[tilesPerRow * tileSize, tileSize, 3]} />
+      <mesh position={[totalWidth, 0, 1.5]}>
+        <boxGeometry args={[totalWidth, tileSize, 3]} />
         <meshLambertMaterial color={sides} flatShading />
       </mesh>
+
+      {/* Dashed line along right margin of middle section */}
+      <line
+        ref={lineRef}
+        position={[0, tileSize / 2, 5.5]} // margencito derecho
+        rotation={[0, 0, 0]}
+      >
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            count={2}
+            array={
+              new Float32Array([-totalWidth / 2, 0, 0, totalWidth / 2, 0, 0])
+            }
+            itemSize={3}
+          />
+        </bufferGeometry>
+        <lineDashedMaterial
+          color={line}
+          dashSize={20}
+          gapSize={10}
+          linewidth={2}
+        />
+      </line>
     </group>
   );
 }
