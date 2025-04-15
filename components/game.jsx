@@ -1,11 +1,22 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Canvas, useThree } from "@react-three/fiber";
-import { OrthographicCamera } from "@react-three/drei";
-import * as THREE from "three";
-import Controls from "./game-controls";
+import { Canvas } from "@react-three/fiber";
 import { Player } from "./game-player";
+import { Controls } from "./game-controls";
+import { GameCamera } from "./game-camera";
+import { AxisHelper2D } from "./scenario-axis-helper";
+import { Road } from "./game-road";
+import {
+  ObstacleObj,
+  generateObstacle,
+  generateRewards,
+} from "./game-obj-tree";
+import { getRandomTerrainType } from "./game-utils";
+import { MoneyChest } from "./game-obj-money-chest";
+import { GoldCoin } from "./game-obj-gold-coin";
+import { RewardVoucher } from "./game-obj-reward-voucher";
+// import { OrbitControls } from "@react-three/drei";
 
 // Game constants
 const GAME_CONSTANTS = {
@@ -13,41 +24,6 @@ const GAME_CONSTANTS = {
   maxTileIndex: 8,
   tileSize: 42,
 };
-
-// Custom camera that actually sets up correctly
-function GameCamera() {
-  const cameraRef = useRef();
-  const { size } = useThree();
-
-  // Compute camera dimensions using the same logic as original code
-  const baseSize = 300;
-  const viewRatio = size.width / size.height;
-  const width = viewRatio < 1 ? baseSize : baseSize * viewRatio;
-  const height = viewRatio < 1 ? baseSize / viewRatio : baseSize;
-
-  useEffect(() => {
-    if (!cameraRef.current) return;
-
-    // Important: we need to set up properly after the camera is created
-    cameraRef.current.up.set(0, 0, 1);
-    cameraRef.current.position.set(300, -300, 300);
-    cameraRef.current.lookAt(0, 0, 0);
-    cameraRef.current.updateProjectionMatrix();
-  }, []);
-
-  return (
-    <OrthographicCamera
-      ref={cameraRef}
-      makeDefault
-      left={width / -2}
-      right={width / 2}
-      top={height / 2}
-      bottom={height / -2}
-      near={100}
-      far={900}
-    />
-  );
-}
 
 // Grass tile component
 function Grass({ rowIndex }) {
@@ -60,48 +36,19 @@ function Grass({ rowIndex }) {
       {/* Middle section */}
       <mesh receiveShadow position={[0, 0, 1.5]}>
         <boxGeometry args={[tilesPerRow * tileSize, tileSize, 3]} />
-        <meshLambertMaterial color="#baf455" flatShading />
+        <meshLambertMaterial color="#e8f1f2" flatShading />
       </mesh>
 
       {/* Left section */}
       <mesh position={[-tilesPerRow * tileSize, 0, 1.5]}>
         <boxGeometry args={[tilesPerRow * tileSize, tileSize, 3]} />
-        <meshLambertMaterial color="#99c846" flatShading />
+        <meshLambertMaterial color="#C7C9C9" flatShading />
       </mesh>
 
       {/* Right section */}
       <mesh position={[tilesPerRow * tileSize, 0, 1.5]}>
         <boxGeometry args={[tilesPerRow * tileSize, tileSize, 3]} />
-        <meshLambertMaterial color="#99c846" flatShading />
-      </mesh>
-    </group>
-  );
-}
-
-// Road tile component
-function Road({ rowIndex }) {
-  const tilesPerRow =
-    GAME_CONSTANTS.maxTileIndex - GAME_CONSTANTS.minTileIndex + 1;
-  const tileSize = GAME_CONSTANTS.tileSize;
-
-  return (
-    <group position={[0, rowIndex * tileSize, 0]}>
-      {/* Middle section */}
-      <mesh receiveShadow position={[0, 0, 1.5]}>
-        <boxGeometry args={[tilesPerRow * tileSize, tileSize, 3]} />
-        <meshLambertMaterial color="#454a59" flatShading />
-      </mesh>
-
-      {/* Left section */}
-      <mesh position={[-tilesPerRow * tileSize, 0, 1.5]}>
-        <boxGeometry args={[tilesPerRow * tileSize, tileSize, 3]} />
-        <meshLambertMaterial color="#393d49" flatShading />
-      </mesh>
-
-      {/* Right section */}
-      <mesh position={[tilesPerRow * tileSize, 0, 1.5]}>
-        <boxGeometry args={[tilesPerRow * tileSize, tileSize, 3]} />
-        <meshLambertMaterial color="#393d49" flatShading />
+        <meshLambertMaterial color="#C7C9C9" flatShading />
       </mesh>
     </group>
   );
@@ -147,26 +94,53 @@ export function CrossyRoad() {
   const [isMoving, setIsMoving] = useState(false);
   const movesQueue = useRef([]);
   const currentPosition = useRef({ currentRow: 0, currentTile: 0 });
+  const playerRef = useRef();
 
-  // Initialize game
+  // En la inicialización de filas:
   useEffect(() => {
-    // Create initial rows of grass
     const initialRows = [];
-    for (let i = -9; i <= 10; i++) {
+
+    for (let i = -9; i <= 50; i++) {
       if (i < 0) {
-        initialRows.push({ type: "grass", rowIndex: i });
+        initialRows.push({
+          type: "grass",
+          rowIndex: i,
+          trees: [],
+          rewards: [],
+        });
       } else {
-        // Alternate between grass and road for testing
-        initialRows.push({ type: i % 2 === 0 ? "grass" : "road", rowIndex: i });
+        const type = getRandomTerrainType();
+        console.log("type", type);
+
+        if (type === "road") {
+          initialRows.push({
+            type: "road",
+            variant: "default",
+            rowIndex: i,
+          });
+        } else if (type === "forest") {
+          initialRows.push({
+            type: "grass",
+            rowIndex: i,
+            trees: generateObstacle(),
+            rewards: generateRewards(),
+          });
+        } else {
+          initialRows.push({
+            type: "grass",
+            rowIndex: i,
+            trees: [],
+            rewards: [],
+          });
+        }
       }
     }
+
     setRows(initialRows);
   }, []);
 
   // Process next move from queue
   const processNextMove = () => {
-    console.log("Processing next move, queue:", movesQueue.current);
-
     if (movesQueue.current.length === 0) {
       setIsMoving(false);
       return;
@@ -234,6 +208,8 @@ export function CrossyRoad() {
   const queueMove = (direction) => {
     console.log("Queueing move:", direction);
 
+    if (movesQueue.current.length > 1) return;
+
     // You could add validation here
 
     // Add move to queue
@@ -259,19 +235,73 @@ export function CrossyRoad() {
       </div>
 
       <Canvas shadows>
-        <GameCamera />
+        <GameCamera target={playerRef} />
         <GameLights />
 
         {/* Map rows */}
         {rows.map((row, index) =>
-          row.type === "grass" ? (
-            <Grass key={`row-${index}`} rowIndex={row.rowIndex} />
+          row.type === "road" ? (
+            <Road
+              key={row.rowIndex}
+              rowIndex={row.rowIndex}
+              variant={row.variant}
+            />
           ) : (
-            <Road key={`row-${index}`} rowIndex={row.rowIndex} />
+            <group key={row.rowIndex}>
+              <Grass rowIndex={row.rowIndex} />
+              {row.trees &&
+                row.trees.map((tree, treeIndex) => (
+                  <ObstacleObj
+                    key={`tree-${row.rowIndex}-${treeIndex}`}
+                    tileIndex={tree.tileIndex}
+                    height={tree.height}
+                    position={[
+                      tree.tileIndex * GAME_CONSTANTS.tileSize,
+                      row.rowIndex * GAME_CONSTANTS.tileSize,
+                      0,
+                    ]}
+                  />
+                ))}
+              {row.rewards &&
+                row.rewards.map((reward, rewardIndex) => {
+                  const position = [
+                    reward.tileIndex * GAME_CONSTANTS.tileSize,
+                    row.rowIndex * GAME_CONSTANTS.tileSize,
+                    reward.zOffset,
+                  ];
+
+                  switch (reward.type) {
+                    case "chest":
+                      return (
+                        <MoneyChest
+                          key={`chest-${row.rowIndex}-${rewardIndex}`}
+                          position={position}
+                        />
+                      );
+                    case "coin":
+                      return (
+                        <GoldCoin
+                          key={`coin-${row.rowIndex}-${rewardIndex}`}
+                          position={position}
+                        />
+                      );
+                    case "voucher":
+                      return (
+                        <RewardVoucher
+                          key={`voucher-${row.rowIndex}-${rewardIndex}`}
+                          position={position}
+                        />
+                      );
+                    default:
+                      return null;
+                  }
+                })}
+            </group>
           )
         )}
 
         <Player
+          ref={playerRef}
           position={playerPosition}
           rotation={playerRotation}
           onMoveComplete={handleMoveComplete}
@@ -279,6 +309,20 @@ export function CrossyRoad() {
 
         {/* Optional - For debugging */}
         <axesHelper args={[100]} />
+
+        {/* Scenario stuff */}
+        <AxisHelper2D
+          position={[100, -80, 1]}
+          rotation={[0, 0, Math.PI / 2]}
+          lengthX={1000}
+          wa
+          lengthY={500}
+          thickness={5}
+          colorX="#ffffff"
+          colorY="#ffffff"
+        />
+
+        {/* <OrbitControls makeDefault /> */}
       </Canvas>
 
       <Controls onMove={handleMove} />
