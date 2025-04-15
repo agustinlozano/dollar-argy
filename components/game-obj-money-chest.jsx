@@ -8,13 +8,13 @@ export function MoneyChest({ position = [0, 0, 0] }) {
       </mesh>
 
       {/* Tapa del cofre */}
-      <mesh castShadow receiveShadow position={[0, 0, 22]}>
+      <mesh castShadow receiveShadow position={[0, 0, 23]}>
         <boxGeometry args={[30, 20, 6]} />
         <meshLambertMaterial color="#A97452" flatShading />
       </mesh>
 
       {/* Cerradura */}
-      <mesh position={[0, 10, 15]}>
+      <mesh position={[0, -10, 15]}>
         <boxGeometry args={[4, 4, 6]} />
         <meshLambertMaterial color="#FFD700" flatShading />
       </mesh>
