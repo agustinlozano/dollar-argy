@@ -16,8 +16,10 @@ import { getRandomTerrainType } from "./game-utils";
 import { MoneyChest } from "./game-obj-money-chest";
 import { GoldCoin } from "./game-obj-gold-coin";
 import { RewardVoucher } from "./game-obj-reward-voucher";
-// import { OrbitControls } from "@react-three/drei";
-
+import { PlayerDirectionalLight } from "./game-directional-light";
+import { OrbitControls } from "@react-three/drei";
+import { enviroment } from "@/lib/env-vars";
+import { PivotControls } from "@react-three/drei";
 // Game constants
 const GAME_CONSTANTS = {
   minTileIndex: -8,
@@ -51,37 +53,6 @@ function Grass({ rowIndex }) {
         <meshLambertMaterial color="#C7C9C9" flatShading />
       </mesh>
     </group>
-  );
-}
-
-// Game environment lights
-function GameLights() {
-  const dirLightRef = useRef();
-
-  useEffect(() => {
-    if (dirLightRef.current) {
-      dirLightRef.current.position.set(-100, -100, 200);
-      dirLightRef.current.up.set(0, 0, 1);
-    }
-  }, []);
-
-  return (
-    <>
-      <ambientLight intensity={0.5} />
-      <directionalLight
-        ref={dirLightRef}
-        intensity={1}
-        castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
-        shadow-camera-left={-400}
-        shadow-camera-right={400}
-        shadow-camera-top={400}
-        shadow-camera-bottom={-400}
-        shadow-camera-near={50}
-        shadow-camera-far={400}
-      />
-    </>
   );
 }
 
@@ -235,8 +206,9 @@ export function CrossyRoad() {
       </div>
 
       <Canvas shadows>
+        <ambientLight intensity={0.5} />
         <GameCamera target={playerRef} />
-        <GameLights />
+        <PlayerDirectionalLight playerPosition={playerPosition} />
 
         {/* Map rows */}
         {rows.map((row, index) =>
@@ -315,14 +287,22 @@ export function CrossyRoad() {
           position={[100, -80, 1]}
           rotation={[0, 0, Math.PI / 2]}
           lengthX={1000}
-          wa
-          lengthY={500}
+          lengthY={800}
           thickness={5}
           colorX="#ffffff"
           colorY="#ffffff"
         />
 
-        {/* <OrbitControls makeDefault /> */}
+        {enviroment === "development" && (
+          <OrbitControls
+            makeDefault
+            minDistance={100}
+            maxZoom={2}
+            minZoom={0.9}
+            maxPolarAngle={Math.PI / 2}
+            enablePan={true}
+          />
+        )}
       </Canvas>
 
       <Controls onMove={handleMove} />
