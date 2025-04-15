@@ -74,7 +74,7 @@ export function GameCamera({
       top={height / 2}
       bottom={height / -2}
       near={100}
-      far={900}
+      far={4000}
     />
   );
 }
