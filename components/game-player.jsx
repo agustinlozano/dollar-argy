@@ -4,6 +4,7 @@ import React, {
   useRef,
   forwardRef,
   useImperativeHandle,
+  useMemo,
 } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
@@ -16,6 +17,11 @@ export const Player = forwardRef(function PlayerBill(
   const playerRef = useRef();
   const groupRef = useRef();
 
+  const texture = useTexture("/hornero-bill.jpg");
+  const billWidth = 41.2;
+  const billHeight = 100;
+  const billDepth = 5;
+
   // Forward the ref to the parent component
   useImperativeHandle(ref, () => playerRef.current);
 
@@ -25,6 +31,18 @@ export const Player = forwardRef(function PlayerBill(
   const [isMoving, setIsMoving] = useState(false);
   const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
   const [startRotation, setStartRotation] = useState(0);
+
+  const materials = useMemo(
+    () => [
+      new THREE.MeshLambertMaterial({ color: "#dbad6a" }), // right
+      new THREE.MeshLambertMaterial({ color: "#dbad6a" }), // left
+      new THREE.MeshLambertMaterial({ color: "#dbad6a" }), // top
+      new THREE.MeshLambertMaterial({ color: "#dbad6a" }), // bottom
+      new THREE.MeshLambertMaterial({ map: texture }), // front (cara visible con textura)
+      new THREE.MeshLambertMaterial({ color: "#dbad6a" }), // back
+    ],
+    [texture]
+  );
 
   // Animation progress
   const animationState = useRef({
@@ -150,16 +168,13 @@ export const Player = forwardRef(function PlayerBill(
   return (
     <group ref={playerRef} position={[0, 0, 0]}>
       <group ref={groupRef} rotation={[0, 0, 0]}>
-        {/* Bill body */}
-        <mesh castShadow receiveShadow position={[0, 0, 10]}>
-          <boxGeometry args={[50, 25, 10]} />
-          <meshLambertMaterial color="#85BB65" flatShading />
-        </mesh>
-
-        {/* Player cap */}
-        <mesh castShadow receiveShadow position={[0, 0, 21]}>
-          <boxGeometry args={[1, 1, 1]} />
-          <meshLambertMaterial color="#f0619a" flatShading />
+        <mesh
+          castShadow
+          receiveShadow
+          position={[0, 0, billDepth / 2]}
+          material={materials}
+        >
+          <boxGeometry args={[billWidth, billHeight, billDepth]} />
         </mesh>
       </group>
     </group>
