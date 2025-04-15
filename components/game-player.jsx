@@ -9,6 +9,7 @@ import React, {
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
+import { PivotControls } from "@react-three/drei";
 
 export const Player = forwardRef(function PlayerBill(
   { position, rotation, jumpHeight = 8, onMoveComplete },
@@ -21,15 +22,34 @@ export const Player = forwardRef(function PlayerBill(
   const billWidth = 41.2;
   const billHeight = 100;
   const billDepth = 5;
+  const baseHeightForward = 25; // Altura base cuando se mueve hacia adelante/atrás
+  const baseHeightSideways = 50; // Altura base cuando se mueve hacia los lados
 
   // Forward the ref to the parent component
   useImperativeHandle(ref, () => playerRef.current);
 
+  // Determinar la altura base según la rotación
+  const getBaseHeight = (rot) => {
+    // Si la rotación es 0 o Math.PI (adelante/atrás), usar altura normal
+    // Si la rotación es Math.PI/2 o -Math.PI/2 (izquierda/derecha), usar altura mayor
+    return Math.abs(rot) === Math.PI / 2
+      ? baseHeightSideways
+      : baseHeightForward;
+  };
+
   // Animation state
-  const [targetPosition, setTargetPosition] = useState({ x: 0, y: 0 });
+  const [targetPosition, setTargetPosition] = useState({
+    x: 0,
+    y: 0,
+    z: baseHeightForward,
+  });
   const [targetRotation, setTargetRotation] = useState(0);
   const [isMoving, setIsMoving] = useState(false);
-  const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
+  const [startPosition, setStartPosition] = useState({
+    x: 0,
+    y: 0,
+    z: baseHeightForward,
+  });
   const [startRotation, setStartRotation] = useState(0);
 
   const materials = useMemo(
@@ -57,13 +77,14 @@ export const Player = forwardRef(function PlayerBill(
     if (playerRef.current) {
       playerRef.current.position.x = position.x;
       playerRef.current.position.y = position.y;
+      playerRef.current.position.z = baseHeightForward;
 
       if (groupRef.current) {
-        groupRef.current.rotation.z = rotation;
+        groupRef.current.rotation.y = Math.PI / 2;
       }
 
-      setTargetPosition({ x: position.x, y: position.y });
-      setStartPosition({ x: position.x, y: position.y });
+      setTargetPosition({ x: position.x, y: position.y, z: baseHeightForward });
+      setStartPosition({ x: position.x, y: position.y, z: baseHeightForward });
       setTargetRotation(rotation);
       setStartRotation(rotation);
     }
@@ -82,14 +103,18 @@ export const Player = forwardRef(function PlayerBill(
       return;
     }
 
+    // Determinar la altura base según la nueva rotación
+    const newBaseHeight = getBaseHeight(rotation);
+
     // Set new target position and rotation
-    setTargetPosition({ x: position.x, y: position.y });
+    setTargetPosition({ x: position.x, y: position.y, z: newBaseHeight });
     setTargetRotation(rotation);
 
     // Set current position as start position
     setStartPosition({
       x: playerRef.current.position.x,
       y: playerRef.current.position.y,
+      z: playerRef.current.position.z,
     });
 
     // Set current rotation as start rotation
@@ -128,8 +153,16 @@ export const Player = forwardRef(function PlayerBill(
         progress
       );
 
-      // Add bounce effect
-      playerRef.current.position.z = Math.sin(progress * Math.PI) * jumpHeight;
+      // Interpolar la altura Z entre la posición inicial y la final
+      playerRef.current.position.z = THREE.MathUtils.lerp(
+        startPosition.z,
+        targetPosition.z,
+        progress
+      );
+
+      // Agregar el efecto de salto
+      const jumpOffset = Math.sin(progress * Math.PI) * jumpHeight;
+      playerRef.current.position.z += jumpOffset;
     }
 
     // Update rotation with smooth interpolation
@@ -151,7 +184,7 @@ export const Player = forwardRef(function PlayerBill(
       if (playerRef.current) {
         playerRef.current.position.x = targetPosition.x;
         playerRef.current.position.y = targetPosition.y;
-        playerRef.current.position.z = 0;
+        playerRef.current.position.z = targetPosition.z; // Usar la altura objetivo
       }
 
       if (groupRef.current) {
@@ -166,17 +199,19 @@ export const Player = forwardRef(function PlayerBill(
   });
 
   return (
-    <group ref={playerRef} position={[0, 0, 0]}>
-      <group ref={groupRef} rotation={[0, 0, 0]}>
-        <mesh
-          castShadow
-          receiveShadow
-          position={[0, 0, billDepth / 2]}
-          material={materials}
-        >
-          <boxGeometry args={[billWidth, billHeight, billDepth]} />
-        </mesh>
-      </group>
+    <group ref={playerRef} position={[0, 0, baseHeightForward]}>
+      <PivotControls scale={45}>
+        <group ref={groupRef} rotation={[0, Math.PI / 2, 0]}>
+          <mesh
+            castShadow
+            receiveShadow
+            position={[0, 0, billDepth / 2]}
+            material={materials}
+          >
+            <boxGeometry args={[billWidth, billHeight, billDepth]} />
+          </mesh>
+        </group>
+      </PivotControls>
     </group>
   );
 });
