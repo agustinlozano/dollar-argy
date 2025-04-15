@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from "react";
 import { useThree, useFrame } from "@react-three/fiber";
 import { OrthographicCamera } from "@react-three/drei";
 import * as THREE from "three";
+import { enviroment } from "@/lib/env-vars";
 
 export function GameCamera({
   target,
@@ -74,7 +75,7 @@ export function GameCamera({
       top={height / 2}
       bottom={height / -2}
       near={100}
-      far={4000}
+      far={enviroment === "development" ? 4000 : 800}
     />
   );
 }
