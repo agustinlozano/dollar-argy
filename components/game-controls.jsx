@@ -1,7 +1,38 @@
 "use client";
+
+import { useEffect } from "react";
 import GameButton from "./game-button";
 
-export default function Controls({ onMove }) {
+export function Controls({ onMove }) {
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      const key = e.key.toLowerCase();
+      switch (key) {
+        case "arrowup":
+        case "w":
+          onMove("forward");
+          break;
+        case "arrowleft":
+        case "a":
+          onMove("left");
+          break;
+        case "arrowdown":
+        case "s":
+          onMove("backward");
+          break;
+        case "arrowright":
+        case "d":
+          onMove("right");
+          break;
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onMove]);
+
   return (
     <div className="absolute bottom-5 w-full flex justify-center items-end">
       <div className="grid grid-cols-3 gap-2 w-[160px]">
