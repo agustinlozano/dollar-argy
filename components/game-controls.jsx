@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import GameButton from "./game-button";
 
-export function Controls({ onMove }) {
+export function Controls({ onMove, onCastSpell }) {
   useEffect(() => {
     const handleKeyDown = (e) => {
       const key = e.key.toLowerCase();
@@ -29,9 +29,21 @@ export function Controls({ onMove }) {
       }
     };
 
+    const handleMouseDown = (e) => {
+      if (e.button === 0) {
+        // Left click
+        onCastSpell();
+      }
+    };
+
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onMove]);
+    window.addEventListener("mousedown", handleMouseDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("mousedown", handleMouseDown);
+    };
+  }, [onMove, onCastSpell]);
 
   return (
     <div className="absolute bottom-5 w-full flex justify-center items-end">
