@@ -1,28 +1,26 @@
 "use client";
 
-import React, { useState, useEffect, useRef, forwardRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
+
 import { Player } from "./game-player";
 import { Controls } from "./game-controls";
 import { GameCamera } from "./game-camera";
-import { AxisHelper2D } from "./scenario-axis-helper";
+import { Grass } from "./game-terrain-grass";
 import { Road } from "./game-road";
-import {
-  ObstacleObj,
-  generateObstacle,
-  generateRewards,
-} from "./game-obj-tree";
-import { getRandomTerrainType } from "./game-utils";
+import { AxisHelper2D } from "./scenario-axis-helper";
+import { ObstacleObj } from "./game-obj-tree";
 import { MoneyChest } from "./game-obj-money-chest";
 import { GoldCoin } from "./game-obj-gold-coin";
 import { RewardVoucher } from "./game-obj-reward-voucher";
 import { PlayerDirectionalLight } from "./game-directional-light";
-import { OrbitControls } from "@react-three/drei";
+import { SpellEffect } from "./game-spell";
+
 import { enviroment } from "@/lib/env-vars";
 
-// import { useGameStore } from "@/stores/gameStore";
+import { useGameStore } from "@/stores/useGameState";
 import { PivotControls } from "@react-three/drei";
-import { SpellEffect } from "./game-spell";
 
 // Game constants
 export const GAME_CONSTANTS = {
@@ -32,215 +30,194 @@ export const GAME_CONSTANTS = {
   initialRows: 50,
 };
 
-// Grass tile component
-function Grass({ rowIndex }) {
-  const tilesPerRow =
-    GAME_CONSTANTS.maxTileIndex - GAME_CONSTANTS.minTileIndex + 1;
-  const tileSize = GAME_CONSTANTS.tileSize;
-
-  return (
-    <group position={[0, rowIndex * tileSize, 0]}>
-      {/* Middle section */}
-      <mesh receiveShadow position={[0, 0, 1.5]}>
-        <boxGeometry args={[tilesPerRow * tileSize, tileSize, 3]} />
-        <meshLambertMaterial color="#e8f1f2" flatShading />
-      </mesh>
-
-      {/* Left section */}
-      <mesh position={[-tilesPerRow * tileSize, 0, 1.5]}>
-        <boxGeometry args={[tilesPerRow * tileSize, tileSize, 3]} />
-        <meshLambertMaterial color="#C7C9C9" flatShading />
-      </mesh>
-
-      {/* Right section */}
-      <mesh position={[tilesPerRow * tileSize, 0, 1.5]}>
-        <boxGeometry args={[tilesPerRow * tileSize, tileSize, 3]} />
-        <meshLambertMaterial color="#C7C9C9" flatShading />
-      </mesh>
-    </group>
-  );
-}
-
 // Main game component
 // Dollar Argy is a game where a thousand Peso Argentino bill
 // fights against a One Dollar Bill.
 export function DollarArgyGame() {
-  const [playerPosition, setPlayerPosition] = useState({ x: 0, y: 0 });
-  const [playerRotation, setPlayerRotation] = useState(0);
-  const [score, setScore] = useState(0);
-  const [rows, setRows] = useState([]);
-  const [isMoving, setIsMoving] = useState(false);
-  const [activeSpells, setActiveSpells] = useState([]);
-  const movesQueue = useRef([]);
-  const currentPosition = useRef({ currentRow: 0, currentTile: 0 });
+  const {
+    playerPosition,
+    playerRotation,
+    score,
+    rows,
+    activeSpells,
+    movePlayer,
+    castSpell,
+    removeSpell,
+    initializeRows,
+  } = useGameStore();
+
   const playerRef = useRef();
-  const spellIdCounter = useRef(0);
 
-  // En la inicialización de filas:
+  // Inicializar filas al montar el componente
   useEffect(() => {
-    const initialRows = [];
-
-    for (let i = -9; i <= GAME_CONSTANTS.initialRows; i++) {
-      if (i < 0) {
-        initialRows.push({
-          type: "grass",
-          rowIndex: i,
-          trees: [],
-          rewards: [],
-        });
-      } else {
-        const type = getRandomTerrainType();
-        console.log("type", type);
-
-        if (type === "road") {
-          initialRows.push({
-            type: "road",
-            variant: "default",
-            rowIndex: i,
-          });
-        } else if (type === "forest") {
-          initialRows.push({
-            type: "grass",
-            rowIndex: i,
-            trees: generateObstacle(),
-            rewards: generateRewards(),
-          });
-        } else {
-          initialRows.push({
-            type: "grass",
-            rowIndex: i,
-            trees: [],
-            rewards: [],
-          });
-        }
-      }
-    }
-
-    setRows(initialRows);
+    initializeRows();
   }, []);
 
-  // Process next move from queue
-  const processNextMove = () => {
-    if (movesQueue.current.length === 0) {
-      setIsMoving(false);
-      return;
-    }
+  // // En la inicialización de filas:
+  // useEffect(() => {
+  //   const initialRows = [];
 
-    const direction = movesQueue.current.shift();
-    const tileSize = GAME_CONSTANTS.tileSize;
+  //   for (let i = -9; i <= GAME_CONSTANTS.initialRows; i++) {
+  //     if (i < 0) {
+  //       initialRows.push({
+  //         type: "grass",
+  //         rowIndex: i,
+  //         trees: [],
+  //         rewards: [],
+  //       });
+  //     } else {
+  //       const type = getRandomTerrainType();
+  //       console.log("type", type);
 
-    // Update logical position
-    let newRow = currentPosition.current.currentRow;
-    let newTile = currentPosition.current.currentTile;
+  //       if (type === "road") {
+  //         initialRows.push({
+  //           type: "road",
+  //           variant: "default",
+  //           rowIndex: i,
+  //         });
+  //       } else if (type === "forest") {
+  //         initialRows.push({
+  //           type: "grass",
+  //           rowIndex: i,
+  //           trees: generateObstacle(),
+  //           rewards: generateRewards(),
+  //         });
+  //       } else {
+  //         initialRows.push({
+  //           type: "grass",
+  //           rowIndex: i,
+  //           trees: [],
+  //           rewards: [],
+  //         });
+  //       }
+  //     }
+  //   }
 
-    // Calculate potential new position
-    if (direction === "forward") newRow += 1;
-    if (direction === "backward") newRow -= 1;
-    if (direction === "left") newTile -= 1;
-    if (direction === "right") newTile += 1;
+  //   setRows(initialRows);
+  // }, []);
 
-    // Check movement limits
-    const isWithinLimits =
-      newTile >= -10 && // Left limit
-      newTile <= 10 && // Right limit
-      newRow >= -10 && // Backward limit
-      newRow <= 40; // Forward limit
+  // // Process next move from queue
+  // const processNextMove = () => {
+  //   if (movesQueue.current.length === 0) {
+  //     setIsMoving(false);
+  //     return;
+  //   }
 
-    // If movement is outside limits, cancel it
-    if (!isWithinLimits) {
-      console.log("Movement cancelled: Outside allowed area");
-      setIsMoving(false);
-      processNextMove(); // Process next move in queue if any
-      return;
-    }
+  //   const direction = movesQueue.current.shift();
+  //   const tileSize = GAME_CONSTANTS.tileSize;
 
-    // Update current position reference
-    currentPosition.current = { currentRow: newRow, currentTile: newTile };
+  //   // Update logical position
+  //   let newRow = currentPosition.current.currentRow;
+  //   let newTile = currentPosition.current.currentTile;
 
-    // Update visual position and rotation
-    const newX = newTile * tileSize;
-    const newY = newRow * tileSize;
+  //   // Calculate potential new position
+  //   if (direction === "forward") newRow += 1;
+  //   if (direction === "backward") newRow -= 1;
+  //   if (direction === "left") newTile -= 1;
+  //   if (direction === "right") newTile += 1;
 
-    let newRotation = 0;
-    if (direction === "forward") newRotation = 0;
-    if (direction === "left") newRotation = Math.PI / 2;
-    if (direction === "right") newRotation = -Math.PI / 2;
-    if (direction === "backward") newRotation = Math.PI;
+  //   // Check movement limits
+  //   const isWithinLimits =
+  //     newTile >= -10 && // Left limit
+  //     newTile <= 10 && // Right limit
+  //     newRow >= -10 && // Backward limit
+  //     newRow <= 40; // Forward limit
 
-    console.log(`Moving ${direction} to position:`, { x: newX, y: newY });
+  //   // If movement is outside limits, cancel it
+  //   if (!isWithinLimits) {
+  //     console.log("Movement cancelled: Outside allowed area");
+  //     setIsMoving(false);
+  //     processNextMove(); // Process next move in queue if any
+  //     return;
+  //   }
 
-    // Set new position and rotation to trigger animation
-    setPlayerPosition({ x: newX, y: newY });
-    setPlayerRotation(newRotation);
-    setIsMoving(true);
+  //   // Update current position reference
+  //   currentPosition.current = { currentRow: newRow, currentTile: newTile };
 
-    // Update score if moving forward
-    if (direction === "forward") {
-      // Add more rows if needed
-      if (newRow > rows.length - 10) {
-        addMoreRows();
-      }
-    }
-  };
+  //   // Update visual position and rotation
+  //   const newX = newTile * tileSize;
+  //   const newY = newRow * tileSize;
 
-  // Handler for when a move animation completes
-  const handleMoveComplete = () => {
-    console.log("Move complete callback received");
-    // Wait a small timeout to ensure state updates are processed
-    setTimeout(() => {
-      processNextMove();
-    }, 50);
-  };
+  //   let newRotation = 0;
+  //   if (direction === "forward") newRotation = 0;
+  //   if (direction === "left") newRotation = Math.PI / 2;
+  //   if (direction === "right") newRotation = -Math.PI / 2;
+  //   if (direction === "backward") newRotation = Math.PI;
 
-  // Add more rows (placeholder function)
-  const addMoreRows = () => {
-    // Add your logic for generating new rows
-    console.log("Would add more rows here");
-  };
+  //   console.log(`Moving ${direction} to position:`, { x: newX, y: newY });
 
-  // Queue a new movement
-  const queueMove = (direction) => {
-    console.log("Queueing move:", direction);
+  //   // Set new position and rotation to trigger animation
+  //   setPlayerPosition({ x: newX, y: newY });
+  //   setPlayerRotation(newRotation);
+  //   setIsMoving(true);
 
-    if (movesQueue.current.length > 1) return;
+  //   // Update score if moving forward
+  //   if (direction === "forward") {
+  //     // Add more rows if needed
+  //     if (newRow > rows.length - 10) {
+  //       addMoreRows();
+  //     }
+  //   }
+  // };
 
-    // You could add validation here
+  // // Handler for when a move animation completes
+  // const handleMoveComplete = () => {
+  //   console.log("Move complete callback received");
+  //   // Wait a small timeout to ensure state updates are processed
+  //   setTimeout(() => {
+  //     processNextMove();
+  //   }, 50);
+  // };
 
-    // Add move to queue
-    movesQueue.current.push(direction);
+  // // Add more rows (placeholder function)
+  // const addMoreRows = () => {
+  //   // Add your logic for generating new rows
+  //   console.log("Would add more rows here");
+  // };
 
-    // If not currently moving, process this move immediately
-    if (!isMoving) {
-      processNextMove();
-    }
-  };
+  // // Queue a new movement
+  // const queueMove = (direction) => {
+  //   console.log("Queueing move:", direction);
 
-  // Handler for control button clicks
-  const handleMove = (direction) => {
-    queueMove(direction);
-  };
+  //   if (movesQueue.current.length > 1) return;
 
-  const handleCastSpell = () => {
-    const spellId = spellIdCounter.current++;
-    const spellPosition = [
-      playerPosition.x,
-      playerPosition.y,
-      // TODO: 25 is bc the bill is 25 units tall use a constant
-      25 + 50, // Adjust height as needed
-    ];
+  //   // You could add validation here
 
-    setActiveSpells((spells) => [
-      ...spells,
-      {
-        id: spellId,
-        position: spellPosition,
-      },
-    ]);
-  };
+  //   // Add move to queue
+  //   movesQueue.current.push(direction);
 
-  const handleSpellComplete = (spellId) => {
-    setActiveSpells((spells) => spells.filter((spell) => spell.id !== spellId));
-  };
+  //   // If not currently moving, process this move immediately
+  //   if (!isMoving) {
+  //     processNextMove();
+  //   }
+  // };
+
+  // // Handler for control button clicks
+  // const handleMove = (direction) => {
+  //   queueMove(direction);
+  // };
+
+  // const handleCastSpell = () => {
+  //   const spellId = spellIdCounter.current++;
+  //   const spellPosition = [
+  //     playerPosition.x,
+  //     playerPosition.y,
+  //     // TODO: 25 is bc the bill is 25 units tall use a constant
+  //     25 + 50, // Adjust height as needed
+  //   ];
+
+  //   setActiveSpells((spells) => [
+  //     ...spells,
+  //     {
+  //       id: spellId,
+  //       position: spellPosition,
+  //     },
+  //   ]);
+  // };
+
+  // const handleSpellComplete = (spellId) => {
+  //   setActiveSpells((spells) => spells.filter((spell) => spell.id !== spellId));
+  // };
 
   return (
     <div className="relative w-full h-screen">
@@ -253,7 +230,7 @@ export function DollarArgyGame() {
       <Canvas shadows>
         <ambientLight intensity={0.5} />
         <GameCamera target={playerRef} />
-        <PlayerDirectionalLight playerPosition={playerPosition} />
+        <PlayerDirectionalLight />
 
         {/* Map rows */}
         {rows.map((row, index) =>
@@ -321,7 +298,6 @@ export function DollarArgyGame() {
           ref={playerRef}
           position={playerPosition}
           rotation={playerRotation}
-          onMoveComplete={handleMoveComplete}
         />
 
         {/* Render active spells */}
@@ -329,7 +305,7 @@ export function DollarArgyGame() {
           <SpellEffect
             key={spell.id}
             position={spell.position}
-            onComplete={() => handleSpellComplete(spell.id)}
+            onComplete={() => removeSpell(spell.id)}
           />
         ))}
 
@@ -359,7 +335,7 @@ export function DollarArgyGame() {
         )}
       </Canvas>
 
-      <Controls onMove={handleMove} onCastSpell={handleCastSpell} />
+      <Controls onMove={movePlayer} onCastSpell={castSpell} />
     </div>
   );
 }
