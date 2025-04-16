@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, forwardRef } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Player } from "./game-player";
 import { Controls } from "./game-controls";
@@ -19,12 +19,17 @@ import { RewardVoucher } from "./game-obj-reward-voucher";
 import { PlayerDirectionalLight } from "./game-directional-light";
 import { OrbitControls } from "@react-three/drei";
 import { enviroment } from "@/lib/env-vars";
+
+// import { useGameStore } from "@/stores/gameStore";
 import { PivotControls } from "@react-three/drei";
+import { SpellEffect } from "./game-spell";
+
 // Game constants
-const GAME_CONSTANTS = {
+export const GAME_CONSTANTS = {
   minTileIndex: -8,
   maxTileIndex: 8,
   tileSize: 42,
+  initialRows: 50,
 };
 
 // Grass tile component
@@ -57,21 +62,25 @@ function Grass({ rowIndex }) {
 }
 
 // Main game component
-export function CrossyRoad() {
+// Dollar Argy is a game where a thousand Peso Argentino bill
+// fights against a One Dollar Bill.
+export function DollarArgyGame() {
   const [playerPosition, setPlayerPosition] = useState({ x: 0, y: 0 });
   const [playerRotation, setPlayerRotation] = useState(0);
   const [score, setScore] = useState(0);
   const [rows, setRows] = useState([]);
   const [isMoving, setIsMoving] = useState(false);
+  const [activeSpells, setActiveSpells] = useState([]);
   const movesQueue = useRef([]);
   const currentPosition = useRef({ currentRow: 0, currentTile: 0 });
   const playerRef = useRef();
+  const spellIdCounter = useRef(0);
 
   // En la inicialización de filas:
   useEffect(() => {
     const initialRows = [];
 
-    for (let i = -9; i <= 50; i++) {
+    for (let i = -9; i <= GAME_CONSTANTS.initialRows; i++) {
       if (i < 0) {
         initialRows.push({
           type: "grass",
@@ -124,10 +133,26 @@ export function CrossyRoad() {
     let newRow = currentPosition.current.currentRow;
     let newTile = currentPosition.current.currentTile;
 
+    // Calculate potential new position
     if (direction === "forward") newRow += 1;
     if (direction === "backward") newRow -= 1;
     if (direction === "left") newTile -= 1;
     if (direction === "right") newTile += 1;
+
+    // Check movement limits
+    const isWithinLimits =
+      newTile >= -10 && // Left limit
+      newTile <= 10 && // Right limit
+      newRow >= -10 && // Backward limit
+      newRow <= 40; // Forward limit
+
+    // If movement is outside limits, cancel it
+    if (!isWithinLimits) {
+      console.log("Movement cancelled: Outside allowed area");
+      setIsMoving(false);
+      processNextMove(); // Process next move in queue if any
+      return;
+    }
 
     // Update current position reference
     currentPosition.current = { currentRow: newRow, currentTile: newTile };
@@ -151,8 +176,6 @@ export function CrossyRoad() {
 
     // Update score if moving forward
     if (direction === "forward") {
-      setScore(newRow);
-
       // Add more rows if needed
       if (newRow > rows.length - 10) {
         addMoreRows();
@@ -195,6 +218,28 @@ export function CrossyRoad() {
   // Handler for control button clicks
   const handleMove = (direction) => {
     queueMove(direction);
+  };
+
+  const handleCastSpell = () => {
+    const spellId = spellIdCounter.current++;
+    const spellPosition = [
+      playerPosition.x,
+      playerPosition.y,
+      // TODO: 25 is bc the bill is 25 units tall use a constant
+      25 + 50, // Adjust height as needed
+    ];
+
+    setActiveSpells((spells) => [
+      ...spells,
+      {
+        id: spellId,
+        position: spellPosition,
+      },
+    ]);
+  };
+
+  const handleSpellComplete = (spellId) => {
+    setActiveSpells((spells) => spells.filter((spell) => spell.id !== spellId));
   };
 
   return (
@@ -279,6 +324,15 @@ export function CrossyRoad() {
           onMoveComplete={handleMoveComplete}
         />
 
+        {/* Render active spells */}
+        {activeSpells.map((spell) => (
+          <SpellEffect
+            key={spell.id}
+            position={spell.position}
+            onComplete={() => handleSpellComplete(spell.id)}
+          />
+        ))}
+
         {/* Optional - For debugging */}
         <axesHelper args={[100]} />
 
@@ -293,19 +347,19 @@ export function CrossyRoad() {
           colorY="#ffffff"
         />
 
-        {enviroment === "development" && (
+        {enviroment === "test" && (
           <OrbitControls
             makeDefault
             minDistance={100}
             maxZoom={2}
-            minZoom={0.9}
+            minZoom={0.1}
             maxPolarAngle={Math.PI / 2}
             enablePan={true}
           />
         )}
       </Canvas>
 
-      <Controls onMove={handleMove} />
+      <Controls onMove={handleMove} onCastSpell={handleCastSpell} />
     </div>
   );
 }
