@@ -4,6 +4,9 @@ import { generateObstacle, generateRewards } from "@/components/game-obj-tree";
 import { getRandomTerrainType } from "@/components/game-utils";
 import { create } from "zustand";
 
+const MOVEMENT_COOLDOWN = 200; // Ms between allowed movements
+const QUEUE_SIZE_LIMIT = 1; // Maximum number of moves in queue
+
 export const useGameStore = create((set, get) => ({
   // Player State
   playerPosition: { x: 0, y: 0 },
@@ -19,8 +22,10 @@ export const useGameStore = create((set, get) => ({
   movesQueue: [],
   currentPosition: { currentRow: 0, currentTile: 0 },
 
+  // throttle
+  lastMoveTime: 0,
+
   // Actions
-  // Nueva acción para inicializar las filas
   initializeRows: () => {
     const initialRows = [];
 
@@ -62,49 +67,28 @@ export const useGameStore = create((set, get) => ({
     set({ rows: initialRows });
   },
 
-  // To generate more map.
-  addMoreRows: () => {
-    const state = get();
-    const currentRows = [...state.rows];
-    const newRowIndex = currentRows[currentRows.length - 1].rowIndex + 1;
-
-    const type = getRandomTerrainType();
-    let newRow;
-
-    if (type === "road") {
-      newRow = {
-        type: "road",
-        variant: "default",
-        rowIndex: newRowIndex,
-      };
-    } else if (type === "forest") {
-      newRow = {
-        type: "grass",
-        rowIndex: newRowIndex,
-        trees: generateObstacle(),
-        rewards: generateRewards(),
-      };
-    } else {
-      newRow = {
-        type: "grass",
-        rowIndex: newRowIndex,
-        trees: [],
-        rewards: [],
-      };
-    }
-
-    set({ rows: [...currentRows, newRow] });
-  },
-
   // Common Player Actions
   movePlayer: (direction) => {
     const state = get();
-    if (state.movesQueue.length > 1) return;
+    const now = Date.now();
 
-    set((state) => ({
+    // Verificar si ha pasado suficiente tiempo desde el último movimiento
+    if (now - state.lastMoveTime < MOVEMENT_COOLDOWN) {
+      return; // Ignorar movimientos demasiado rápidos
+    }
+
+    // Verificar si la cola no está llena
+    if (state.movesQueue.length >= QUEUE_SIZE_LIMIT) {
+      return; // No agregar más movimientos si la cola está llena
+    }
+
+    // Actualizar el tiempo del último movimiento
+    set({
+      lastMoveTime: now,
       movesQueue: [...state.movesQueue, direction],
-    }));
+    });
 
+    // Si no está en movimiento, procesar el siguiente movimiento
     if (!state.isMoving) {
       get().processNextMove();
     }
@@ -117,7 +101,8 @@ export const useGameStore = create((set, get) => ({
       return;
     }
 
-    const direction = state.movesQueue[0];
+    // Tomamos solo el primer movimiento de la cola
+    const [direction, ...remainingMoves] = state.movesQueue;
     const tileSize = GAME_CONSTANTS.tileSize;
 
     // Update logical position
@@ -135,9 +120,9 @@ export const useGameStore = create((set, get) => ({
       newTile >= -10 && newTile <= 10 && newRow >= -10 && newRow <= 40;
 
     if (!isWithinLimits) {
-      set((state) => ({
-        movesQueue: state.movesQueue.slice(1),
-      }));
+      // Solo removemos el movimiento actual y continuamos con el siguiente
+      set({ movesQueue: remainingMoves });
+      setTimeout(() => get().processNextMove(), 50);
       return;
     }
 
@@ -151,18 +136,13 @@ export const useGameStore = create((set, get) => ({
     if (direction === "right") newRotation = -Math.PI / 2;
     if (direction === "backward") newRotation = Math.PI;
 
-    set((state) => ({
+    set({
       playerPosition: { x: newX, y: newY },
       playerRotation: newRotation,
       currentPosition: { currentRow: newRow, currentTile: newTile },
-      movesQueue: state.movesQueue.slice(1),
+      movesQueue: remainingMoves,
       isMoving: true,
-    }));
-
-    // Add more rows if needed
-    if (direction === "forward" && newRow > state.rows.length - 10) {
-      get().addMoreRows();
-    }
+    });
   },
 
   castSpell: () => {
@@ -189,6 +169,20 @@ export const useGameStore = create((set, get) => ({
 
   setIsMoving: (isMoving) => {
     set({ isMoving });
+
+    if (!isMoving) {
+      // Asegurarnos de que el siguiente movimiento tenga un delay mínimo
+      const state = get();
+      const timeElapsed = Date.now() - state.lastMoveTime;
+      const remainingCooldown = Math.max(0, MOVEMENT_COOLDOWN - timeElapsed);
+
+      setTimeout(() => {
+        const currentState = get();
+        if (currentState.movesQueue.length > 0) {
+          currentState.processNextMove();
+        }
+      }, Math.max(50, remainingCooldown)); // Usar el mayor entre 50ms y el cooldown restante
+    }
   },
 
   onMoveComplete: () => {
