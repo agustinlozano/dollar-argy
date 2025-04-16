@@ -6,7 +6,7 @@ import { enviroment } from "@/lib/env-vars";
 
 export function GameCamera({
   target,
-  followSpeed = 0.01,
+  followSpeed = 0.05,
   followDistance = 300,
 }) {
   const cameraRef = useRef();
