@@ -35,11 +35,11 @@ export function GameCamera({
 
   // Update camera position every frame to follow target
   useFrame(() => {
-    if (!cameraRef.current || !target.current) return;
+    if (!cameraRef.current || !target.current.mesh) return;
 
     // Get player position
     const playerPosition = new THREE.Vector3();
-    target.current.getWorldPosition(playerPosition);
+    target.current.mesh.getWorldPosition(playerPosition);
 
     // Update target position (maintain the original camera angle)
     targetPosition.current.set(
