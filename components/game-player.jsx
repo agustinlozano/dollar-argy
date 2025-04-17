@@ -41,6 +41,7 @@ export const Player = forwardRef(function PlayerBill(
     targetPosition: { x: 0, y: 0, z: BILL_DIMENSIONS.baseHeightForward },
     startRotation: 0,
     targetRotation: 0,
+    lastDelta: 0,
   });
 
   // Expose necessary references to the parent
@@ -115,14 +116,24 @@ export const Player = forwardRef(function PlayerBill(
   useFrame((state, delta) => {
     if (!isMoving || !animationState.current.running) return;
 
-    animationState.current.time += delta;
-    const progress = Math.min(
+    // Smooth out delta to prevent jerky movements
+    const smoothDelta = THREE.MathUtils.lerp(
+      animationState.current.lastDelta,
+      delta,
+      0.5
+    );
+    animationState.current.lastDelta = smoothDelta;
+
+    animationState.current.time += smoothDelta;
+    // Use easeInOutQuad for smoother acceleration/deceleration
+    const rawProgress = Math.min(
       1,
       animationState.current.time / animationState.current.stepTime
     );
+    const progress = easeInOutQuad(rawProgress);
 
     if (playerRef.current) {
-      // Interpolate position
+      // Interpolate position with smoothing
       playerRef.current.position.x = THREE.MathUtils.lerp(
         animationState.current.startPosition.x,
         animationState.current.targetPosition.x,
@@ -139,13 +150,14 @@ export const Player = forwardRef(function PlayerBill(
         progress
       );
 
-      // Jump effect
-      const jumpHeight = 8;
-      const jumpOffset = Math.sin(progress * Math.PI) * jumpHeight;
+      // Optimized jump effect with smoother curve
+      const jumpHeight = 6; // Reduced from 8
+      const jumpProgress = progress < 0.5 ? progress * 2 : 2 - progress * 2;
+      const jumpOffset = easeOutQuad(jumpProgress) * jumpHeight;
       playerRef.current.position.z += jumpOffset;
     }
 
-    // Interpolate rotation
+    // Interpolate rotation with smoothing
     if (groupRef.current) {
       groupRef.current.rotation.z = THREE.MathUtils.lerp(
         animationState.current.startRotation,
@@ -170,6 +182,15 @@ export const Player = forwardRef(function PlayerBill(
       }
     }
   });
+
+  // Easing functions for smoother animations
+  const easeInOutQuad = (t) => {
+    return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+  };
+
+  const easeOutQuad = (t) => {
+    return t * (2 - t);
+  };
 
   // Materials
   const materials = React.useMemo(
