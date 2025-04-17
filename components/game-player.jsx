@@ -1,39 +1,51 @@
+// components/game-player.jsx
 import React, {
-  useState,
-  useEffect,
   useRef,
+  useEffect,
   forwardRef,
   useImperativeHandle,
-  useMemo,
 } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
-import { PivotControls } from "@react-three/drei";
+import { useGameStore } from "@/stores/useGameState";
+// import { PivotControls } from "@react-three/drei";
 
-// Define bill dimensions as an object for better readability
 const BILL_DIMENSIONS = {
   width: 41.2,
   height: 100,
   depth: 5,
-  baseHeightForward: 50, // Base height when moving forward/backward
-  baseHeightSideways: 25, // Base height when moving sideways
+  baseHeightForward: 55,
+  baseHeightSideways: 25,
 };
 
 export const Player = forwardRef(function PlayerBill(
-  { position, rotation, jumpHeight = 8, onMoveComplete },
+  { position, rotation },
   ref
 ) {
   const playerRef = useRef();
   const groupRef = useRef();
-  const rigidBodyRef = useRef();
-
   const texture = useTexture("/hornero-bill.jpg");
 
-  // Forward both refs to the parent component
+  // Access the store for animation state
+  const isMoving = useGameStore((state) => state.isMoving);
+  const setIsMoving = useGameStore((state) => state.setIsMoving);
+
+  // Animation state using useRef instead of useState
+  const animationState = useRef({
+    progress: 0,
+    time: 0,
+    running: false,
+    stepTime: 0.2,
+    startPosition: { x: 0, y: 0, z: BILL_DIMENSIONS.baseHeightForward },
+    targetPosition: { x: 0, y: 0, z: BILL_DIMENSIONS.baseHeightForward },
+    startRotation: 0,
+    targetRotation: 0,
+  });
+
+  // Expose necessary references to the parent
   useImperativeHandle(ref, () => ({
     mesh: playerRef.current,
-    rigidbody: rigidBodyRef.current,
   }));
 
   // Determine base height based on rotation
@@ -43,197 +55,155 @@ export const Player = forwardRef(function PlayerBill(
       : BILL_DIMENSIONS.baseHeightForward;
   };
 
-  // Animation state
-  const [targetPosition, setTargetPosition] = useState({
-    x: 0,
-    y: 0,
-    z: BILL_DIMENSIONS.baseHeightForward,
-  });
-  const [targetRotation, setTargetRotation] = useState(0);
-  const [isMoving, setIsMoving] = useState(false);
-  const [startPosition, setStartPosition] = useState({
-    x: 0,
-    y: 0,
-    z: BILL_DIMENSIONS.baseHeightForward,
-  });
-  const [startRotation, setStartRotation] = useState(0);
-
-  const materials = useMemo(
-    () => [
-      new THREE.MeshLambertMaterial({ color: "#dbad6a" }), // right
-      new THREE.MeshLambertMaterial({ color: "#dbad6a" }), // left
-      new THREE.MeshLambertMaterial({ color: "#dbad6a" }), // top
-      new THREE.MeshLambertMaterial({ color: "#dbad6a" }), // bottom
-      new THREE.MeshLambertMaterial({ map: texture }), // front (visible face with texture)
-      new THREE.MeshLambertMaterial({ color: "#dbad6a" }), // back
-    ],
-    [texture]
-  );
-
-  // Animation progress
-  const animationState = useRef({
-    progress: 0,
-    time: 0,
-    running: false,
-    stepTime: 0.2, // Seconds per step
-  });
-
-  // Initialize player position on first render
-  useEffect(() => {
-    if (playerRef.current) {
-      playerRef.current.position.x = position.x;
-      playerRef.current.position.y = position.y;
-      playerRef.current.position.z = BILL_DIMENSIONS.baseHeightSideways;
-
-      if (groupRef.current) {
-        groupRef.current.rotation.x = -Math.PI / 2;
-        groupRef.current.rotation.y = Math.PI;
-        groupRef.current.rotation.z = Math.PI / 2;
-      }
-
-      setTargetPosition({
-        x: position.x,
-        y: position.y,
-        z: BILL_DIMENSIONS.baseHeightForward,
-      });
-      setStartPosition({
-        x: position.x,
-        y: position.y,
-        z: BILL_DIMENSIONS.baseHeightForward,
-      });
-      setTargetRotation(rotation);
-      setStartRotation(rotation);
-    }
-  }, []);
-
-  // Detect changes in target position or rotation
+  // Initialize player position
   useEffect(() => {
     if (!playerRef.current) return;
 
-    // Only start a new movement if the position actually changed
-    if (
-      targetPosition.x === position.x &&
-      targetPosition.y === position.y &&
-      targetRotation === rotation
-    ) {
-      return;
+    playerRef.current.position.x = position.x;
+    playerRef.current.position.y = position.y;
+    playerRef.current.position.z = BILL_DIMENSIONS.baseHeightSideways;
+
+    if (groupRef.current) {
+      groupRef.current.rotation.x = -Math.PI / 2;
+      groupRef.current.rotation.y = Math.PI;
+      groupRef.current.rotation.z = Math.PI / 2;
     }
 
-    // Determine base height based on new rotation
+    // Update initial animation state
+    animationState.current.targetPosition = {
+      x: position.x,
+      y: position.y,
+      z: BILL_DIMENSIONS.baseHeightForward,
+    };
+    animationState.current.startPosition = {
+      x: position.x,
+      y: position.y,
+      z: BILL_DIMENSIONS.baseHeightForward,
+    };
+    animationState.current.targetRotation = rotation;
+    animationState.current.startRotation = rotation;
+  }, []);
+
+  // Detect changes in position or rotation
+  useEffect(() => {
+    if (!playerRef.current) return;
+
+    const currentPos = playerRef.current.position;
     const newBaseHeight = getBaseHeight(rotation);
 
-    // Set new target position and rotation
-    setTargetPosition({ x: position.x, y: position.y, z: newBaseHeight });
-    setTargetRotation(rotation);
-
-    // Set current position as start position
-    setStartPosition({
-      x: playerRef.current.position.x,
-      y: playerRef.current.position.y,
-      z: playerRef.current.position.z,
-    });
-
-    // Set current rotation as start rotation
-    setStartRotation(groupRef.current.rotation.z);
-
-    // Start animation
-    setIsMoving(true);
+    // Update animation state
+    animationState.current.startPosition = {
+      x: currentPos.x,
+      y: currentPos.y,
+      z: currentPos.z,
+    };
+    animationState.current.targetPosition = {
+      x: position.x,
+      y: position.y,
+      z: newBaseHeight,
+    };
+    animationState.current.startRotation = groupRef.current.rotation.z;
+    animationState.current.targetRotation = rotation;
     animationState.current.time = 0;
     animationState.current.progress = 0;
     animationState.current.running = true;
+
+    setIsMoving(true);
   }, [position, rotation]);
 
   // Animation frame
   useFrame((state, delta) => {
     if (!isMoving || !animationState.current.running) return;
 
-    // Update animation time and progress
     animationState.current.time += delta;
     const progress = Math.min(
       1,
       animationState.current.time / animationState.current.stepTime
     );
-    animationState.current.progress = progress;
 
-    // Update position with smooth interpolation
     if (playerRef.current) {
+      // Interpolate position
       playerRef.current.position.x = THREE.MathUtils.lerp(
-        startPosition.x,
-        targetPosition.x,
+        animationState.current.startPosition.x,
+        animationState.current.targetPosition.x,
         progress
       );
-
       playerRef.current.position.y = THREE.MathUtils.lerp(
-        startPosition.y,
-        targetPosition.y,
+        animationState.current.startPosition.y,
+        animationState.current.targetPosition.y,
         progress
       );
-
-      // Interpolate the Z height between the initial and final positions
       playerRef.current.position.z = THREE.MathUtils.lerp(
-        startPosition.z,
-        targetPosition.z,
+        animationState.current.startPosition.z,
+        animationState.current.targetPosition.z,
         progress
       );
 
-      // Add jump effect
+      // Jump effect
+      const jumpHeight = 8;
       const jumpOffset = Math.sin(progress * Math.PI) * jumpHeight;
       playerRef.current.position.z += jumpOffset;
     }
 
-    // Update rotation with smooth interpolation
+    // Interpolate rotation
     if (groupRef.current) {
       groupRef.current.rotation.z = THREE.MathUtils.lerp(
-        startRotation,
-        targetRotation,
+        animationState.current.startRotation,
+        animationState.current.targetRotation,
         progress
       );
     }
 
-    // Check if animation is complete
+    // Check if animation finished
     if (progress >= 1) {
-      // Reset animation state
       animationState.current.running = false;
       setIsMoving(false);
 
-      // Make sure final position is exact
+      // Ensure exact final position
       if (playerRef.current) {
-        playerRef.current.position.x = targetPosition.x;
-        playerRef.current.position.y = targetPosition.y;
-        playerRef.current.position.z = targetPosition.z; // Use target height
+        playerRef.current.position.x = animationState.current.targetPosition.x;
+        playerRef.current.position.y = animationState.current.targetPosition.y;
+        playerRef.current.position.z = animationState.current.targetPosition.z;
       }
-
       if (groupRef.current) {
-        groupRef.current.rotation.z = targetRotation;
-      }
-
-      // Notify parent that move is complete
-      if (onMoveComplete) {
-        onMoveComplete();
+        groupRef.current.rotation.z = animationState.current.targetRotation;
       }
     }
   });
 
+  // Materials
+  const materials = React.useMemo(
+    () => [
+      new THREE.MeshLambertMaterial({ color: "#dbad6a" }), // right
+      new THREE.MeshLambertMaterial({ color: "#dbad6a" }), // left
+      new THREE.MeshLambertMaterial({ color: "#dbad6a" }), // top
+      new THREE.MeshLambertMaterial({ color: "#dbad6a" }), // bottom
+      new THREE.MeshLambertMaterial({ map: texture }), // front
+      new THREE.MeshLambertMaterial({ color: "#dbad6a" }), // back
+    ],
+    [texture]
+  );
+
   return (
     <group ref={playerRef}>
-      <PivotControls scale={45}>
-        <group ref={groupRef} rotation={[0, 0, 0]}>
-          <mesh
-            castShadow
-            receiveShadow
-            position={[0, 0, 0]}
-            material={materials}
-          >
-            <boxGeometry
-              args={[
-                BILL_DIMENSIONS.width,
-                BILL_DIMENSIONS.height,
-                BILL_DIMENSIONS.depth,
-              ]}
-            />
-          </mesh>
-        </group>
-      </PivotControls>
+      {/* <PivotControls scale={45}> */}
+      <group ref={groupRef} rotation={[0, 0, 0]}>
+        <mesh
+          castShadow
+          receiveShadow
+          position={[0, 0, 0]}
+          material={materials}
+        >
+          <boxGeometry
+            args={[
+              BILL_DIMENSIONS.width,
+              BILL_DIMENSIONS.height,
+              BILL_DIMENSIONS.depth,
+            ]}
+          />
+        </mesh>
+      </group>
+      {/* </PivotControls> */}
     </group>
   );
 });
