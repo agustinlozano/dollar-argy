@@ -57,7 +57,7 @@ export function DollarArgyGame() {
     <div className="relative w-full h-screen">
       <div className="absolute top-5 left-0 w-full text-center z-10">
         <div className="text-2xl font-bold text-white bg-black bg-opacity-50 py-1 px-4 rounded-lg inline-block">
-          Score: {score}
+          Score {score}
         </div>
       </div>
 
