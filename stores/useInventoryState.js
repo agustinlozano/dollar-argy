@@ -1,3 +1,5 @@
+import { createGoldCoin } from "@/components/game-utils";
+import { itemTypes } from "@/lib/consts";
 import { create } from "zustand";
 
 const initialState = {
@@ -85,5 +87,32 @@ export const useInventoryStore = create((set, get) => ({
   getQuantity: (name) => {
     const item = get().items.find((i) => i.name === name);
     return item?.quantity || 0;
+  },
+
+  // Claim a reward from a voucher by its ID
+  claimReward: (voucherId) => {
+    set((state) => {
+      const voucher = state.items.find(
+        (i) => i.type === itemTypes.voucher && i.id === voucherId
+      );
+      if (!voucher) {
+        console.log("Voucher not found.");
+        return state; // Voucher not found
+      }
+
+      if (voucher.isRedeemed) {
+        console.log("This voucher has already been redeemed.");
+        return state; // Voucher already redeemed
+      }
+
+      // Add the reward to the inventory
+      get().add(createGoldCoin(voucher.value, "Reward from voucher."));
+
+      // Mark the voucher as redeemed
+      voucher.isRedeemed = true;
+
+      console.log("Voucher claimed successfully.");
+      return state;
+    });
   },
 }));
