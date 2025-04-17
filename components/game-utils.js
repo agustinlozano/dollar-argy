@@ -76,19 +76,25 @@ export const getRandomVariant = () => {
   return ROAD_VARIANTS[index];
 };
 
-export const createGoldCoin = (
-  value = itemValues.goldCoinValue,
-  description = "A shiny gold coin used for transactions."
-) => {
+export const createGoldCoin = () => {
   return {
     id: nanoid(6),
-    name: "Gold Coin",
-    value,
+    name: itemNames.goldCoins,
+    slug: itemSlugs.goldCoins,
+    value: itemValues.goldCoinsValue,
     type: itemTypes.currency,
-    color: itemColors.goldCoinColor,
-    description,
+    color: itemColors.goldCoinsColor,
+    description: "A shiny gold coins used for transactions.",
     expirationTurns: expirationTurns.none,
     isRedeemed: false,
+    quantity: 1,
+  };
+};
+
+export const changeGoldCoinQuantity = (goldCoin, quantity) => {
+  return {
+    ...goldCoin,
+    quantity,
   };
 };
 
@@ -98,7 +104,8 @@ export const createRewardVoucher = (
 ) => {
   return {
     id: nanoid(6),
-    name: "Reward Voucher",
+    name: itemNames.rewardVoucher,
+    slug: itemSlugs.rewardVoucher,
     value,
     type: itemTypes.voucher,
     color: itemColors.rewardVoucherColor,
