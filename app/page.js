@@ -1,10 +1,9 @@
-import { CrossyRoad } from "@/components/game";
-// import Gameboard from "@/components/gameboard";
+import { DollarArgyGame } from "@/components/game";
 
 export default function Home() {
   return (
     <main className="flex flex-col items-center justify-center">
-      <CrossyRoad />
+      <DollarArgyGame />
     </main>
   );
 }
