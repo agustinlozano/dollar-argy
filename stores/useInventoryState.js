@@ -3,7 +3,7 @@ import { itemTypes } from "@/lib/consts";
 import { create } from "zustand";
 
 const initialState = {
-  items: [], // stackable items like Gold Coin or Reward Voucher
+  items: [],
   spells: [], // non-stackable spells like Rapid Fire, Single Shot
 };
 
@@ -91,28 +91,32 @@ export const useInventoryStore = create((set, get) => ({
 
   // Claim a reward from a voucher by its ID
   claimReward: (voucherId) => {
-    set((state) => {
-      const voucher = state.items.find(
-        (i) => i.type === itemTypes.voucher && i.id === voucherId
-      );
-      if (!voucher) {
-        console.log("Voucher not found.");
-        return state; // Voucher not found
-      }
+    const { items } = get();
+    const voucherIndex = items.findIndex(
+      (i) => i.type === itemTypes.voucher && i.id === voucherId
+    );
 
-      if (voucher.isRedeemed) {
-        console.log("This voucher has already been redeemed.");
-        return state; // Voucher already redeemed
-      }
+    if (voucherIndex === -1) {
+      return { success: false, message: "Voucher not found." };
+    }
 
-      // Add the reward to the inventory
-      get().add(createGoldCoin(voucher.value, "Reward from voucher."));
+    const voucher = items[voucherIndex];
+    if (voucher.isRedeemed) {
+      return {
+        success: false,
+        message: "This voucher has already been redeemed.",
+      };
+    }
 
-      // Mark the voucher as redeemed
-      voucher.isRedeemed = true;
+    // Mark it as redeemed and update state
+    const updatedVoucher = { ...voucher, isRedeemed: true };
+    const updatedItems = [...items];
+    updatedItems[voucherIndex] = updatedVoucher;
 
-      console.log("Voucher claimed successfully.");
-      return state;
-    });
+    // Set new state and add the reward
+    set({ items: updatedItems });
+    get().add(createGoldCoin(voucher.value, "Reward from voucher."));
+
+    return { success: true, message: "Voucher claimed successfully." };
   },
 }));
