@@ -21,6 +21,7 @@ import { enviroment } from "@/lib/env-vars";
 
 import { useGameStore } from "@/stores/useGameState";
 import { PivotControls } from "@react-three/drei";
+import { DebugGrid } from "./dev-grid";
 
 // Game constants
 export const GAME_CONSTANTS = {
@@ -65,6 +66,9 @@ export function DollarArgyGame() {
         <ambientLight intensity={0.5} />
         <GameCamera target={playerRef} />
         <PlayerDirectionalLight />
+
+        {/* debug grid */}
+        {/* <DebugGrid /> */}
 
         {/* Map rows */}
         {rows.map((row, index) =>
