@@ -30,6 +30,7 @@ export const Player = forwardRef(function PlayerBill(
   // Access the store for animation state
   const isMoving = useGameStore((state) => state.isMoving);
   const setIsMoving = useGameStore((state) => state.setIsMoving);
+  const onMoveComplete = useGameStore((state) => state.onMoveComplete);
 
   // Animation state using useRef instead of useState
   const animationState = useRef({
@@ -170,6 +171,7 @@ export const Player = forwardRef(function PlayerBill(
     if (progress >= 1) {
       animationState.current.running = false;
       setIsMoving(false);
+      onMoveComplete();
 
       // Ensure exact final position
       if (playerRef.current) {
