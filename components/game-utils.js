@@ -1,3 +1,11 @@
+import {
+  expirationTurns,
+  itemColors,
+  itemTypes,
+  itemValues,
+} from "@/lib/consts";
+import { nanoid } from "nanoid";
+
 // Generación inteligente de tipos de filas
 let lastTypes = []; // Almacena los últimos tipos de fila generados
 
@@ -66,4 +74,36 @@ const ROAD_VARIANTS = ["default", "desert", "neon"];
 export const getRandomVariant = () => {
   const index = Math.floor(Math.random() * ROAD_VARIANTS.length);
   return ROAD_VARIANTS[index];
+};
+
+export const createGoldCoin = (
+  value = itemValues.goldCoinValue,
+  description = "A shiny gold coin used for transactions."
+) => {
+  return {
+    id: nanoid(6),
+    name: "Gold Coin",
+    value,
+    type: itemTypes.currency,
+    color: itemColors.goldCoinColor,
+    description,
+    expirationTurns: expirationTurns.none,
+    isRedeemed: false,
+  };
+};
+
+export const createRewardVoucher = (
+  value = itemValues.rewardVoucherValue,
+  description = "A voucher that can be redeemed for rewards."
+) => {
+  return {
+    id: nanoid(6),
+    name: "Reward Voucher",
+    value,
+    type: itemTypes.voucher,
+    color: itemColors.rewardVoucherColor,
+    description,
+    expirationTurns: expirationTurns.rewardVoucher,
+    isRedeemed: false,
+  };
 };
