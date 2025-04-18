@@ -12,12 +12,6 @@ export function DebugGrid() {
     (_, i) => i - 9
   );
 
-  // Generate array of tile indices from minTileIndex to maxTileIndex
-  const tileIndices = Array.from(
-    { length: tilesPerRow },
-    (_, i) => i + GAME_CONSTANTS.minTileIndex
-  );
-
   return (
     <group>
       {/* Draw the grid */}
@@ -26,6 +20,11 @@ export function DebugGrid() {
           {/* Horizontal line for each row */}
           <mesh position={[0, 0, 0.1]}>
             <planeGeometry args={[tilesPerRow * tileSize, 0.5]} />
+            <meshBasicMaterial color="#666666" transparent opacity={0.3} />
+          </mesh>
+          {/* Vertical line for each row */}
+          <mesh position={[0, 0, 0.1]}>
+            <planeGeometry args={[0.5, 50 * tileSize]} />
             <meshBasicMaterial color="#666666" transparent opacity={0.3} />
           </mesh>
 
@@ -38,33 +37,6 @@ export function DebugGrid() {
           >
             Row {rowIndex}
           </Text>
-
-          {/* Tile indices and vertical lines */}
-          {tileIndices.map((tileIndex) => (
-            <group
-              key={`tile-${rowIndex}-${tileIndex}`}
-              position={[tileIndex * tileSize, 0, 0.1]}
-            >
-              {/* Vertical line for each tile */}
-              <mesh>
-                <planeGeometry args={[0.5, tileSize]} />
-                <meshBasicMaterial color="#666666" transparent opacity={0.2} />
-              </mesh>
-
-              {/* Tile index number */}
-              {tileIndex === 0 && (
-                <Text
-                  position={[0, 0, 0.1]}
-                  color="#666666"
-                  fontSize={6}
-                  anchorX="center"
-                  anchorY="bottom"
-                >
-                  {tileIndex}
-                </Text>
-              )}
-            </group>
-          ))}
         </group>
       ))}
     </group>
