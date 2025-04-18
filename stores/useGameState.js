@@ -6,6 +6,8 @@ import { create } from "zustand";
 
 const MOVEMENT_COOLDOWN = 200; // Ms between allowed movements
 const QUEUE_SIZE_LIMIT = 1; // Maximum number of moves in queue
+const FRIST_ROW = 0;
+const BASE_ROWS = 9;
 
 export const useGameStore = create((set, get) => ({
   // Player State
@@ -29,12 +31,19 @@ export const useGameStore = create((set, get) => ({
   initializeRows: () => {
     const initialRows = [];
 
-    for (let i = -9; i <= GAME_CONSTANTS.initialRows; i++) {
-      if (i < 0) {
+    for (let i = -BASE_ROWS; i <= GAME_CONSTANTS.initialRows + BASE_ROWS; i++) {
+      if (i < FRIST_ROW) {
         initialRows.push({
           type: "grass",
           rowIndex: i,
-          trees: [],
+          trees: generateObstacle(),
+          rewards: [],
+        });
+      } else if (i > GAME_CONSTANTS.initialRows - BASE_ROWS) {
+        initialRows.push({
+          type: "grass",
+          rowIndex: i,
+          trees: generateObstacle(),
           rewards: [],
         });
       } else {
