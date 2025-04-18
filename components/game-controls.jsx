@@ -2,26 +2,41 @@
 
 import { useEffect } from "react";
 import GameButton from "./game-button";
+import { useDanceAnimation } from "@/hooks/useDanceAnimation";
 
 export function Controls({ onMove, onCastSpell }) {
+  const { startDance, stopDance } = useDanceAnimation();
+
   useEffect(() => {
     const handleKeyDown = (e) => {
       const key = e.key.toLowerCase();
+
+      // Check for dance command (OPTION+COMMAND+T)
+      if (e.metaKey && key === "k") {
+        startDance();
+        return;
+      }
+
+      // Regular movement controls
       switch (key) {
         case "arrowup":
         case "w":
+          stopDance();
           onMove("forward");
           break;
         case "arrowleft":
         case "a":
+          stopDance();
           onMove("left");
           break;
         case "arrowdown":
         case "s":
+          stopDance();
           onMove("backward");
           break;
         case "arrowright":
         case "d":
+          stopDance();
           onMove("right");
           break;
         default:
@@ -32,6 +47,7 @@ export function Controls({ onMove, onCastSpell }) {
     const handleMouseDown = (e) => {
       if (e.button === 0) {
         // Left click
+        stopDance();
         onCastSpell();
       }
     };
@@ -43,7 +59,7 @@ export function Controls({ onMove, onCastSpell }) {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("mousedown", handleMouseDown);
     };
-  }, [onMove, onCastSpell]);
+  }, [onMove, onCastSpell, startDance, stopDance]);
 
   return (
     <div className="absolute bottom-5 w-full flex justify-center items-end">
