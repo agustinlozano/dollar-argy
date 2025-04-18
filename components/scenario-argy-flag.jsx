@@ -1,44 +1,45 @@
-import { useRef, useMemo } from "react";
+import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { GAME_CONSTANTS } from "./game";
 import * as THREE from "three";
 
 const UNITS_UP = 92;
 
-// Flag Sun component to avoid repetition
+// Creamos colores utilizando THREE.Color en lugar de strings
+const COLORS = {
+  flagBlue: new THREE.Color("#75AADB"),
+  flagWhite: new THREE.Color("#FFFFFF"),
+  poleMetal: new THREE.Color("#FFFFFF"),
+  poleOrnament: new THREE.Color("#FFD700"),
+  sunGold: new THREE.Color("#F6B40E"),
+};
+
+// Flag Sun component usando props de colores directamente
 const FlagSun = ({ position }) => {
   const sunRayCount = 16;
+  const sunRays = [];
 
-  const materials = useMemo(
-    () => ({
-      sunGold: new THREE.MeshStandardMaterial({
-        color: "#F6B40E",
-        side: THREE.DoubleSide,
-        metalness: 0.2,
-        roughness: 0.3,
-      }),
-    }),
-    []
-  );
-
-  // Create sun rays geometry once using useMemo
-  const sunRays = useMemo(() => {
-    return [...Array(sunRayCount)].map((_, i) => {
-      const angle = (i * Math.PI * 2) / sunRayCount;
-      const radius = 5;
-      return {
-        position: [Math.cos(angle) * radius, Math.sin(angle) * radius, 0],
-        rotation: [0, 0, angle],
-      };
+  // Crear rays de forma imperativa
+  for (let i = 0; i < sunRayCount; i++) {
+    const angle = (i * Math.PI * 2) / sunRayCount;
+    const radius = 5;
+    sunRays.push({
+      position: [Math.cos(angle) * radius, Math.sin(angle) * radius, 0],
+      rotation: [0, 0, angle],
     });
-  }, [sunRayCount]);
+  }
 
   return (
     <group position={position}>
       {/* Center sun */}
       <mesh castShadow>
         <circleGeometry args={[4, 32]} />
-        <primitive object={materials.sunGold} />
+        <meshStandardMaterial
+          color={COLORS.sunGold}
+          side={THREE.DoubleSide}
+          metalness={0.2}
+          roughness={0.3}
+        />
       </mesh>
 
       {/* Sun rays */}
@@ -50,7 +51,12 @@ const FlagSun = ({ position }) => {
           castShadow
         >
           <boxGeometry args={[1.5, 0.4, 0.1]} />
-          <primitive object={materials.sunGold} />
+          <meshStandardMaterial
+            color={COLORS.sunGold}
+            side={THREE.DoubleSide}
+            metalness={0.2}
+            roughness={0.3}
+          />
         </mesh>
       ))}
     </group>
@@ -60,33 +66,6 @@ const FlagSun = ({ position }) => {
 export function ArgyFlag() {
   const tileSize = GAME_CONSTANTS.tileSize;
   const flagRef = useRef();
-
-  // Memoize materials for better performance
-  const materials = useMemo(
-    () => ({
-      flagBlue: new THREE.MeshStandardMaterial({
-        color: "#75AADB",
-        side: THREE.DoubleSide,
-        roughness: 0.8,
-      }),
-      flagWhite: new THREE.MeshStandardMaterial({
-        color: "#FFFFFF",
-        side: THREE.DoubleSide,
-        roughness: 0.7,
-      }),
-      poleMetal: new THREE.MeshStandardMaterial({
-        color: "white",
-        metalness: 0.4,
-        roughness: 0.8,
-      }),
-      poleOrnament: new THREE.MeshStandardMaterial({
-        color: "#FFD700",
-        metalness: 0.6,
-        roughness: 0.1,
-      }),
-    }),
-    []
-  );
 
   // Enhanced flag animation with more natural movement
   useFrame((state) => {
@@ -109,21 +88,33 @@ export function ArgyFlag() {
       {/* Flagpole */}
       <group position={[-10, 0, 20]}>
         {/* Base */}
-        <mesh position={[0, 80, 0]} castShadow receiveShadow>
+        <mesh position={[0, 80, 0]} castShadow>
           <cylinderGeometry args={[4, 3, 25]} />
-          <primitive object={materials.poleMetal} />
+          <meshStandardMaterial
+            color={COLORS.poleMetal}
+            metalness={0.4}
+            roughness={0.8}
+          />
         </mesh>
 
         {/* Pole */}
-        <mesh position={[0, 0, 0]} castShadow receiveShadow>
+        <mesh position={[0, 0, 0]} castShadow>
           <cylinderGeometry args={[2, 2, 180, 12]} />
-          <primitive object={materials.poleMetal} />
+          <meshStandardMaterial
+            color={COLORS.poleMetal}
+            metalness={0.4}
+            roughness={0.8}
+          />
         </mesh>
 
         {/* Ornament or finial */}
-        <mesh position={[0, -90, 0]} castShadow receiveShadow>
+        <mesh position={[0, -90, 0]} castShadow>
           <sphereGeometry args={[3, 16, 16]} />
-          <primitive object={materials.poleOrnament} />
+          <meshStandardMaterial
+            color={COLORS.poleOrnament}
+            metalness={0.4}
+            roughness={0.1}
+          />
         </mesh>
       </group>
 
@@ -132,26 +123,38 @@ export function ArgyFlag() {
         {/* Top stripe */}
         <mesh position={[0, 0, 0]} castShadow>
           <boxGeometry args={[120, 24, 0.4]} />
-          <primitive object={materials.flagBlue} />
+          <meshStandardMaterial
+            color={COLORS.flagBlue}
+            side={THREE.DoubleSide}
+            roughness={0.8}
+          />
         </mesh>
 
         {/* Middle white stripe */}
         <mesh position={[0, -24, 0]} castShadow>
           <boxGeometry args={[120, 24, 0.4]} />
-          <primitive object={materials.flagWhite} />
+          <meshStandardMaterial
+            color={COLORS.flagWhite}
+            side={THREE.DoubleSide}
+            roughness={0.7}
+          />
         </mesh>
 
         {/* Bottom blue stripe */}
         <mesh position={[0, -48, 0]} castShadow>
           <boxGeometry args={[120, 24, 0.4]} />
-          <primitive object={materials.flagBlue} />
+          <meshStandardMaterial
+            color={COLORS.flagBlue}
+            side={THREE.DoubleSide}
+            roughness={0.8}
+          />
         </mesh>
 
         {/* Sol de Mayo - front */}
         <FlagSun position={[0, -24, 0.4]} />
 
         {/* Sol de Mayo - back */}
-        <FlagSun position={[0, -24, -0.9]} />
+        <FlagSun position={[0, -24, -0.4]} />
       </group>
     </group>
   );
