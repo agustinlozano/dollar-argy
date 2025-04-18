@@ -9,6 +9,7 @@ import { PlayerDirectionalLight } from "./game-directional-light";
 import { Player } from "./game-player";
 import { Controls } from "./game-controls";
 import { GameCamera } from "./game-camera";
+import { DanceCamera } from "./game-dance-camera";
 import { Grass } from "./game-terrain-grass";
 import { Road } from "./game-terrain-road";
 
@@ -49,6 +50,8 @@ export function DollarArgyGame() {
     castSpell,
     removeSpell,
     initializeRows,
+    isDancing,
+    danceStartPosition,
   } = useGameStore();
 
   const playerRef = useRef();
@@ -87,11 +90,15 @@ export function DollarArgyGame() {
         }}
       >
         <ambientLight intensity={0.5} />
-        <GameCamera target={playerRef} />
+        {isDancing && danceStartPosition ? (
+          <DanceCamera position={danceStartPosition} />
+        ) : (
+          <GameCamera target={playerRef} />
+        )}
         <PlayerDirectionalLight />
 
         {/* debug grid */}
-        <DebugGrid />
+        {/* <DebugGrid /> */}
 
         {/* Static scenario elements */}
         <ArgyFlag position={[GAME_CONSTANTS.tileSize * 2, 0, 0]} />
