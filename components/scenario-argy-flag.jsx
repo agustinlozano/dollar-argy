@@ -112,7 +112,7 @@ const FlagPole = memo(({ materials }) => (
 
 FlagPole.displayName = "FlagPole";
 
-export function ArgyFlag() {
+export function ArgyFlag({ position = [0, 0, 0] }) {
   const flagRef = useRef();
 
   // We memoize the materials (data) within the component
@@ -150,10 +150,10 @@ export function ArgyFlag() {
     []
   );
 
-  const initialPosition = useMemo(
-    () => [GAME_CONSTANTS.tileSize * 2, 0, UNITS_UP],
-    []
-  );
+  const initialPosition = useMemo(() => {
+    const [x, y, z] = position;
+    return [x, y, z + UNITS_UP];
+  }, [position]);
 
   useFrame((state) => {
     if (flagRef.current) {
