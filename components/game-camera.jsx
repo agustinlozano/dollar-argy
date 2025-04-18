@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useMemo } from "react";
 import { useThree, useFrame } from "@react-three/fiber";
 import { OrthographicCamera } from "@react-three/drei";
 import * as THREE from "three";
@@ -10,17 +10,36 @@ export function GameCamera({
   followDistance = 300,
 }) {
   const cameraRef = useRef();
-  const { size } = useThree();
+  const { size, invalidate } = useThree();
 
-  // Compute camera dimensions
-  const baseSize = 300;
-  const viewRatio = size.width / size.height;
-  const width = viewRatio < 1 ? baseSize : baseSize * viewRatio;
-  const height = viewRatio < 1 ? baseSize / viewRatio : baseSize;
+  // Compute camera dimensions using memoization
+  const { width, height } = useMemo(() => {
+    const baseSize = 300;
+    const viewRatio = size.width / size.height;
+    return {
+      width: Math.max(baseSize, baseSize * viewRatio),
+      height: Math.max(baseSize, baseSize / viewRatio),
+    };
+  }, [size.width, size.height]);
 
   // Create a vector to store the target position
   const targetPosition = useRef(new THREE.Vector3(0, 0, 0));
   const currentOffset = useRef(new THREE.Vector3(300, -300, 300));
+
+  // Handle window resize
+  useEffect(() => {
+    if (!cameraRef.current) return;
+
+    // Update camera frustum on resize
+    cameraRef.current.left = width / -2;
+    cameraRef.current.right = width / 2;
+    cameraRef.current.top = height / 2;
+    cameraRef.current.bottom = height / -2;
+    cameraRef.current.updateProjectionMatrix();
+
+    // Force a re-render of the scene
+    invalidate();
+  }, [width, height, invalidate]);
 
   // Set up camera on first render
   useEffect(() => {
@@ -35,7 +54,7 @@ export function GameCamera({
 
   // Update camera position every frame to follow target
   useFrame(() => {
-    if (!cameraRef.current || !target.current.mesh) return;
+    if (!cameraRef.current || !target.current?.mesh) return;
 
     // Get player position
     const playerPosition = new THREE.Vector3();
@@ -57,13 +76,6 @@ export function GameCamera({
 
     // Apply smooth movement to camera position
     cameraRef.current.position.lerp(newCameraPosition, followSpeed);
-
-    // Update camera target
-    // cameraRef.current.lookAt(
-    //   targetPosition.current.x,
-    //   targetPosition.current.y,
-    //   0
-    // );
   });
 
   return (
@@ -79,38 +91,3 @@ export function GameCamera({
     />
   );
 }
-
-// Old game camera
-// function GameCamera() {
-//   const cameraRef = useRef();
-//   const { size } = useThree();
-
-//   // Compute camera dimensions using the same logic as original code
-//   const baseSize = 300;
-//   const viewRatio = size.width / size.height;
-//   const width = viewRatio < 1 ? baseSize : baseSize * viewRatio;
-//   const height = viewRatio < 1 ? baseSize / viewRatio : baseSize;
-
-//   useEffect(() => {
-//     if (!cameraRef.current) return;
-
-//     // Important: we need to set up properly after the camera is created
-//     cameraRef.current.up.set(0, 0, 1);
-//     cameraRef.current.position.set(300, -300, 300);
-//     cameraRef.current.lookAt(0, 0, 0);
-//     cameraRef.current.updateProjectionMatrix();
-//   }, []);
-
-//   return (
-//     <OrthographicCamera
-//       ref={cameraRef}
-//       makeDefault
-//       left={width / -2}
-//       right={width / 2}
-//       top={height / 2}
-//       bottom={height / -2}
-//       near={100}
-//       far={900}
-//     />
-//   );
-// }
