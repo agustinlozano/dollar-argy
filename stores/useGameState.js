@@ -18,6 +18,10 @@ export const useGameStore = create((set, get) => ({
   playerRotation: 0,
   isMoving: false,
 
+  // Dance State
+  isDancing: false,
+  danceStartPosition: null,
+
   // Game State
   score: 0,
   rows: [],
@@ -204,5 +208,9 @@ export const useGameStore = create((set, get) => ({
     } else {
       set({ isMoving: false });
     }
+  },
+
+  setDanceState: (isDancing, startPosition = null) => {
+    set({ isDancing, danceStartPosition: startPosition });
   },
 }));
