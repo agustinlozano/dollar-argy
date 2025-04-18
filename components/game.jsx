@@ -72,7 +72,7 @@ export function DollarArgyGame() {
       className="relative w-full h-screen overflow-hidden"
     >
       <div className="absolute top-5 left-0 w-full text-center z-10">
-        <div className="text-lg bg-card/20 text-primary-foreground border backdrop-blur-sm px-4 rounded inline-block">
+        <div className="text-lg bg-card/20 text-primary-foreground border backdrop-blur-sm px-4 rounded inline-block select-none">
           Score {score}
         </div>
       </div>
@@ -102,7 +102,7 @@ export function DollarArgyGame() {
         <PlayerDirectionalLight />
 
         {/* debug grid */}
-        {/* <DebugGrid /> */}
+        <DebugGrid />
 
         {/* Static scenario elements */}
         <ArgyFlag position={[GAME_CONSTANTS.tileSize * 2, 0, 0]} />
@@ -131,6 +131,7 @@ export function DollarArgyGame() {
                     ]}
                   />
                 ))}
+              {/* Render rewards (coins and vouchers) */}
               {row.rewards &&
                 row.rewards.map((reward, rewardIndex) => {
                   const position = [
@@ -140,13 +141,6 @@ export function DollarArgyGame() {
                   ];
 
                   switch (reward.type) {
-                    case "chest":
-                      return (
-                        <MoneyChest
-                          key={`chest-${row.rowIndex}-${rewardIndex}`}
-                          position={position}
-                        />
-                      );
                     case "coin":
                       return (
                         <GoldCoin
@@ -165,6 +159,18 @@ export function DollarArgyGame() {
                       return null;
                   }
                 })}
+              {/* Render chests separately */}
+              {row.chests &&
+                row.chests.map((chest, chestIndex) => (
+                  <MoneyChest
+                    key={`chest-${row.rowIndex}-${chestIndex}`}
+                    position={[
+                      chest.tileIndex * GAME_CONSTANTS.tileSize,
+                      row.rowIndex * GAME_CONSTANTS.tileSize,
+                      chest.zOffset,
+                    ]}
+                  />
+                ))}
             </group>
           )
         )}
