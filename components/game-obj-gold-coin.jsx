@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import { useGameStore } from "@/stores/useGameState";
@@ -6,88 +6,92 @@ import { useInventoryStore } from "@/stores/useInventoryState";
 import * as THREE from "three";
 
 export function GoldCoin({ position = [0, 0, 0] }) {
-  const coinRef = useRef();
+  const coinRef = useRef(null);
+  const animationProgress = useRef(0);
+
   const [isNearby, setIsNearby] = useState(false);
   const [isCollected, setIsCollected] = useState(false);
-  const [animationProgress, setAnimationProgress] = useState(0);
 
   const playerPosition = useGameStore((state) => state.playerPosition);
   const addToInventory = useInventoryStore((state) => state.add);
 
-  // Check if player is near the coin
+  // Memo geometría y material
+  const coinGeometry = useMemo(
+    () => new THREE.CylinderGeometry(6, 6, 4, 24),
+    []
+  );
+  const coinMaterial = useMemo(
+    () =>
+      new THREE.MeshLambertMaterial({ color: "#FFD700", flatShading: true }),
+    []
+  );
+
+  // Player proximity
   useEffect(() => {
     if (isCollected) return;
 
-    const coinPos2D = new THREE.Vector2(position[0], position[1]);
-    const playerPos2D = new THREE.Vector2(playerPosition.x, playerPosition.y);
-    const distance = coinPos2D.distanceTo(playerPos2D);
+    const dist = new THREE.Vector2(position[0], position[1]).distanceTo(
+      new THREE.Vector2(playerPosition.x, playerPosition.y)
+    );
 
-    setIsNearby(distance <= 60);
+    setIsNearby(dist <= 60);
   }, [playerPosition, position, isCollected]);
 
-  // Handle the E key press
+  // Collect with E key
   useEffect(() => {
     if (!isNearby || isCollected) return;
 
-    const handleKeyPress = (e) => {
+    const handleKey = (e) => {
       if (e.key.toLowerCase() === "e") {
         setIsCollected(true);
         addToInventory({ slug: "gold_coins", type: "coin" });
       }
     };
 
-    window.addEventListener("keydown", handleKeyPress);
-    return () => window.removeEventListener("keydown", handleKeyPress);
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
   }, [isNearby, isCollected, addToInventory]);
 
-  // Animation when collecting the coin
+  // Collection animation
   useFrame((_, delta) => {
-    if (!isCollected || !coinRef.current) return;
+    const coin = coinRef.current;
+    if (!coin || !isCollected) return;
 
-    // Update animation progress
-    setAnimationProgress((prev) => {
-      const newProgress = prev + delta * 2;
-      return newProgress >= 1 ? 1 : newProgress;
-    });
-
-    // Move coin towards player position
-    const targetPosition = new THREE.Vector3(
-      playerPosition.x,
-      playerPosition.y,
-      50 // Float up a bit
+    animationProgress.current = Math.min(
+      animationProgress.current + delta * 2,
+      1
     );
 
-    const currentPos = coinRef.current.position;
-    currentPos.lerp(targetPosition, 0.1);
+    // Movement towards the player
+    const target = new THREE.Vector3(playerPosition.x, playerPosition.y, 50);
+    coin.position.lerp(target, 0.1);
 
-    // Rotate coin while moving
-    coinRef.current.rotation.z += delta * 5;
+    // Rotation
+    coin.rotation.z += delta * 5;
 
-    // Scale down as it moves
-    const scale = 1 - animationProgress * 0.8;
-    coinRef.current.scale.set(scale, scale, scale);
+    // Scaling
+    const scale = 1 - animationProgress.current * 0.8;
+    coin.scale.set(scale, scale, scale);
 
-    // Make coin disappear when animation completes
-    if (animationProgress >= 1) {
-      coinRef.current.visible = false;
+    // Hide
+    if (animationProgress.current >= 1) {
+      coin.visible = false;
     }
   });
 
-  if (isCollected && animationProgress >= 1) return null;
+  if (isCollected && animationProgress.current >= 1) return null;
 
   return (
     <group ref={coinRef} position={position}>
       <mesh
         castShadow
         receiveShadow
+        geometry={coinGeometry}
+        material={coinMaterial}
         position={[0, 0, 4]}
         rotation={[-Math.PI / 2, 1, 0]}
-      >
-        <cylinderGeometry args={[6, 6, 4, 24]} />
-        <meshLambertMaterial color="#FFD700" flatShading />
-      </mesh>
+      />
 
-      {/* Interaction indicator */}
       {isNearby && !isCollected && (
         <Html
           position={[0, 0, 20]}
