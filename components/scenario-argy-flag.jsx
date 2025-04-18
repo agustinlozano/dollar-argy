@@ -5,7 +5,6 @@ import * as THREE from "three";
 
 const UNITS_UP = 92;
 
-// We create colors using THREE.Color instead of strings
 const COLORS = {
   flagBlue: "#75AADB",
   flagWhite: "#FFFFFF",
@@ -156,11 +155,10 @@ export function ArgyFlag() {
     []
   );
 
-  // Enhanced flag animation with more natural movement
   useFrame((state) => {
     if (flagRef.current) {
       const time = state.clock.getElapsedTime();
-      // More complex movement for a realistic flag wave
+      // Waving motion
       flagRef.current.rotation.y = Math.sin(time) * 0.03;
       flagRef.current.rotation.z = Math.sin(time * 1.5) * 0.01;
       // Subtle position adjustment to simulate cloth physics
