@@ -28,6 +28,7 @@ import { enviroment } from "@/lib/env-vars";
 
 import { useGameStore } from "@/stores/useGameState";
 import { useResizeEffect } from "./game.hooks";
+import { DancingIndicator } from "./game-dance-badge";
 
 // Game constants
 export const GAME_CONSTANTS = {
@@ -91,7 +92,10 @@ export function DollarArgyGame() {
       >
         <ambientLight intensity={0.5} />
         {isDancing && danceStartPosition ? (
-          <DanceCamera position={danceStartPosition} />
+          <>
+            <DanceCamera position={danceStartPosition} />
+            <DancingIndicator position={danceStartPosition} />
+          </>
         ) : (
           <GameCamera target={playerRef} />
         )}
