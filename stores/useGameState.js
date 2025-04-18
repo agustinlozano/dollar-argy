@@ -3,6 +3,7 @@ import { GAME_CONSTANTS } from "@/components/game";
 import {
   generateObstacle,
   generateRewards,
+  generateChests,
 } from "@/components/game-obj.helper";
 import { getRandomTerrainType } from "@/components/game-utils";
 import { create } from "zustand";
@@ -45,6 +46,7 @@ export const useGameStore = create((set, get) => ({
           rowIndex: i,
           trees: generateObstacle(),
           rewards: [],
+          chests: [],
         });
       } else if (i > GAME_CONSTANTS.initialRows - BASE_ROWS) {
         initialRows.push({
@@ -52,6 +54,7 @@ export const useGameStore = create((set, get) => ({
           rowIndex: i,
           trees: generateObstacle(),
           rewards: [],
+          chests: [],
         });
       } else {
         const type = getRandomTerrainType();
@@ -63,11 +66,16 @@ export const useGameStore = create((set, get) => ({
             rowIndex: i,
           });
         } else if (type === "forest") {
+          const trees = generateObstacle();
+          const rewards = generateRewards(trees);
+          const chests = generateChests(trees, rewards);
+
           initialRows.push({
             type: "grass",
             rowIndex: i,
-            trees: generateObstacle(),
-            rewards: generateRewards(),
+            trees,
+            rewards,
+            chests,
           });
         } else {
           initialRows.push({
@@ -75,6 +83,7 @@ export const useGameStore = create((set, get) => ({
             rowIndex: i,
             trees: [],
             rewards: [],
+            chests: [],
           });
         }
       }
