@@ -107,7 +107,7 @@ export function GoldCoin({ position = [0, 0, 0] }) {
             whiteSpace: "nowrap",
           }}
         >
-          E para recolectar
+          E para recolectar 🪙
         </Html>
       )}
     </group>

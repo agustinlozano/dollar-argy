@@ -119,7 +119,7 @@ export function MoneyChest({ position = [0, 0, 0] }) {
             whiteSpace: "nowrap",
           }}
         >
-          E para abrir
+          E para abrir 📦
         </Html>
       )}
     </group>
