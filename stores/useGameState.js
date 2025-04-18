@@ -1,6 +1,9 @@
 // hooks/useGameState.js
 import { GAME_CONSTANTS } from "@/components/game";
-import { generateObstacle, generateRewards } from "@/components/game-obj-tree";
+import {
+  generateObstacle,
+  generateRewards,
+} from "@/components/game-obj.helper";
 import { getRandomTerrainType } from "@/components/game-utils";
 import { create } from "zustand";
 
