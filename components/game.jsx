@@ -4,24 +4,29 @@ import React, { useEffect, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 
+import { PlayerDirectionalLight } from "./game-directional-light";
+
 import { Player } from "./game-player";
 import { Controls } from "./game-controls";
 import { GameCamera } from "./game-camera";
 import { Grass } from "./game-terrain-grass";
-import { Road } from "./game-road";
-import { AxisHelper2D } from "./scenario-axis-helper";
+import { Road } from "./game-terrain-road";
+
 import { ObstacleObj } from "./game-obj-tree";
 import { MoneyChest } from "./game-obj-money-chest";
 import { GoldCoin } from "./game-obj-gold-coin";
 import { RewardVoucher } from "./game-obj-reward-voucher";
-import { PlayerDirectionalLight } from "./game-directional-light";
+
+import { AxisHelper2D } from "./scenario-axis-helper";
+import { ArgyFlag } from "./scenario-argy-flag.jsx";
+
 import { SpellEffect } from "./game-spell";
+import { DebugGrid } from "./dev-grid";
 
 import { enviroment } from "@/lib/env-vars";
 
 import { useGameStore } from "@/stores/useGameState";
-import { PivotControls } from "@react-three/drei";
-import { DebugGrid } from "./dev-grid";
+import { useResizeEffect } from "./game.hooks";
 
 // Game constants
 export const GAME_CONSTANTS = {
@@ -32,8 +37,7 @@ export const GAME_CONSTANTS = {
 };
 
 // Main game component
-// Dollar Argy is a game where a thousand Peso Argentino bill
-// fights against a One Dollar Bill.
+// Dollar Argy is a game where a thousand Peso Argentino bill fights against a One Dollar Bill.
 export function DollarArgyGame() {
   const {
     playerPosition,
@@ -48,27 +52,49 @@ export function DollarArgyGame() {
   } = useGameStore();
 
   const playerRef = useRef();
+  const containerRef = useRef();
 
-  // Inicializar filas al montar el componente
+  // Initialize rows when the component mounts
   useEffect(() => {
     initializeRows();
   }, []);
 
+  // Handle window resize
+  const canvasSize = useResizeEffect(containerRef);
+
   return (
-    <div className="relative w-full h-screen">
+    <div
+      ref={containerRef}
+      className="relative w-full h-screen overflow-hidden"
+    >
       <div className="absolute top-5 left-0 w-full text-center z-10">
-        <div className="text-2xl font-bold text-white bg-black bg-opacity-50 py-1 px-4 rounded-lg inline-block">
+        <div className="text-lg bg-card/20 text-primary-foreground border backdrop-blur-sm px-4 rounded inline-block">
           Score {score}
         </div>
       </div>
 
-      <Canvas shadows>
+      <Canvas
+        shadows
+        style={{
+          width: canvasSize.width,
+          height: canvasSize.height,
+          // Prevent default touch actions to avoid zooming or other gestures
+          touchAction: "none",
+        }}
+        onCreated={({ gl }) => {
+          // Limit pixel ratio (2x) for better performance
+          gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        }}
+      >
         <ambientLight intensity={0.5} />
         <GameCamera target={playerRef} />
         <PlayerDirectionalLight />
 
         {/* debug grid */}
-        {/* <DebugGrid /> */}
+        <DebugGrid />
+
+        {/* Static scenario elements */}
+        <ArgyFlag position={[GAME_CONSTANTS.tileSize * 2, 0, 0]} />
 
         {/* Map rows */}
         {rows.map((row, index) =>
