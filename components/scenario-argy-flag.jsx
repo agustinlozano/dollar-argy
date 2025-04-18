@@ -13,7 +13,7 @@ export function ArgyFlag() {
     if (flagRef.current) {
       // Efecto de ondeo suave
       const time = state.clock.getElapsedTime();
-      flagRef.current.rotation.y = Math.sin(time) * 0.1;
+      flagRef.current.rotation.y = Math.sin(time) * 0.02;
     }
   });
 
@@ -48,7 +48,7 @@ export function ArgyFlag() {
       </group>
 
       {/* flag */}
-      <group position={[-70, -25, 20]}>
+      <group position={[-70, -25, 20]} ref={flagRef}>
         {/* Top stripe */}
         <mesh position={[0, 0, 0]} castShadow>
           <boxGeometry args={[120, 24, 0.4]} />
