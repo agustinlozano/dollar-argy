@@ -49,14 +49,14 @@ export function M16M1({ position = [0, 0, 0], rotation = [0, 0, 0] }) {
       <group position={[0, 0, 0]} rotation={[0, 0, 0]}>
         {/* Upper Receiver */}
         <mesh position={[-5, 0.7, 0]} castShadow>
-          <boxGeometry args={[8, 1.5, 1.2]} />
+          <boxGeometry args={[8, 1.4, 1.2]} />
           <meshStandardMaterial color="#252525" />
         </mesh>
 
         {/* Lower Receiver */}
         <group position={[-4.5, -1, 0]}>
-          <mesh position={[-4, 0.5, 0]} castShadow>
-            <boxGeometry args={[1, 1.5, 1.2]} />
+          <mesh position={[-4, 0.4, 0]} castShadow>
+            <boxGeometry args={[1, 1.2, 1.2]} />
             <meshStandardMaterial color="#2b2b2b" />
           </mesh>
           <mesh position={[0, 0, 0]} castShadow>
@@ -134,7 +134,7 @@ export function M16M1({ position = [0, 0, 0], rotation = [0, 0, 0] }) {
 
         {/* Trigger Guard */}
         <mesh position={[-4, -3, 0]} castShadow>
-          <boxGeometry args={[5.3, 0.1, 1]} />
+          <boxGeometry args={[5.3, 0.1, 0.9]} />
           <meshStandardMaterial color="#1a1a1a" />
         </mesh>
 
