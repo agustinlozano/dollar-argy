@@ -1,6 +1,8 @@
 import {
   expirationTurns,
   itemColors,
+  itemNames,
+  itemSlugs,
   itemTypes,
   itemValues,
 } from "@/lib/consts";
@@ -99,9 +101,9 @@ export const createGoldCoin = () => {
     name: itemNames.goldCoins,
     slug: itemSlugs.goldCoins,
     value: itemValues.goldCoinsValue,
-    type: itemTypes.currency,
+    type: itemTypes.coins,
     color: itemColors.goldCoinsColor,
-    description: "A shiny gold coins used for transactions.",
+    description: "Shiny gold coins used for transactions.",
     expirationTurns: expirationTurns.none,
     isRedeemed: false,
     quantity: 1,
