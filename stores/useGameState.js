@@ -179,7 +179,7 @@ export const useGameStore = create((set, get) => ({
           position: [
             state.playerPosition.x + 30,
             state.playerPosition.y + 25,
-            75, // 25 + 50 como tenías antes
+            80, // 25 + 50 como tenías antes
           ],
         },
       ],
