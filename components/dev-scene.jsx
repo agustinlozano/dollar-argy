@@ -12,11 +12,14 @@ import { MoneyChest } from "./game-obj-money-chest";
 import { GoldCoin } from "./game-obj-gold-coin";
 import { RewardVoucher } from "./game-obj-reward-voucher";
 import { DebugGrid } from "./dev-grid";
+import { DevCamera } from "./dev-camera";
+import { GAME_CONSTANTS } from "./game";
+import { M16M1 } from "./game-weapon-m16";
+import { DevStudioLight } from "./dev-studio-light";
 
 import { chestTypes, rewardTypes } from "@/lib/consts";
 import { useResizeEffect } from "./game.hooks";
-import { DevCamera } from "./dev-camera";
-import { GAME_CONSTANTS } from "./game";
+import { ModeToggle } from "@/app/theme-toggle";
 
 // Hardcoded scene data
 const hardcodedScene = {
@@ -70,8 +73,8 @@ const hardcodedScene = {
   obstacles: [
     // First cluster (dense)
     { rowIndex: 0, tileIndex: -2, height: 55 },
-    { rowIndex: 0, tileIndex: -1, height: 65 },
-    { rowIndex: 0, tileIndex: 0, height: 45 },
+    { rowIndex: 0, tileIndex: -3, height: 65 },
+    { rowIndex: 1, tileIndex: -3, height: 45 },
     { rowIndex: 1, tileIndex: -2, height: 65 },
     { rowIndex: 1, tileIndex: -1, height: 55 },
     { rowIndex: 1, tileIndex: 0, height: 45 },
@@ -119,12 +122,22 @@ export function DevScene() {
           gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         }}
       >
-        <ambientLight intensity={0.5} />
+        <ambientLight intensity={0.01} />
         <PlayerDirectionalLight />
         <DevCamera />
 
         {/* Debug grid - always visible in dev scene */}
         <DebugGrid />
+
+        {/* M16 con iluminación de estudio */}
+        <group position={[0, 0, 100]}>
+          <DevStudioLight
+            position={[0, 0, 0]}
+            intensity={1.2}
+            showHelper={true}
+          />
+          <M16M1 position={[0, 0, 0]} />
+        </group>
 
         {/* Grass rows */}
         {hardcodedScene.grassRows.map((rowIndex) => (
@@ -196,6 +209,8 @@ export function DevScene() {
         {/* Helper axes for development */}
         <axesHelper args={[100]} />
       </Canvas>
+
+      <ModeToggle />
     </div>
   );
 }
