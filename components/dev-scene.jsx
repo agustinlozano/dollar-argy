@@ -132,11 +132,11 @@ export function DevScene() {
         {/* M16 con iluminación de estudio */}
         <group position={[0, 0, 100]}>
           <DevStudioLight
-            position={[0, 0, 0]}
+            position={[0, -42, 0]}
             intensity={1.2}
             showHelper={true}
           />
-          <M16M1 position={[0, 0, 0]} />
+          <M16M1 position={[0, -20, 0]} />
         </group>
 
         {/* Grass rows */}
