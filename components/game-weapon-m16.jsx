@@ -11,7 +11,12 @@ export function M16M1({ position = [0, 0, 0] }) {
   // });
 
   return (
-    <group ref={group} position={position} scale={[0.8, 0.8, 0.8]}>
+    <group
+      ref={group}
+      position={position}
+      scale={[0.8, 0.8, 0.8]}
+      rotation={[Math.PI / 2, Math.PI / 2, 0]}
+    >
       {/* Stock Group */}
       <group position={[-14, -0.3, 0]}>
         {/* Main Upper Stock */}
@@ -189,7 +194,7 @@ export function M16M1({ position = [0, 0, 0] }) {
 
         {/* Handguard Vents */}
         <mesh position={[6, 0.2, 0]} castShadow>
-          <boxGeometry args={[12, 1.5, 1.5]} />
+          <boxGeometry args={[12, 1.5, 1.3]} />
           <meshStandardMaterial color="#111111" />
         </mesh>
       </group>
@@ -222,7 +227,7 @@ export function M16M1({ position = [0, 0, 0] }) {
           </mesh>
 
           <mesh position={[0, 0, 0]} castShadow>
-            <boxGeometry args={[0.3, 1, 0.8]} />
+            <boxGeometry args={[0.3, 1, 0.2]} />
             <meshStandardMaterial color="#0a0a0a" />
           </mesh>
 
