@@ -2,7 +2,6 @@
 
 import React, { useRef } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
 
 import { PlayerDirectionalLight } from "./game-directional-light";
 import { Player } from "./game-player";
@@ -17,6 +16,7 @@ import { DebugGrid } from "./dev-grid";
 import { GAME_CONSTANTS } from "./game";
 import { chestTypes, rewardTypes } from "@/lib/consts";
 import { useResizeEffect } from "./game.hooks";
+import { DevCamera } from "./dev-camera";
 
 // Hardcoded scene data
 const hardcodedScene = {
@@ -121,6 +121,7 @@ export function DevScene() {
       >
         <ambientLight intensity={0.5} />
         <PlayerDirectionalLight />
+        <DevCamera />
 
         {/* Debug grid - always visible in dev scene */}
         <DebugGrid />
@@ -190,20 +191,10 @@ export function DevScene() {
         ))}
 
         {/* Player at center position */}
-        <Player ref={playerRef} position={{ x: 0, y: 0 }} rotation={0} />
+        <Player ref={playerRef} position={{ x: 0, y: 300 }} rotation={0} />
 
         {/* Helper axes for development */}
         <axesHelper args={[100]} />
-
-        {/* Enable OrbitControls for dev scene */}
-        <OrbitControls
-          makeDefault
-          minDistance={100}
-          maxZoom={2}
-          minZoom={0.1}
-          maxPolarAngle={Math.PI / 2}
-          enablePan={true}
-        />
       </Canvas>
     </div>
   );
