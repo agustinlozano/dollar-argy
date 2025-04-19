@@ -6,8 +6,11 @@ import { OrbitControls } from "@react-three/drei";
 
 import { PlayerDirectionalLight } from "./game-directional-light";
 
+import { FoundTracker } from "@/components/ui/game-found-tracker";
+import { Controls } from "@/components/ui/game-controls";
+import { DancingIndicator } from "@/components/ui/game-dance-badge";
+
 import { Player } from "./game-player";
-import { Controls } from "./game-controls";
 import { GameCamera } from "./game-camera";
 import { DanceCamera } from "./game-dance-camera";
 import { Grass } from "./game-terrain-grass";
@@ -21,6 +24,7 @@ import { RewardVoucher } from "./game-obj-reward-voucher";
 import { AxisHelper2D } from "./scenario-axis-helper";
 import { ArgyFlag } from "./scenario-argy-flag.jsx";
 
+import { GameInventory } from "./game-inventory";
 import { SpellEffect } from "./game-spell";
 import { DebugGrid } from "./dev-grid";
 
@@ -28,7 +32,6 @@ import { enviroment } from "@/lib/env-vars";
 
 import { useGameStore } from "@/stores/useGameState";
 import { useResizeEffect } from "./game.hooks";
-import { DancingIndicator } from "./game-dance-badge";
 
 // Game constants
 export const GAME_CONSTANTS = {
@@ -71,12 +74,6 @@ export function DollarArgyGame() {
       ref={containerRef}
       className="relative w-full h-screen overflow-hidden"
     >
-      <div className="absolute top-5 left-0 w-full text-center z-10">
-        <div className="text-lg bg-card/20 text-primary-foreground border backdrop-blur-sm px-4 rounded inline-block select-none">
-          Score {score}
-        </div>
-      </div>
-
       <Canvas
         shadows
         style={{
@@ -102,7 +99,7 @@ export function DollarArgyGame() {
         <PlayerDirectionalLight />
 
         {/* debug grid */}
-        <DebugGrid />
+        {/* <DebugGrid /> */}
 
         {/* Static scenario elements */}
         <ArgyFlag position={[GAME_CONSTANTS.tileSize * 2, 0, 0]} />
@@ -141,7 +138,7 @@ export function DollarArgyGame() {
                   ];
 
                   switch (reward.type) {
-                    case "coin":
+                    case "coins":
                       return (
                         <GoldCoin
                           key={`coin-${row.rowIndex}-${rewardIndex}`}
@@ -216,6 +213,8 @@ export function DollarArgyGame() {
         )}
       </Canvas>
 
+      <GameInventory />
+      <FoundTracker />
       <Controls onMove={movePlayer} onCastSpell={castSpell} />
     </div>
   );
