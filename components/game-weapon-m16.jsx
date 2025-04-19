@@ -1,14 +1,17 @@
-import { useRef } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useRef, useMemo } from "react";
+import * as THREE from "three";
 
 export function M16M1({ position = [0, 0, 0] }) {
   const group = useRef();
 
-  // useFrame(() => {
-  //   if (group.current) {
-  //     group.current.rotation.y += 0.002;
-  //   }
-  // });
+  const geometries = useMemo(() => {
+    return {
+      smallBox: new THREE.BoxGeometry(0.3, 0.3, 0.3),
+      trigger: new THREE.BoxGeometry(0.3, 0.8, 0.2),
+      cylinderThin: new THREE.CylinderGeometry(0.4, 0.4, 16, 8),
+      smallCylinder: new THREE.CylinderGeometry(0.5, 0.5, 1, 8),
+    };
+  }, []);
 
   return (
     <group
@@ -100,8 +103,8 @@ export function M16M1({ position = [0, 0, 0] }) {
 
         {/* Forward Assist */}
         <mesh position={[-2, 0.7, 0.4]} castShadow>
-          <cylinderGeometry
-            args={[0.5, 0.5, 1, 8]}
+          <primitive
+            object={geometries.smallCylinder}
             rotation={[Math.PI / 2, 0, 0]}
           />
           <meshStandardMaterial color="#1a1a1a" />
@@ -131,14 +134,14 @@ export function M16M1({ position = [0, 0, 0] }) {
 
         {/* Trigger Guard */}
         <mesh position={[-4, -3, 0]} castShadow>
-          <boxGeometry args={[5.3, 0.1, 1.2]} />
+          <boxGeometry args={[5.3, 0.1, 1]} />
           <meshStandardMaterial color="#1a1a1a" />
         </mesh>
 
         {/* Trigger */}
         <mesh position={[-5.5, -2.3, 0]} castShadow>
-          <boxGeometry args={[0.3, 0.8, 0.2]} />
-          <meshStandardMaterial color="#0a0a0a" />
+          <primitive object={geometries.trigger} />
+          <meshStandardMaterial color="#1a1a1a" />
         </mesh>
 
         {/* Magazine */}
@@ -153,17 +156,17 @@ export function M16M1({ position = [0, 0, 0] }) {
 
         {/* Magazine Release */}
         <mesh position={[-4, -1.5, 0.6]} castShadow>
-          <boxGeometry args={[0.3, 0.3, 0.3]} />
-          <meshStandardMaterial color="#0a0a0a" />
+          <primitive object={geometries.smallBox} />
+          <meshStandardMaterial color="#1a1a1a" />
         </mesh>
       </group>
 
       {/* Handguard Group */}
       <group position={[0, 0, 0]}>
-        {/* Main Handguard */}
+        {/* Main Handguard - Reducido segmentos */}
         <mesh position={[6, 0, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
           <cylinderGeometry
-            args={[1.1, 0.8, 12, 16]}
+            args={[1.1, 0.8, 12, 8]} // Reducido segmentos radiales
             rotation={[Math.PI / 2, 0, 0]}
           />
           <meshStandardMaterial color="#1a1a1a" />
@@ -173,7 +176,7 @@ export function M16M1({ position = [0, 0, 0] }) {
         <group position={[0, 0, 0]}>
           <mesh position={[0, 0, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
             <cylinderGeometry
-              args={[0.8, 0.8, 2, 16]}
+              args={[0.8, 0.8, 2, 8]} // Reducido segmentos radiales
               rotation={[Math.PI / 2, 0, 0]}
             />
             <meshStandardMaterial color="#232323" />
@@ -185,7 +188,7 @@ export function M16M1({ position = [0, 0, 0] }) {
             castShadow
           >
             <cylinderGeometry
-              args={[0.4, 1.1, 0.5, 16]}
+              args={[0.4, 1.1, 0.5, 8]} // Reducido segmentos radiales
               rotation={[Math.PI / 2, 0, 0]}
             />
             <meshStandardMaterial color="#232323" />
@@ -203,8 +206,8 @@ export function M16M1({ position = [0, 0, 0] }) {
       <group position={[3, 0, 0]}>
         {/* Main Barrel */}
         <mesh position={[10, 0, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
-          <cylinderGeometry
-            args={[0.4, 0.4, 16, 12]}
+          <primitive
+            object={geometries.cylinderThin}
             rotation={[Math.PI / 2, 0, 0]}
           />
           <meshStandardMaterial color="#2a2a2a" />
@@ -248,12 +251,12 @@ export function M16M1({ position = [0, 0, 0] }) {
             rotation={[0, 0, Math.PI / 2]}
             castShadow
           >
-            <cylinderGeometry args={[0.5, 0.5, 0.3, 12]} />
+            <cylinderGeometry args={[0.5, 0.5, 0.3, 8]} />{" "}
             <meshStandardMaterial color="#0f0f0f" />
           </mesh>
 
           <mesh position={[0, 0, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
-            <cylinderGeometry args={[0.5, 0.5, 2, 12]} />
+            <cylinderGeometry args={[0.5, 0.5, 2, 9]} />
             <meshStandardMaterial color="#0f0f0f" />
           </mesh>
         </group>
