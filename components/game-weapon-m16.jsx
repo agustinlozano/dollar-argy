@@ -1,23 +1,34 @@
+import { useFrame } from "@react-three/fiber";
 import { useRef, useMemo } from "react";
 import * as THREE from "three";
 
-export function M16M1({ position = [0, 0, 0], rotation = [0, 0, 0] }) {
-  const group = useRef();
+export function M16M1({
+  position = [0, 0, 0],
+  rotation = [0, 0, 0],
+  expo = false,
+}) {
+  const weaponRef = useRef();
 
   const geometries = useMemo(() => {
     return {
       smallBox: new THREE.BoxGeometry(0.3, 0.3, 0.3),
       trigger: new THREE.BoxGeometry(0.3, 0.8, 0.2),
       cylinderThin: new THREE.CylinderGeometry(0.4, 0.4, 16, 8),
-      smallCylinder: new THREE.CylinderGeometry(0.5, 0.5, 1, 8),
+      smallCylinder: new THREE.CylinderGeometry(0.5, 0.5, 7, 8),
     };
   }, []);
 
+  useFrame((state, delta) => {
+    if (!expo || !weaponRef.current) return;
+    weaponRef.current.rotation.x += delta * 0.5;
+    weaponRef.current.rotation.y += delta * 0.5;
+  });
+
   return (
     <group
-      ref={group}
+      ref={weaponRef}
       position={position}
-      scale={[0.8, 0.8, 0.8]}
+      scale={[1.4, 1.4, 1.4]}
       rotation={rotation}
     >
       {/* Stock Group */}
@@ -102,11 +113,12 @@ export function M16M1({ position = [0, 0, 0], rotation = [0, 0, 0] }) {
         </mesh>
 
         {/* Forward Assist */}
-        <mesh position={[-2, 0.7, 0.4]} castShadow>
-          <primitive
-            object={geometries.smallCylinder}
-            rotation={[Math.PI / 2, 0, 0]}
-          />
+        <mesh
+          position={[-5, -0, 0.4]}
+          rotation={[0, 0, Math.PI / 2]}
+          castShadow
+        >
+          <primitive object={geometries.smallCylinder} />
           <meshStandardMaterial color="#1a1a1a" />
         </mesh>
 
