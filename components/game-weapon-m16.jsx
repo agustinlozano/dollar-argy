@@ -1,6 +1,5 @@
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import * as THREE from "three";
 
 export function M16M1({ position = [0, 0, 0] }) {
   const group = useRef();
