@@ -9,7 +9,7 @@ export function FoundTracker() {
   const found = getQuantity("gold_coins");
 
   return (
-    <div className="absolute top-5 right-5">
+    <div className="absolute top-5 right-24">
       <div className="relative flex gap-x-4 justify-between items-center z-10 px-4">
         <div
           className={cn(
