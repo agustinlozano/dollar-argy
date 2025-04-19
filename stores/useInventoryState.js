@@ -2,7 +2,7 @@ import {
   changeGoldCoinQuantity,
   createGoldCoin,
   createRewardVoucher,
-} from "@/components/game-utils";
+} from "@/components/game.utils";
 import { itemTypes } from "@/lib/consts";
 import { create } from "zustand";
 

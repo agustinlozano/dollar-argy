@@ -5,7 +5,7 @@ import {
   generateRewards,
   generateChests,
 } from "@/components/game-obj.helper";
-import { getRandomTerrainType } from "@/components/game-utils";
+import { getRandomTerrainType } from "@/components/game.utils";
 import { create } from "zustand";
 
 const MOVEMENT_COOLDOWN = 200; // Ms between allowed movements
