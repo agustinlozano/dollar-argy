@@ -4,6 +4,7 @@ import { Html } from "@react-three/drei";
 import { useGameStore } from "@/stores/useGameState";
 import { useInventoryStore } from "@/stores/useInventoryState";
 import * as THREE from "three";
+import { itemSlugs, itemTypes } from "@/lib/consts";
 
 export function GoldCoin({ position = [0, 0, 0] }) {
   const coinRef = useRef(null);
@@ -44,7 +45,7 @@ export function GoldCoin({ position = [0, 0, 0] }) {
     const handleKey = (e) => {
       if (e.key.toLowerCase() === "e") {
         setIsCollected(true);
-        addToInventory({ slug: "gold_coins", type: "coin" });
+        addToInventory({ slug: itemSlugs.goldCoins, type: itemTypes.coins });
       }
     };
 
