@@ -10,6 +10,7 @@ import { useFrame } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
 import { useGameStore } from "@/stores/useGameState";
 // import { PivotControls } from "@react-three/drei";
+import { M16M1 } from "./game-weapon-m16";
 
 const BILL_DIMENSIONS = {
   width: 41.2,
@@ -66,9 +67,9 @@ export const Player = forwardRef(function PlayerBill(
     playerRef.current.position.z = BILL_DIMENSIONS.baseHeightSideways;
 
     if (groupRef.current) {
-      groupRef.current.rotation.x = -Math.PI / 2;
-      groupRef.current.rotation.y = Math.PI;
-      groupRef.current.rotation.z = Math.PI / 2;
+      groupRef.current.rotation.x = Math.PI / 2;
+      groupRef.current.rotation.y = 0;
+      groupRef.current.rotation.z = 0;
     }
 
     // Update initial animation state
@@ -225,6 +226,9 @@ export const Player = forwardRef(function PlayerBill(
             ]}
           />
         </mesh>
+
+        {/* Add M16 weapon */}
+        <M16M1 position={[30, 25, 5]} rotation={[0, Math.PI / 2, 0]} />
       </group>
       {/* </PivotControls> */}
     </group>
