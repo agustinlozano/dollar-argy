@@ -6,7 +6,7 @@ export function GameInventory() {
 
   return (
     <div className="absolute top-5 right-5 z-10">
-      <InventoryMenu items={items} spells={spells} />
+      <InventoryMenu items={items} />
     </div>
   );
 }
