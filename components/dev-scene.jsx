@@ -24,7 +24,7 @@ import { ModeToggle } from "@/app/theme-toggle";
 // Hardcoded scene data
 const hardcodedScene = {
   // 4 rows of grass (0-3)
-  grassRows: [0, 1, 2, 3],
+  grassRows: [0, 1, 2, 3, 8, 9, 10, 11],
 
   // 4 rows of road (4-7)
   roadRows: [4, 5, 6, 7],
@@ -132,12 +132,18 @@ export function DevScene() {
         {/* M16 con iluminación de estudio */}
         <group position={[0, 0, 100]}>
           <DevStudioLight
-            position={[0, -42, 0]}
+            position={[0, -42, 25]}
             intensity={1.2}
             showHelper={true}
           />
           <M16M1 position={[0, -20, 0]} />
         </group>
+
+        <DevStudioLight
+          position={[300, 180, 0]}
+          intensity={1.2}
+          showHelper={true}
+        />
 
         {/* Grass rows */}
         {hardcodedScene.grassRows.map((rowIndex) => (
@@ -204,7 +210,7 @@ export function DevScene() {
         ))}
 
         {/* Player at center position */}
-        <Player ref={playerRef} position={{ x: 0, y: 300 }} rotation={0} />
+        <Player ref={playerRef} position={{ x: 140, y: 100 }} rotation={0} />
 
         {/* Helper axes for development */}
         <axesHelper args={[100]} />
