@@ -4,61 +4,255 @@ import { useFrame } from "@react-three/fiber";
 export function M16M1({ position = [0, 0, 0] }) {
   const group = useRef();
 
-  useFrame(() => {
-    if (group.current) {
-      group.current.rotation.y += 0.002;
-    }
-  });
+  // useFrame(() => {
+  //   if (group.current) {
+  //     group.current.rotation.y += 0.002;
+  //   }
+  // });
 
   return (
-    <group ref={group} position={position} scale={[1, 1, 1]}>
-      {/* Stock */}
-      <mesh position={[-16, 0, 0]} castShadow>
-        <boxGeometry args={[10, 4, 2]} />
-        <meshStandardMaterial color="#1a1a1a" />
-      </mesh>
+    <group ref={group} position={position} scale={[0.8, 0.8, 0.8]}>
+      {/* Stock Group */}
+      <group position={[-14, -0.3, 0]}>
+        {/* Main Upper Stock */}
+        <mesh position={[0, 0.5, 0]} castShadow>
+          <boxGeometry args={[10, 2.5, 1.1]} />
+          <meshStandardMaterial color="#1a1a1a" />
+        </mesh>
 
-      {/* Receiver */}
-      <mesh position={[-5, 0, 0]} castShadow>
-        <boxGeometry args={[8, 4, 2]} />
-        <meshStandardMaterial color="#2b2b2b" />
-      </mesh>
+        {/* Main Lower Stock */}
+        <mesh
+          position={[0, -0.5, 0]}
+          rotation={[0, 0, Math.PI / 15]}
+          castShadow
+        >
+          <boxGeometry args={[10, 2, 1]} />
+          <meshStandardMaterial color="#1a1a1a" />
+        </mesh>
 
-      {/* Carry handle */}
-      <mesh position={[-5, 2.5, 0]} castShadow>
-        <boxGeometry args={[6, 1, 1]} />
-        <meshStandardMaterial color="#1f1f1f" />
-      </mesh>
+        {/* Buttplate */}
+        <mesh position={[-5, -0.5, 0]} rotation={[0, 0, 0]} castShadow>
+          <boxGeometry args={[1, 4, 1]} />
+          <meshStandardMaterial color="#111111" />
+        </mesh>
+      </group>
 
-      {/* Pistol grip */}
-      <mesh position={[-7.5, -3, 0]} rotation={[Math.PI / 6, 0, 0]} castShadow>
-        <boxGeometry args={[1.2, 3, 1]} />
-        <meshStandardMaterial color="#111" />
-      </mesh>
+      {/* Receiver Group */}
+      <group position={[0, 0, 0]} rotation={[0, 0, 0]}>
+        {/* Upper Receiver */}
+        <mesh position={[-5, 0.7, 0]} castShadow>
+          <boxGeometry args={[8, 1.5, 1.2]} />
+          <meshStandardMaterial color="#252525" />
+        </mesh>
 
-      {/* Magazine */}
-      <mesh position={[-3, -2.5, 0]} rotation={[Math.PI / 10, 0, 0]} castShadow>
-        <boxGeometry args={[1.5, 4, 1]} />
-        <meshStandardMaterial color="#333" />
-      </mesh>
+        {/* Lower Receiver */}
+        <group position={[-4.5, -1, 0]}>
+          <mesh position={[-4, 0.5, 0]} castShadow>
+            <boxGeometry args={[1, 1.5, 1.2]} />
+            <meshStandardMaterial color="#2b2b2b" />
+          </mesh>
+          <mesh position={[0, 0, 0]} castShadow>
+            <boxGeometry args={[7, 2, 1.2]} />
+            <meshStandardMaterial color="#2b2b2b" />
+          </mesh>
+        </group>
 
-      {/* Handguard */}
-      <mesh position={[6, 0, 0]} castShadow>
-        <boxGeometry args={[14, 3.2, 2]} />
-        <meshStandardMaterial color="#1a1a1a" />
-      </mesh>
+        {/* Magazine Holder */}
+        <mesh position={[-2.6, -2.5, 0]} castShadow>
+          <boxGeometry args={[2.5, 1, 1.2]} />
+          <meshStandardMaterial color="#2b2b2b" />
+        </mesh>
 
-      {/* Front sight */}
-      <mesh position={[14, 2, 0]} castShadow>
-        <boxGeometry args={[1, 3, 1]} />
-        <meshStandardMaterial color="#1a1a1a" />
-      </mesh>
+        {/* Carry Handle */}
+        <group position={[-5, 2.5, 0]}>
+          <mesh
+            position={[-3, -0.5, 0]}
+            rotation={[0, 0, -Math.PI / 6]}
+            castShadow
+          >
+            <boxGeometry args={[0.6, 2, 0.5]} />
+            <meshStandardMaterial color="#1f1f1f" />
+          </mesh>
+          <mesh
+            position={[0, 0, 0]}
+            rotation={[0, 0, Math.PI / 2.1]}
+            castShadow
+          >
+            <cylinderGeometry args={[0.3, 0.1, 5.5, 8]} />
+            <meshStandardMaterial color="#1f1f1f" />
+          </mesh>
+          <mesh position={[2.7, -0.7, 0]} castShadow>
+            <boxGeometry args={[0.3, 1, 0.2]} />
+            <meshStandardMaterial color="#1f1f1f" />
+          </mesh>
+        </group>
 
-      {/* Barrel */}
-      <mesh position={[25, 0.5, 0]} rotation={[Math.PI / 2, 0, 0]} castShadow>
-        <cylinderGeometry args={[0.3, 0.3, 12, 12]} />
-        <meshStandardMaterial color="#2a2a2a" />
-      </mesh>
+        {/* Ejection Port */}
+        <mesh position={[-5, 0.7, 0.6]} castShadow>
+          <boxGeometry args={[4, 0.5, 0.1]} />
+          <meshStandardMaterial color="#1a1a1a" />
+        </mesh>
+
+        {/* Forward Assist */}
+        <mesh position={[-2, 0.7, 0.4]} castShadow>
+          <cylinderGeometry
+            args={[0.5, 0.5, 1, 8]}
+            rotation={[Math.PI / 2, 0, 0]}
+          />
+          <meshStandardMaterial color="#1a1a1a" />
+        </mesh>
+
+        {/* Charging Handle */}
+        <mesh position={[-8, 0.8, 0.4]} castShadow>
+          <boxGeometry args={[1, 0.5, 0.5]} />
+          <meshStandardMaterial color="#0f0f0f" />
+        </mesh>
+      </group>
+
+      {/* Controls Group */}
+      <group position={[0, 0, 0]}>
+        {/* Pistol Grip */}
+        <group position={[-7.5, -3, 0]} rotation={[0, 0, -Math.PI / 6]}>
+          <mesh position={[0, 0, 0]} castShadow>
+            <boxGeometry args={[1.5, 4, 1]} />
+            <meshStandardMaterial color="#111" />
+          </mesh>
+
+          <mesh position={[0, -2, 0]} castShadow>
+            <boxGeometry args={[1.8, 0.2, 1.2]} />
+            <meshStandardMaterial color="#111" />
+          </mesh>
+        </group>
+
+        {/* Trigger Guard */}
+        <mesh position={[-4, -3, 0]} castShadow>
+          <boxGeometry args={[5.3, 0.1, 1.2]} />
+          <meshStandardMaterial color="#1a1a1a" />
+        </mesh>
+
+        {/* Trigger */}
+        <mesh position={[-5.5, -2.3, 0]} castShadow>
+          <boxGeometry args={[0.3, 0.8, 0.2]} />
+          <meshStandardMaterial color="#0a0a0a" />
+        </mesh>
+
+        {/* Magazine */}
+        <mesh
+          position={[-2.5, -3.5, 0]}
+          rotation={[0, 0, Math.PI / 18]}
+          castShadow
+        >
+          <boxGeometry args={[1.8, 5, 1]} />
+          <meshStandardMaterial color="#333" />
+        </mesh>
+
+        {/* Magazine Release */}
+        <mesh position={[-4, -1.5, 1]} castShadow>
+          <boxGeometry args={[0.3, 0.3, 0.3]} />
+          <meshStandardMaterial color="#0a0a0a" />
+        </mesh>
+      </group>
+
+      {/* Handguard Group */}
+      <group position={[0, 0, 0]}>
+        {/* Main Handguard */}
+        <mesh position={[6, 0, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
+          <cylinderGeometry
+            args={[1.1, 0.8, 12, 16]}
+            rotation={[Math.PI / 2, 0, 0]}
+          />
+          <meshStandardMaterial color="#1a1a1a" />
+        </mesh>
+
+        {/* Delta Ring */}
+        <group position={[0, 0, 0]}>
+          <mesh position={[0, 0, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
+            <cylinderGeometry
+              args={[0.8, 0.8, 2, 16]}
+              rotation={[Math.PI / 2, 0, 0]}
+            />
+            <meshStandardMaterial color="#232323" />
+          </mesh>
+
+          <mesh
+            position={[-0.2, 0, 0]}
+            rotation={[0, 0, Math.PI / 2]}
+            castShadow
+          >
+            <cylinderGeometry
+              args={[0.4, 1.1, 0.5, 16]}
+              rotation={[Math.PI / 2, 0, 0]}
+            />
+            <meshStandardMaterial color="#232323" />
+          </mesh>
+        </group>
+
+        {/* Handguard Vents */}
+        <mesh position={[6, 0.2, 0]} castShadow>
+          <boxGeometry args={[12, 1.5, 1.5]} />
+          <meshStandardMaterial color="#111111" />
+        </mesh>
+      </group>
+
+      {/* Barrel Group */}
+      <group position={[3, 0, 0]}>
+        {/* Main Barrel */}
+        <mesh position={[10, 0, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
+          <cylinderGeometry
+            args={[0.4, 0.4, 16, 12]}
+            rotation={[Math.PI / 2, 0, 0]}
+          />
+          <meshStandardMaterial color="#2a2a2a" />
+        </mesh>
+
+        {/* Front Sight Assembly */}
+        <group position={[10.2, 1.2, 0]}>
+          <mesh position={[0, 0, 0]} castShadow>
+            <boxGeometry args={[0.3, 1.8, 0.3]} />
+            <meshStandardMaterial color="#0a0a0a" />
+          </mesh>
+
+          <mesh
+            position={[-0.7, 0.2, 0]}
+            rotation={[0, 0, -Math.PI / 4]}
+            castShadow
+          >
+            <boxGeometry args={[0.2, 1.8, 0.3]} />
+            <meshStandardMaterial color="#0a0a0a" />
+          </mesh>
+
+          <mesh position={[0, 0, 0]} castShadow>
+            <boxGeometry args={[0.3, 1, 0.8]} />
+            <meshStandardMaterial color="#0a0a0a" />
+          </mesh>
+
+          <mesh
+            position={[-0.7, -0.55, 0]}
+            rotation={[0, 0, -Math.PI / 2]}
+            castShadow
+          >
+            <boxGeometry args={[0.3, 1.8, 0.3]} />
+            <meshStandardMaterial color="#0a0a0a" />
+          </mesh>
+        </group>
+
+        {/* Flash Hider */}
+        <group position={[18, 0, 0]}>
+          <mesh
+            position={[-1.4, 0, 0]}
+            rotation={[0, 0, Math.PI / 2]}
+            castShadow
+          >
+            <cylinderGeometry args={[0.5, 0.5, 0.3, 12]} />
+            <meshStandardMaterial color="#0f0f0f" />
+          </mesh>
+
+          <mesh position={[0, 0, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
+            <cylinderGeometry args={[0.5, 0.5, 2, 12]} />
+            <meshStandardMaterial color="#0f0f0f" />
+          </mesh>
+        </group>
+      </group>
     </group>
   );
 }
