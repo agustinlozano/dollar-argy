@@ -1,7 +1,7 @@
 import { useRef, useMemo } from "react";
 import * as THREE from "three";
 
-export function M16M1({ position = [0, 0, 0] }) {
+export function M16M1({ position = [0, 0, 0], rotation = [0, 0, 0] }) {
   const group = useRef();
 
   const geometries = useMemo(() => {
@@ -18,7 +18,7 @@ export function M16M1({ position = [0, 0, 0] }) {
       ref={group}
       position={position}
       scale={[0.8, 0.8, 0.8]}
-      rotation={[Math.PI / 2, Math.PI / 2, 0]}
+      rotation={rotation}
     >
       {/* Stock Group */}
       <group position={[-14, -0.3, 0]}>
@@ -40,7 +40,7 @@ export function M16M1({ position = [0, 0, 0] }) {
 
         {/* Buttplate */}
         <mesh position={[-5, -0.5, 0]} rotation={[0, 0, 0]} castShadow>
-          <boxGeometry args={[1, 4, 1]} />
+          <boxGeometry args={[1, 4, 0.8]} />
           <meshStandardMaterial color="#111111" />
         </mesh>
       </group>
