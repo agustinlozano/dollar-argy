@@ -13,10 +13,10 @@ import { GoldCoin } from "./game-obj-gold-coin";
 import { RewardVoucher } from "./game-obj-reward-voucher";
 import { DebugGrid } from "./dev-grid";
 
-import { GAME_CONSTANTS } from "./game";
 import { chestTypes, rewardTypes } from "@/lib/consts";
 import { useResizeEffect } from "./game.hooks";
 import { DevCamera } from "./dev-camera";
+import { GAME_CONSTANTS } from "./game";
 
 // Hardcoded scene data
 const hardcodedScene = {
