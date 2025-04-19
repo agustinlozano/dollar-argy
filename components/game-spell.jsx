@@ -66,9 +66,9 @@ export function SpellEffect({ position, onComplete }) {
   );
 
   // Re-use geometries
-  const explosionGeometry = useRef(new THREE.BoxGeometry(12, 12, 12));
-  const innerExplosionGeometry = useRef(new THREE.BoxGeometry(6, 6, 6));
-  const projectileGeometry = useRef(new THREE.BoxGeometry(4, 6, 4));
+  const explosionGeometry = useRef(new THREE.BoxGeometry(2, 2, 2));
+  const innerExplosionGeometry = useRef(new THREE.BoxGeometry(4, 4, 4));
+  const projectileGeometry = useRef(new THREE.BoxGeometry(2, 2, 2));
 
   useFrame((state, delta) => {
     timeRef.current += delta;
