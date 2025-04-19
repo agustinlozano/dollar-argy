@@ -3,8 +3,8 @@ import { useFrame } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import { useGameStore } from "@/stores/useGameState";
 import { useInventoryStore } from "@/stores/useInventoryState";
-import * as THREE from "three";
 import { itemSlugs, itemTypes } from "@/lib/consts";
+import * as THREE from "three";
 
 export function RewardVoucher({ position = [0, 0, 0] }) {
   const voucherRef = useRef(null);
