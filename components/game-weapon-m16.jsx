@@ -147,7 +147,7 @@ export function M16M1({ position = [0, 0, 0] }) {
         </mesh>
 
         {/* Magazine Release */}
-        <mesh position={[-4, -1.5, 1]} castShadow>
+        <mesh position={[-4, -1.5, 0.6]} castShadow>
           <boxGeometry args={[0.3, 0.3, 0.3]} />
           <meshStandardMaterial color="#0a0a0a" />
         </mesh>
