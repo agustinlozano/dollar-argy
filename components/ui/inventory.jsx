@@ -138,7 +138,7 @@ export function InventoryMenu({
 
   return (
     <div className="w-full max-w-md mx-auto font-['Press_Start_2P',system-ui] text-[0.8rem]">
-      <Card className="border-4 border-[#352879] bg-[#0f0f1b] shadow-[0_0_0_4px_#000000,5px_5px_0_0_#000] rounded-none overflow-hidden">
+      <Card className="border-4 w-[384px] border-[#352879] bg-[#0f0f1b] shadow-[0_0_0_4px_#000000,5px_5px_0_0_#000] rounded-none overflow-hidden">
         <CardHeader className="bg-[#352879] pb-3 px-4 pt-4 space-y-1">
           <div className="flex items-center justify-between">
             <CardTitle className="text-xl font-normal text-[#f8d800] [text-shadow:2px_2px_0_#000]">

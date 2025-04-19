@@ -1,6 +1,7 @@
 import {
   changeGoldCoinQuantity,
   createGoldCoin,
+  createRewardVoucher,
 } from "@/components/game-utils";
 import { itemTypes } from "@/lib/consts";
 import { create } from "zustand";
@@ -25,16 +26,26 @@ export const useInventoryStore = create((set, get) => ({
       });
     } else {
       set((state) => {
-        const exists = state.items.find((i) => i.slug === object.slug);
-        if (exists) {
+        if (object.type === itemTypes.coins) {
+          const exists = state.items.find((i) => i.slug === object.slug);
+          return exists
+            ? {
+                items: state.items.map((i) =>
+                  i.slug === object.slug
+                    ? { ...i, quantity: (i.quantity || 1) + 1 }
+                    : i
+                ),
+              }
+            : {
+                items: [...state.items, createGoldCoin()],
+              };
+        }
+        if (object.type === itemTypes.voucher) {
           return {
-            items: state.items.map((i) =>
-              i.slug === object.slug
-                ? { ...i, quantity: (i.quantity || 1) + 1 }
-                : i
-            ),
+            items: [...state.items, createRewardVoucher()],
           };
         }
+
         return {
           // items: [...state.items, { ...object, quantity: 1 }],
           items: [...state.items, createGoldCoin()],
