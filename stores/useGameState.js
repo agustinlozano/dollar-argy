@@ -159,7 +159,7 @@ export const useGameStore = create((set, get) => ({
     if (direction === "forward") newRotation = 0;
     if (direction === "left") newRotation = Math.PI / 2;
     if (direction === "right") newRotation = -Math.PI / 2;
-    if (direction === "backward") newRotation = Math.PI;
+    if (direction === "backward") newRotation = 2 * Math.PI;
 
     set({
       playerPosition: { x: newX, y: newY },
@@ -177,8 +177,8 @@ export const useGameStore = create((set, get) => ({
         {
           id: Date.now(),
           position: [
-            state.playerPosition.x,
-            state.playerPosition.y,
+            state.playerPosition.x + 30,
+            state.playerPosition.y + 25,
             75, // 25 + 50 como tenías antes
           ],
         },
