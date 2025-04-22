@@ -1,4 +1,4 @@
-### 📊 3. CÓMO ESCALAR ATAQUE Y DEFENSA
+### 📊 CÓMO ESCALAR POR NIVEL
 
 Keep it simple: 3 stats bases + modificadores contextuales.
 
