@@ -11,7 +11,7 @@
 - Los costos de mana corresponden a los de early game. (default)
 </aside>
 
-**🔥 Spells: Ofensivos**
+#### **🔥 Spells: Ofensivos**
 
 - **Dose of Freedom**: Ataque básico del juego, para poder repartir pequeñas dosis de libertad.
 
@@ -109,7 +109,7 @@
   - **Any other relevant technical data**: Type: Offensive, Target: Area, Animation: explosive_chart, Sound: boom
   - **Implementation Note**: High-impact spell with a large area of effect, ideal against enemies with Inflation.
 
-**🛡️ Spells: Defensivos**
+#### **🛡️ Spells: Defensivos**
 
 - **Blinding Surveys**: Distracts an enemy with surveys, causing them to lose 1 turn.
 
@@ -183,7 +183,7 @@
   - **Any other relevant technical data**: Type: Defensive, Target: Area, Animation: bank_seal, Sound: lockdown, Aura Color: #A52A2A
   - **Implementation Note**: High-cost crowd control spell, effective for disrupting multiple enemies in a small area.
 
-**✨ Buffs / Support**
+#### **✨ Buffs / Support**
 
 - **Free Market**: Desata el poder de los mercados sin cadenas.
 
