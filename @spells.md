@@ -181,3 +181,41 @@
   - **Efectos secundarios**: Ninguno
   - **Cualquier otro dato técnico relevante**: Tipo: Defensivo, Objetivo: Área, Animación: bank_seal, Sonido: lockdown, Color de aura: #A52A2A
   - **Nota de implementación**: High-cost crowd control spell, effective for disrupting multiple enemies in a small area.
+
+**✨ Buffs / Support**
+
+- **Free Market**: Desata el poder de los mercados sin cadenas.
+
+  - **Slug**: `free_market`
+  - **Mana Cost**: 35
+  - **Cooldown**: 2 turns
+  - **Strong Against**: None
+  - **Effects**: Increases attack by 15% for 2 turns.
+  - **Extra Effects**: None
+  - **Side Effects**: None
+  - **Any other relevant technical data**: Type: Buff, Target: Self, Animation: market_wave, Sound: money_flow
+  - **Implementation Note**: Useful for boosting offensive capabilities temporarily, ideal for burst damage phases.
+
+- **Free Exchange Rate**: Abre la puerta a los dólares.
+
+  - **Slug**: `free_exchange_rate`
+  - **Mana Cost**: 30
+  - **Cooldown**: 2 turns
+  - **Strong Against**: None
+  - **Effects**: Grants 100% defense penetration for 1 turn.
+  - **Extra Effects**: If the enemy has the Inflation or Regulations concept, increases critical chance by 10% for 1 turn.
+  - **Side Effects**: None
+  - **Any other relevant technical data**: Type: Buff, Target: Self, Animation: dollar_wave, Sound: cash_register
+  - **Implementation Note**: Synergizes well against enemies with Inflation or Regulations, enhancing critical hit potential.
+
+- **Country Risk Drop**: Suben los bonos y baja el miedo.
+
+  - **Slug**: `country_risk_drop`
+  - **Mana Cost**: 35
+  - **Cooldown**: 2 turns
+  - **Strong Against**: None
+  - **Effects**: Increases defense by 15% for 1 turn. If the Bond Shorter concept is present, increases critical chance by 100% for 1 turn.
+  - **Extra Effects**: None
+  - **Side Effects**: None
+  - **Any other relevant technical data**: Type: Buff, Target: Self, Animation: bond_rise, Sound: ding_positive
+  - **Implementation Note**: Combines defensive boost with conditional critical chance increase, best used when Bond Shorter is active.
