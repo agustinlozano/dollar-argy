@@ -4,7 +4,7 @@
 💡
 
 - MX se refiere a criaturas hostiles de diferente naturaleza. Esta tabla no incluye bosses.
-- La vida base del player fue pensada en base al daño ejercido por 2 **Dosis de Libertad** + un ataque básico. Aunque los ataques de los enemigos serán diferentes y menos poderosos, con lo cual esta vida permite tanquear varios ataques de las criaturas hostiles en un combate.
+- La vida base del player fue pensada en base al daño ejercido por 2 **Dose of Freedom** + un ataque básico. Aunque los ataques de los enemigos serán diferentes y menos poderosos, con lo cual esta vida permite tanquear varios ataques de las criaturas hostiles en un combate.
 - La vida del player en los siguientes niveles tiene que establecerse a partir del factor de escalado. El caul aun debe determinarse por nivel/game stage.
 </aside>
 
@@ -23,7 +23,7 @@ Usamos un growth progresivo x1.5 por stage.
 <aside>
 💡
 
-La mana base del player fue pensada en un combate contra 3 M1 o 3 M2. Donde harían falta como mínimo 3 casteos de **Dosis de Libertad** + 6 ataques básicos en total para abatir a los tres.
+La mana base del player fue pensada en un combate contra 3 M1 o 3 M2. Donde harían falta como mínimo 3 casteos de **Dose of Freedom** + 6 ataques básicos en total para abatir a los tres.
 
 </aside>
 
