@@ -108,3 +108,76 @@
   - **Efectos secundarios**: Ninguno
   - **Cualquier otro dato técnico relevante**: Tipo: Ofensivo, Objetivo: Área, Animación: explosive_chart, Sonido: boom
   - **Nota de implementación**: Hechizo de alto impacto con gran área de efecto, ideal contra enemigos con Inflación.
+
+**🛡️ Defensivos**
+
+- **Blinding Surveys**: Distracts an enemy with surveys, causing them to lose 1 turn.
+
+  - **Slug**: `blinding_surveys`
+  - **Costo de mana**: 10
+  - **Cooldown**: 1 turno
+  - **Fuerte contra**: Ninguno
+  - **Efectos**: Forces a single enemy to skip their turn for 1 turn.
+  - **Efectos Extras**: Ninguno
+  - **Efectos secundarios**: Ninguno
+  - **Cualquier otro dato técnico relevante**: Tipo: Defensivo, Objetivo: Un solo enemigo, Animación: survey_confusion, Sonido: paper_rustle, Color de aura: #D3D3D3
+  - **Nota de implementación**: Low-cost spell for crowd control, effective for neutralizing a single enemy temporarily.
+
+- **Liquidity Injection**: Restores 20% of health.
+
+  - **Slug**: `liquidity_injection`
+  - **Costo de mana**: 20
+  - **Cooldown**: 1 turno
+  - **Fuerte contra**: Ninguno
+  - **Efectos**: Heals the caster for 20% of their maximum health for 1 turn.
+  - **Efectos Extras**: Ninguno
+  - **Efectos secundarios**: Ninguno
+  - **Cualquier otro dato técnico relevante**: Tipo: Defensivo, Objetivo: Propio, Animación: liquidity_wave, Sonido: healing_whoosh, Color de aura: #00FA9A
+  - **Nota de implementación**: Reliable self-healing spell for quick health recovery in combat.
+
+- **Interest Rate Hike**: Increases defense by 10% against inflationary attacks and reduces attack by 25%.
+
+  - **Slug**: `interest_rate_hike`
+  - **Costo de mana**: 20
+  - **Cooldown**: 3 turnos
+  - **Fuerte contra**: Inflación
+  - **Efectos**: Increases defense by 10% against enemies with the Inflation concept for 1 turn.
+  - **Efectos Extras**: Ninguno
+  - **Efectos secundarios**: Reduces the caster's attack by 25% for 1 turn.
+  - **Cualquier otro dato técnico relevante**: Tipo: Defensivo, Objetivo: Propio, Animación: ratehike_defense, Sonido: rate_up, Color de aura: #FFD700
+  - **Nota de implementación**: Useful against Inflation-based enemies but comes with an attack penalty, requiring strategic timing.
+
+- **Fiscal Surplus**: Protects with an aura that blocks inflationary attacks.
+
+  - **Slug**: `fiscal_surplus`
+  - **Costo de mana**: 60
+  - **Cooldown**: 3 turnos
+  - **Fuerte contra**: Inflación
+  - **Efectos**: Increases defense by 100% against enemies with the Inflation concept for 1 turn.
+  - **Efectos Extras**: Ninguno
+  - **Efectos secundarios**: Ninguno
+  - **Cualquier otro dato técnico relevante**: Tipo: Defensivo, Objetivo: Propio, Animación: surplus_aura, Sonido: shield_pop, Color de aura: #98FB98
+  - **Nota de implementación**: High-cost spell offering complete protection against Inflation-based attacks for one turn.
+
+- **Monetary Anchor**: Restores 5% of health per turn for an entire combat round.
+
+  - **Slug**: `monetary_anchor`
+  - **Costo de mana**: 40
+  - **Cooldown**: Toda la duración del combate
+  - **Fuerte contra**: Ninguno
+  - **Efectos**: Grants 5% health regeneration per turn for the duration of one combat.
+  - **Efectos Extras**: Ninguno
+  - **Efectos secundarios**: Ninguno
+  - **Cualquier otro dato técnico relevante**: Tipo: Defensivo, Objetivo: Propio, Animación: anchor_hold, Sonido: slow_beat, Color de aura: #4682B4
+  - **Nota de implementación**: Long-term healing option, best used in prolonged fights due to its one-combat cooldown.
+
+- **Central Bank Shutdown**: Blocks enemy mana and causes them to lose 1 turn.
+  - **Slug**: `central_bank_shutdown`
+  - **Costo de mana**: 60
+  - **Cooldown**: 3 turnos
+  - **Fuerte contra**: Ninguno
+  - **Efectos**: Forces enemies in a small area (1 unit) to skip their turn for 1 turn.
+  - **Efectos Extras**: Ninguno
+  - **Efectos secundarios**: Ninguno
+  - **Cualquier otro dato técnico relevante**: Tipo: Defensivo, Objetivo: Área, Animación: bank_seal, Sonido: lockdown, Color de aura: #A52A2A
+  - **Nota de implementación**: High-cost crowd control spell, effective for disrupting multiple enemies in a small area.
