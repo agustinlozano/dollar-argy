@@ -16,98 +16,98 @@
 - **Dose of Freedom**: Ataque básico del juego, para poder repartir pequeñas dosis de libertad.
 
   - **Slug**: `freedom_dose`
-  - **Costo de mana**: 0
+  - **Mana Cost**: 0
   - **Cooldown**: 0
-  - **Fuerte contra**: Ninguno
-  - **Efectos**: Inflige 5 de daño a un solo objetivo durante 1 turno.
-  - **Efectos Extras**: Ninguno
-  - **Efectos secundarios**: Ninguno
-  - **Cualquier otro dato técnico relevante**: Tipo: Ofensivo, Objetivo: Un solo enemigo, Animación: light_hit, Sonido: slap
-  - **Nota de implementación**: Hechizo inicial sin costo, ideal para ataques básicos sin consumir recursos.
+  - **Strong Against**: None
+  - **Effects**: Deals 5 damage to a single target for 1 turn.
+  - **Extra Effects**: None
+  - **Side Effects**: None
+  - **Any other relevant technical data**: Type: Offensive, Target: Single enemy, Animation: light_hit, Sound: slap
+  - **Implementation Note**: Initial zero-cost spell, ideal for basic attacks without consuming resources.
 
 - **Freedom Missile**: Un disparo certero que quita 10 puntos de vida.
 
   - **Slug**: `freedom_projectile`
-  - **Costo de mana**: 15
+  - **Mana Cost**: 15
   - **Cooldown**: 0
-  - **Fuerte contra**: Ninguno
-  - **Efectos**: Inflige 10 de daño a un solo objetivo durante 1 turno.
-  - **Efectos Extras**: Ninguno
-  - **Efectos secundarios**: Ninguno
-  - **Cualquier otro dato técnico relevante**: Tipo: Ofensivo, Objetivo: Un solo enemigo, Animación: bullet_hit, Sonido: whoosh
-  - **Nota de implementación**: Hechizo de daño directo eficiente para enemigos individuales, sin enfriamiento.
+  - **Strong Against**: None
+  - **Effects**: Deals 10 damage to a single target for 1 turn.
+  - **Extra Effects**: None
+  - **Side Effects**: None
+  - **Any other relevant technical data**: Type: Offensive, Target: Single enemy, Animation: bullet_hit, Sound: whoosh
+  - **Implementation Note**: Efficient direct damage spell for single enemies, with no cooldown.
 
 - **Austerity Blast**: Golpe en área que congela enemigos con recortes presupuestarios.
 
   - **Slug**: `austerity_blast`
-  - **Costo de mana**: 30
-  - **Cooldown**: 1 turno
-  - **Fuerte contra**: Inflación
-  - **Efectos**: Inflige 5 de daño y aplica aturdimiento (stun) en un área de 4 unidades durante 1 turno.
-  - **Efectos Extras**: Ninguno
-  - **Efectos secundarios**: Ninguno
-  - **Cualquier otro dato técnico relevante**: Tipo: Ofensivo, Objetivo: Área, Animación: ice_explosion, Sonido: frost_hit
-  - **Nota de implementación**: Útil para controlar grupos de enemigos con su efecto de aturdimiento.
+  - **Mana Cost**: 30
+  - **Cooldown**: 1 turn
+  - **Strong Against**: Inflation
+  - **Effects**: Deals 5 damage and applies stun in an area of 4 units for 1 turn.
+  - **Extra Effects**: None
+  - **Side Effects**: None
+  - **Any other relevant technical data**: Type: Offensive, Target: Area, Animation: ice_explosion, Sound: frost_hit
+  - **Implementation Note**: Useful for controlling groups of enemies with its stun effect.
 
 - **Lower Interest Rate**: Dispara daño leve en área y debuffea el ataque enemigo.
 
   - **Slug**: `interest_rate_drop`
-  - **Costo de mana**: 25
-  - **Cooldown**: 1 turno
-  - **Fuerte contra**: Ninguno
-  - **Efectos**: Inflige 5 de daño en un área de 3 unidades durante 1 turno.
-  - **Efectos Extras**: Ninguno
-  - **Efectos secundarios**: Si el enemigo tiene el concepto de Inflación, reduce su ataque en 20% durante 1 turno.
-  - **Cualquier otro dato técnico relevante**: Tipo: Ofensivo, Objetivo: Área, Animación: coin_rain, Sonido: soft_bang
-  - **Nota de implementación**: Efectivo contra enemigos con Inflación, combina daño y debilitamiento.
+  - **Mana Cost**: 25
+  - **Cooldown**: 1 turn
+  - **Strong Against**: None
+  - **Effects**: Deals 5 damage in an area of 3 units for 1 turn.
+  - **Extra Effects**: None
+  - **Side Effects**: If the enemy has the Inflation concept, reduces their attack by 20% for 1 turn.
+  - **Any other relevant technical data**: Type: Offensive, Target: Area, Animation: coin_rain, Sound: soft_bang
+  - **Implementation Note**: Effective against enemies with Inflation, combining damage and debuff.
 
 - **Deregulation Ray**: Destruye trabas con pura eficiencia de mercado.
 
   - **Slug**: `deregulation_ray`
-  - **Costo de mana**: 25
-  - **Cooldown**: 1 turno
-  - **Fuerte contra**: Burocracia, Corrupción
-  - **Efectos**: Inflige 10 de daño a un solo objetivo durante 1 turno.
-  - **Efectos Extras**: Ninguno
-  - **Efectos secundarios**: Ninguno
-  - **Cualquier otro dato técnico relevante**: Tipo: Ofensivo, Objetivo: Un solo enemigo, Animación: electric_beam, Sonido: zap
-  - **Nota de implementación**: Especialmente útil contra enemigos con conceptos de Burocracia o Corrupción.
+  - **Mana Cost**: 25
+  - **Cooldown**: 1 turn
+  - **Strong Against**: Bureaucracy, Corruption
+  - **Effects**: Deals 10 damage to a single target for 1 turn.
+  - **Extra Effects**: None
+  - **Side Effects**: None
+  - **Any other relevant technical data**: Type: Offensive, Target: Single enemy, Animation: electric_beam, Sound: zap
+  - **Implementation Note**: Particularly useful against enemies with Bureaucracy or Corruption concepts.
 
 - **Mass Privatization**: Invoca una ráfaga de contratos que desmantelan enemigos públicos.
 
   - **Slug**: `mass_privatization`
-  - **Costo de mana**: 50
-  - **Cooldown**: 2 turnos
-  - **Fuerte contra**: Corrupción
-  - **Efectos**: Inflige 15 de daño a hasta 3 objetivos en un área durante 1 turno.
-  - **Efectos Extras**: Ninguno
-  - **Efectos secundarios**: Ninguno
-  - **Cualquier otro dato técnico relevante**: Tipo: Ofensivo, Objetivo: Área, Animación: paper_storm, Sonido: stampede
-  - **Nota de implementación**: Hechizo de alto costo para daño en área, ideal contra múltiples enemigos.
+  - **Mana Cost**: 50
+  - **Cooldown**: 2 turns
+  - **Strong Against**: Corruption
+  - **Effects**: Deals 15 damage to up to 3 targets in an area for 1 turn.
+  - **Extra Effects**: None
+  - **Side Effects**: None
+  - **Any other relevant technical data**: Type: Offensive, Target: Area, Animation: paper_storm, Sound: stampede
+  - **Implementation Note**: High-cost area damage spell, ideal against multiple enemies.
 
 - **Laffer Bullet**: Proyectil que se potencia si bajás impuestos.
 
   - **Slug**: `laffer_bullet`
-  - **Costo de mana**: 40
-  - **Cooldown**: 2 turnos
-  - **Fuerte contra**: Ninguno
-  - **Efectos**: Inflige 10 de daño a un solo objetivo durante 1 turno.
-  - **Efectos Extras**: Si el ítem "Lower Taxes" está equipado, aumenta la probabilidad de crítico en 100% de forma permanente.
-  - **Efectos secundarios**: Ninguno
-  - **Cualquier otro dato técnico relevante**: Tipo: Ofensivo, Objetivo: Un solo enemigo, Animación: golden_bullet, Sonido: ka-ching
-  - **Nota de implementación**: Requiere sinergia con el ítem "Lower Taxes" para maximizar su potencial crítico.
+  - **Mana Cost**: 40
+  - **Cooldown**: 2 turns
+  - **Strong Against**: None
+  - **Effects**: Deals 10 damage to a single target for 1 turn.
+  - **Extra Effects**: If the "Lower Taxes" item is equipped, increases critical chance by 100% permanently.
+  - **Side Effects**: None
+  - **Any other relevant technical data**: Type: Offensive, Target: Single enemy, Animation: golden_bullet, Sound: ka-ching
+  - **Implementation Note**: Requires synergy with the "Lower Taxes" item to maximize its critical potential.
 
 - **Fiscal Shock**: Reduce el gasto público en el área de impacto.
 
   - **Slug**: `fiscal_shock`
-  - **Costo de mana**: 60
-  - **Cooldown**: 3 turnos
-  - **Fuerte contra**: Inflación
-  - **Efectos**: Inflige 20 de daño en un área de 6 unidades durante 1 turno.
-  - **Efectos Extras**: Si el enemigo tiene el concepto de Inflación, inflige 10 de daño adicional de forma permanente.
-  - **Efectos secundarios**: Ninguno
-  - **Cualquier otro dato técnico relevante**: Tipo: Ofensivo, Objetivo: Área, Animación: explosive_chart, Sonido: boom
-  - **Nota de implementación**: Hechizo de alto impacto con gran área de efecto, ideal contra enemigos con Inflación.
+  - **Mana Cost**: 60
+  - **Cooldown**: 3 turns
+  - **Strong Against**: Inflation
+  - **Effects**: Deals 20 damage in an area of 6 units for 1 turn.
+  - **Extra Effects**: If the enemy has the Inflation concept, deals an additional 10 damage permanently.
+  - **Side Effects**: None
+  - **Any other relevant technical data**: Type: Offensive, Target: Area, Animation: explosive_chart, Sound: boom
+  - **Implementation Note**: High-impact spell with a large area of effect, ideal against enemies with Inflation.
 
 **🛡️ Defensivos**
 
