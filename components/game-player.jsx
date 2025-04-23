@@ -26,7 +26,7 @@ export const Player = forwardRef(function PlayerBill(
 ) {
   const playerRef = useRef();
   const groupRef = useRef();
-  const texture = useTexture("/hornero-bill.jpg");
+  const texture = useTexture("/textures/hornero-bill.jpg");
 
   // Access the store for animation state
   const isMoving = useGameStore((state) => state.isMoving);
