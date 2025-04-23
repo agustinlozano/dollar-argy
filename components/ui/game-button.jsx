@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export default function GameButton({ id, className, children, ...props }) {
+export function GameButton({ id, className, children, ...props }) {
   return (
     <Button
       id={id}
