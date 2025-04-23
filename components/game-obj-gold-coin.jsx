@@ -27,6 +27,29 @@ export function GoldCoin({ position = [0, 0, 0] }) {
     []
   );
 
+  // Cleanup function
+  const cleanup = () => {
+    if (coinGeometry) {
+      coinGeometry.dispose();
+    }
+    if (coinMaterial) {
+      coinMaterial.dispose();
+    }
+    if (coinRef.current) {
+      // Dispose any additional resources
+      if (coinRef.current.geometry) {
+        coinRef.current.geometry.dispose();
+      }
+      if (coinRef.current.material) {
+        if (Array.isArray(coinRef.current.material)) {
+          coinRef.current.material.forEach((material) => material.dispose());
+        } else {
+          coinRef.current.material.dispose();
+        }
+      }
+    }
+  };
+
   // Player proximity
   useEffect(() => {
     if (isCollected) return;
@@ -74,11 +97,17 @@ export function GoldCoin({ position = [0, 0, 0] }) {
     const scale = 1 - animationProgress.current * 0.8;
     coin.scale.set(scale, scale, scale);
 
-    // Hide
+    // Hide and cleanup when animation completes
     if (animationProgress.current >= 1) {
       coin.visible = false;
+      cleanup();
     }
   });
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => cleanup();
+  }, []);
 
   if (isCollected && animationProgress.current >= 1) return null;
 

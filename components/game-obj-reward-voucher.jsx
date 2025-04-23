@@ -34,6 +34,39 @@ export function RewardVoucher({ position = [0, 0, 0] }) {
     []
   );
 
+  // Cleanup function
+  const cleanup = () => {
+    if (paperGeometry) {
+      paperGeometry.dispose();
+    }
+    if (paperMaterial) {
+      paperMaterial.dispose();
+    }
+    if (sealGeometry) {
+      sealGeometry.dispose();
+    }
+    if (sealMaterial) {
+      sealMaterial.dispose();
+    }
+    if (voucherRef.current) {
+      // Dispose any additional resources from child meshes
+      voucherRef.current.traverse((child) => {
+        if (child.isMesh) {
+          if (child.geometry) {
+            child.geometry.dispose();
+          }
+          if (child.material) {
+            if (Array.isArray(child.material)) {
+              child.material.forEach((material) => material.dispose());
+            } else {
+              child.material.dispose();
+            }
+          }
+        }
+      });
+    }
+  };
+
   // Player proximity
   useEffect(() => {
     if (isCollected) return;
@@ -85,11 +118,17 @@ export function RewardVoucher({ position = [0, 0, 0] }) {
     const scale = 1 - animationProgress.current * 0.8;
     voucher.scale.set(scale, scale, scale);
 
-    // Hide
+    // Hide and cleanup when animation completes
     if (animationProgress.current >= 1) {
       voucher.visible = false;
+      cleanup();
     }
   });
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => cleanup();
+  }, []);
 
   if (isCollected && animationProgress.current >= 1) return null;
 
