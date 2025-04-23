@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import GameButton from "@/components/game-button";
+import { GameButton } from "@/components/ui/game-button";
 import { useDanceAnimation } from "@/hooks/useDanceAnimation";
 
 export function Controls({ onMove, onCastSpell }) {

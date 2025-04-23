@@ -1,5 +1,5 @@
 "use client";
-import GameButton from "./game-button";
+import { GameButton } from "@/components/ui/game-button";
 
 export default function GameOverModal({ score, onRetry, visible }) {
   return (
