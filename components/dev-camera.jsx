@@ -21,11 +21,18 @@ export function DevCamera() {
     if (!cameraRef.current) return;
 
     // Update camera frustum on resize
+    // The camera's frustum defines the visible area of the scene.
+    // The properties left, right, top, and bottom are updated
+    // based on the new width and height values
     cameraRef.current.left = width / -2;
     cameraRef.current.right = width / 2;
     cameraRef.current.top = height / 2;
     cameraRef.current.bottom = height / -2;
     cameraRef.current.updateProjectionMatrix();
+    // These calculations ensure that the camera's frustum is
+    // centered around the origin (0, 0) and adjusts
+    // according to the new dimensions.
+    // https://es.m.wikipedia.org/wiki/Archivo:Orthographic_view_frustum.png
 
     // Force a re-render of the scene
     invalidate();
