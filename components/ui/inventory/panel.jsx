@@ -14,11 +14,7 @@ import {
   Droplets,
 } from "lucide-react";
 
-export default function DetailPanel({
-  selectedItem,
-  selectedSpell,
-  activeTab,
-}) {
+export function DetailPanel({ selectedItem, selectedSpell, activeTab }) {
   if (activeTab === "items" && selectedItem) {
     return <ItemDetails item={selectedItem} />;
   } else if (activeTab === "spells" && selectedSpell) {
