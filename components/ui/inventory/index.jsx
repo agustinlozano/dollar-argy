@@ -32,14 +32,14 @@ export function Inventory({ items, spells }) {
         value={activeTab}
         onValueChange={setActiveTab}
         defaultValue="items"
-        className="z-40 h-full"
+        className="h-full"
       >
-        <div className="tab-header p-3 select-none">
-          <TabsList className="grid grid-cols-2 rounded-none">
-            <TabsTrigger value="items" className="px-8 rounded-none">
+        <div className="tab-header p-3 select-none z-40">
+          <TabsList className="grid grid-cols-2 rounded-none font-cormorant">
+            <TabsTrigger value="items" className="px-8 rounded-none uppercase">
               Items
             </TabsTrigger>
-            <TabsTrigger value="spells" className="px-8 rounded-none">
+            <TabsTrigger value="spells" className="px-8 rounded-none uppercase">
               Spells
             </TabsTrigger>
           </TabsList>

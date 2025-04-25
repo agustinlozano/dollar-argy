@@ -48,7 +48,7 @@ export default function SpellCard({ spell, isSelected, onSelect }) {
             </span>
           </div>
         </div>
-        <h3 className="text-sm font-bold text-[#e0d5b8] line-clamp-1">
+        <h3 className="text-sm font-bold text-[#e0d5b8] line-clamp-1 font-cormorant uppercase">
           {spell.name}
         </h3>
         <p className="text-xs text-[#a3a090] line-clamp-2 mt-1">

@@ -52,7 +52,7 @@ export default function ItemCard({ item, isSelected, onSelect }) {
             {getItemIcon()}
           </div>
         </div>
-        <h3 className="text-sm font-bold text-[#e0d5b8] line-clamp-1">
+        <h3 className="text-sm font-bold text-[#e0d5b8] line-clamp-1 font-cormorant uppercase">
           {item.name}
         </h3>
         <p className="text-xs text-[#a3a090] line-clamp-2 mt-1">
