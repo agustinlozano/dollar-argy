@@ -24,7 +24,6 @@ import { RewardVoucher } from "./game-obj-reward-voucher";
 import { AxisHelper2D } from "./scenario-axis-helper";
 import { ArgyFlag } from "./scenario-argy-flag.jsx";
 
-import { GameInventory } from "./game-inventory";
 import { SpellEffect } from "./game-spell";
 import { DebugGrid } from "./dev-grid";
 
@@ -213,7 +212,6 @@ export function DollarArgyGame() {
         )}
       </Canvas>
 
-      <GameInventory />
       <FoundTracker />
       <Controls onMove={movePlayer} onCastSpell={castSpell} />
     </div>
