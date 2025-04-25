@@ -27,7 +27,7 @@ export function Inventory({ items, spells }) {
   }, [activeTab, items, spells]);
 
   return (
-    <div className={cn("relative grow max-w-4xl px-6 py-6")}>
+    <div className={cn("relative grow max-w-4xl px-6 pt-8")}>
       <div className="absolute inset-0 bg-[url('/textures/stiff-paint-opt.jpg')] bg-cover opacity-100"></div>
       <Tabs
         value={activeTab}
