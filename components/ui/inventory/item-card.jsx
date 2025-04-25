@@ -46,16 +46,20 @@ export function ItemCard({ item, isSelected, onSelect }) {
       )}
       onClick={onSelect}
     >
-      <div className="p-3 h-[120px] flex flex-col bg-card/20 backdrop-blur-sm">
+      <div className="p-2 h-[120px] flex flex-col bg-card/20 backdrop-blur-sm">
         <div className="flex justify-between items-start mb-1">
           <div className={cn("p-1 bg-[#1a1510]", getItemTypeColor())}>
             {getItemIcon()}
           </div>
         </div>
-        <h3 className="text-sm font-bold text-[#e0d5b8] line-clamp-1 font-cormorant uppercase">
-          {item.name}
+        <h3 className="text-xs pt-1 font-bold text-[#e0d5b8] font-cormorant uppercase">
+          {item.name.split(" ").map((word, index) => (
+            <span key={index} className="block leading-3.5">
+              {word}
+            </span>
+          ))}
         </h3>
-        <p className="text-xs text-[#a3a090] line-clamp-2 mt-1">
+        <p className="text-xs text-[#a3a090] line-clamp-1 mt-1">
           {item.description}
         </p>
       </div>
