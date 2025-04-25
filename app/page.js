@@ -26,11 +26,12 @@ export default function Home() {
   return (
     <main className="flex flex-col items-center justify-center bg-white">
       <DollarArgyGame />
-      <aside className="fixed flex top-1 right-1 w-md h-[600px] overflow-hidden">
+      <aside className="fixed flex top-1 right-1 w-md h-[624px] overflow-hidden">
         {/* <div className="absolute inset-0 bg-[url('/textures/glitch-texture.jpg')] bg-cover opacity-90"></div> */}
         {/* <div className="absolute inset-0 bg-[url('/textures/concrete-wall-texture.jpg')] bg-cover opacity-90"></div> */}
         {/* <div className="absolute inset-0 bg-[url('/textures/concrete-scratched.jpg')] bg-cover opacity-40"></div> */}
-        <div className="absolute inset-0 opacity-55 texture-fade bg-[url('/textures/grunge-frame-opt.jpg')] bg-cover bg-center rounded"></div>
+        {/* <div className="absolute inset-0 opacity-55 texture-fade bg-[url('/textures/grunge-frame-opt.jpg')] bg-cover bg-center rounded"></div> */}
+        <div className="absolute inset-0 opacity-55 z-10 texture-fade bg-[url('/textures/grunge-frame-2.png')] bg-cover bg-center rounded invert"></div>
         <BgGradient />
         <Inventory items={items} spells={spells} />
       </aside>

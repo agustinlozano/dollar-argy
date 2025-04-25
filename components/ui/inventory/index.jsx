@@ -27,7 +27,7 @@ export function Inventory({ items, spells }) {
   }, [activeTab, items, spells]);
 
   return (
-    <div className={cn("relative grow max-w-4xl mx-9.5 my-10 p-1")}>
+    <div className={cn("relative grow max-w-4xl px-6 py-6")}>
       <div className="absolute inset-0 bg-[url('/textures/stiff-paint-opt.jpg')] bg-cover opacity-100"></div>
       <Tabs
         value={activeTab}
@@ -35,7 +35,7 @@ export function Inventory({ items, spells }) {
         defaultValue="items"
         className="p-0"
       >
-        <div className="tab-header select-none z-40">
+        <div className="mx-auto select-none z-40">
           <TabsList className="grid grid-cols-2 rounded-none font-cormorant bg-card/75">
             <TabsTrigger value="items" className="px-8 rounded-none uppercase">
               Items
