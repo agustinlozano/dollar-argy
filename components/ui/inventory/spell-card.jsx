@@ -56,7 +56,7 @@ export default function SpellCard({ spell, isSelected, onSelect }) {
         </p>
       </div>
       {isSelected && (
-        <div className="absolute inset-0 border border-[#9059c9] pointer-events-none"></div>
+        <div className="absolute inset-0 border border-purple-950/50 pointer-events-none"></div>
       )}
     </div>
   );
