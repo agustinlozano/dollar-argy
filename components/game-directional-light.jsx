@@ -24,7 +24,7 @@ export function PlayerDirectionalLight() {
     <>
       <directionalLight
         position={[-200, -200, 400]}
-        intensity={0.5}
+        intensity={0.1}
         castShadow
         shadow-mapSize-width={4096}
         shadow-mapSize-height={4096}
@@ -39,7 +39,7 @@ export function PlayerDirectionalLight() {
       <directionalLight
         ref={dirLightRef2}
         position={[200, 1000, 400]}
-        intensity={0.5}
+        intensity={0.1}
         castShadow
         shadow-mapSize-width={4096}
         shadow-mapSize-height={4096}
