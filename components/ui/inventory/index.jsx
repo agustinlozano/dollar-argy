@@ -27,14 +27,15 @@ export function Inventory({ items, spells }) {
   }, [activeTab, items, spells]);
 
   return (
-    <div className={cn("grow max-w-4xl")}>
+    <div className={cn("relative grow max-w-4xl mx-6 my-10")}>
+      <div className="absolute inset-0 bg-[url('/textures/stiff-paint-opt.jpg')] bg-cover opacity-100"></div>
       <Tabs
         value={activeTab}
         onValueChange={setActiveTab}
         defaultValue="items"
-        className="h-full"
+        className="p-2 pr-0"
       >
-        <div className="tab-header p-3 select-none z-40">
+        <div className="tab-header select-none z-40">
           <TabsList className="grid grid-cols-2 rounded-none font-cormorant">
             <TabsTrigger value="items" className="px-8 rounded-none uppercase">
               Items
@@ -45,16 +46,16 @@ export function Inventory({ items, spells }) {
           </TabsList>
         </div>
 
-        <div className="relative grid grid-cols-1 gap-2 p-4 z-40 h-full">
+        <div className="relative grid grid-cols-1 gap-2 z-40">
           <div className="inventory-scroll">
-            <TabsContent value="items" className="mt-0 rounded-none h-full">
+            <TabsContent value="items" className="mt-0 rounded-none">
               <ItemGrid
                 items={items}
                 selectedItem={selectedItem}
                 onSelectItem={setSelectedItem}
               />
             </TabsContent>
-            <TabsContent value="spells" className="mt-0 rounded-none h-full">
+            <TabsContent value="spells" className="mt-0 rounded-none">
               <SpellGrid
                 spells={spells}
                 selectedSpell={selectedSpell}
