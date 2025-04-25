@@ -27,13 +27,13 @@ export function Inventory({ items, spells }) {
   }, [activeTab, items, spells]);
 
   return (
-    <div className={cn("relative grow max-w-4xl mx-6 my-10")}>
+    <div className={cn("relative grow max-w-4xl mx-9.5 my-10 p-1")}>
       <div className="absolute inset-0 bg-[url('/textures/stiff-paint-opt.jpg')] bg-cover opacity-100"></div>
       <Tabs
         value={activeTab}
         onValueChange={setActiveTab}
         defaultValue="items"
-        className="p-2 pr-0"
+        className="p-0"
       >
         <div className="tab-header select-none z-40">
           <TabsList className="grid grid-cols-2 rounded-none font-cormorant">
