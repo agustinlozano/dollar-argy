@@ -38,9 +38,9 @@ export function SpellCard({ spell, isSelected, onSelect }) {
       )}
       onClick={onSelect}
     >
-      <div className="p-2 h-[120px] flex flex-col bg-card/20 backdrop-blur-sm">
+      <div className="p-2 h-[120px] flex flex-col bg-card/50">
         <div className="flex justify-between items-start mb-1">
-          <div className="p-1 bg-[#1a1510]">{getSpellIcon()}</div>
+          <div className="p-1">{getSpellIcon()}</div>
           <div className="flex items-center gap-1">
             {getTargetingIcon()}
             <span className="text-xs font-bold text-[#9059c9]">
