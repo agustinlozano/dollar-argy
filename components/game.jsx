@@ -86,7 +86,7 @@ export function DollarArgyGame() {
           gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         }}
       >
-        <ambientLight intensity={0.5} />
+        <ambientLight intensity={0.1} />
         {isDancing && danceStartPosition ? (
           <>
             <DanceCamera position={danceStartPosition} />
