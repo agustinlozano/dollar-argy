@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@formkit/drag-and-drop": "^0.5.3",
     "@radix-ui/react-dropdown-menu": "^2.1.7",
     "@radix-ui/react-menubar": "^1.1.12",
     "@radix-ui/react-scroll-area": "^1.2.6",
