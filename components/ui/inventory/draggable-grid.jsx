@@ -43,7 +43,7 @@ export function DraggableGrid({
   return (
     <div className={cn("relative mt-3", className)}>
       <h2 className="text-xl font-bold mb-1 font-cormorant">{title}</h2>
-      <ScrollArea className="grow h-[480px]">
+      <ScrollArea className="grow h-[490px]">
         <div className={cn(draggable && "p-1 fade-to-bottom")}>
           <div
             ref={draggable ? parentRef : null}
