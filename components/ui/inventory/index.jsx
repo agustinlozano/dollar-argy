@@ -1,9 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ItemGrid from "@/components/ui/inventory/item-grid";
-import SpellGrid from "@/components/ui/inventory/spell-grid";
-import DetailPanel from "@/components/ui/inventory/panel";
+import { ItemGrid } from "@/components/ui/inventory/item-grid";
+import { SpellGrid } from "@/components/ui/inventory/spell-grid";
+import { DetailPanel } from "@/components/ui/inventory/panel";
 import { cn } from "@/lib/utils";
 // import "./linear-gradrient.css";
 
