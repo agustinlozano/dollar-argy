@@ -46,7 +46,7 @@ export default function ItemCard({ item, isSelected, onSelect }) {
       )}
       onClick={onSelect}
     >
-      <div className="p-3 h-[120px] flex flex-col">
+      <div className="p-3 h-[120px] flex flex-col bg-card/20 backdrop-blur-sm">
         <div className="flex justify-between items-start mb-1">
           <div className={cn("p-1 bg-[#1a1510]", getItemTypeColor())}>
             {getItemIcon()}
