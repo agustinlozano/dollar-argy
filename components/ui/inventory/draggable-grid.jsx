@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useDragAndDrop } from "@formkit/drag-and-drop/react";
 import { cn } from "@/lib/utils";
+import "./fade-to-bottom.css";
 
 export function DraggableGrid({
   items,
@@ -42,8 +43,8 @@ export function DraggableGrid({
   return (
     <div className={cn("relative mt-3", className)}>
       <h2 className="text-xl font-bold mb-1 font-cormorant">{title}</h2>
-      <ScrollArea className="grow h-[420px]">
-        <div className={cn(draggable && "p-1")}>
+      <ScrollArea className="grow h-[480px]">
+        <div className={cn(draggable && "p-1 fade-to-bottom")}>
           <div
             ref={draggable ? parentRef : null}
             className="grid grid-cols-3 gap-2 select-none"
