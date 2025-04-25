@@ -36,7 +36,7 @@ export function Inventory({ items, spells }) {
         className="p-0"
       >
         <div className="tab-header select-none z-40">
-          <TabsList className="grid grid-cols-2 rounded-none font-cormorant">
+          <TabsList className="grid grid-cols-2 rounded-none font-cormorant bg-card/75">
             <TabsTrigger value="items" className="px-8 rounded-none uppercase">
               Items
             </TabsTrigger>
