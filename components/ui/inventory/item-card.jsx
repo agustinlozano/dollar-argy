@@ -10,7 +10,7 @@ import {
   Skull,
 } from "lucide-react";
 
-export default function ItemCard({ item, isSelected, onSelect }) {
+export function ItemCard({ item, isSelected, onSelect }) {
   const getItemIcon = () => {
     switch (item.category) {
       case "potion":

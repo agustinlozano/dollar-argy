@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { Flame, Zap, Shield, Sparkles, Target, Skull } from "lucide-react";
 
-export default function SpellCard({ spell, isSelected, onSelect }) {
+export function SpellCard({ spell, isSelected, onSelect }) {
   const getSpellIcon = () => {
     switch (spell.type) {
       case "offensive-spell":
