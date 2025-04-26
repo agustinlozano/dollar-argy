@@ -34,3 +34,13 @@ Estos conceptos podrían afectar tanto, el ataque, la defensa o el critico.
 - **🧊** Burocracia
 - **🧊** Regulaciones
 - **🧊** Suba Impuestos
+
+## Aesthetics
+
+Generate assets for a RPG videogame
+
+- Dark Gothic aesthetics.
+- Pixel-art style.
+- Fantasy Framing.
+- A little bit indie.
+- Limited Space.
