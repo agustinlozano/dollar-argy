@@ -71,7 +71,7 @@ LINE_GEOMETRY.setAttribute(
   new THREE.BufferAttribute(lineDistances, 1)
 );
 
-export function Road({ rowIndex, variant = "default" }) {
+function Road({ rowIndex, variant = "default" }) {
   const lineRef = useRef();
 
   // Create materials using useMemo to prevent recreations

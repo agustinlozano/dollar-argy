@@ -3,10 +3,11 @@
 import React, { useRef } from "react";
 import { Canvas } from "@react-three/fiber";
 
+import Grass from "./game-terrain-grass";
+import Road from "./game-terrain-road";
+
 import { PlayerDirectionalLight } from "./game-directional-light";
 import { Player } from "./game-player";
-import { Grass } from "./game-terrain-grass";
-import { Road } from "./game-terrain-road";
 import { ObstacleObj } from "./game-obj-tree";
 import { MoneyChest } from "./game-obj-money-chest";
 import { GoldCoin } from "./game-obj-gold-coin";

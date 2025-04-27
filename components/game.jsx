@@ -12,8 +12,9 @@ import { GameUI } from "@/components/ui/game-ui";
 import { Player } from "./game-player";
 import { GameCamera } from "./game-camera";
 import { DanceCamera } from "./game-dance-camera";
-import { Grass } from "./game-terrain-grass";
-import { Road } from "./game-terrain-road";
+
+import Grass from "./game-terrain-grass";
+import Road from "./game-terrain-road";
 
 import { ObstacleObj } from "./game-obj-tree";
 import { MoneyChest } from "./game-obj-money-chest";
