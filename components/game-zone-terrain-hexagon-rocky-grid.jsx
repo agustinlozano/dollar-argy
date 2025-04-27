@@ -73,22 +73,6 @@ export const HexagonalRockyZone = ({
           transformed += normal * noise;
           `
         );
-
-        shader.fragmentShader = `
-          varying vec3 vPosition;
-          ${shader.fragmentShader}
-        `.replace(
-          "#include <dithering_fragment>",
-          `
-          #include <dithering_fragment>
-          
-          // Add fracture lines
-          float lines = abs(fract(vPosition.x * 0.5 + vPosition.y * 0.5 + vPosition.z * 0.5) - 0.5);
-          lines = smoothstep(0.1, 0.2, lines);
-          
-          gl_FragColor.rgb = mix(gl_FragColor.rgb * 0.8, gl_FragColor.rgb, lines);
-          `
-        );
       },
     });
   }, []);
