@@ -20,6 +20,7 @@ import { DevStudioLight } from "./dev-studio-light";
 import { chestTypes, rewardTypes } from "@/lib/consts";
 import { useResizeEffect } from "./game.hooks";
 import { ModeToggle } from "@/app/theme-toggle";
+import { GameObjTorch } from "./game-obj-torch";
 
 // Hardcoded scene data
 const hardcodedScene = {
@@ -138,6 +139,8 @@ export function DevScene() {
           />
           <M16M1 position={[0, -20, 0]} />
         </group>
+
+        <GameObjTorch />
 
         <DevStudioLight
           position={[300, 180, 0]}
