@@ -16,7 +16,6 @@ const BASE_ROWS = 9;
 export const useGameStore = create((set, get) => ({
   // Player State
   playerPosition: { x: 0, y: 0 },
-  playerRotation: 0,
   isMoving: false,
 
   // Dance State
@@ -162,16 +161,9 @@ export const useGameStore = create((set, get) => ({
     // Update position and rotation
     const newX = newTile * tileSize;
     const newY = newRow * tileSize;
-    let newRotation = 0;
-
-    if (direction === "forward") newRotation = 0;
-    if (direction === "left") newRotation = Math.PI / 2;
-    if (direction === "right") newRotation = -Math.PI / 2;
-    if (direction === "backward") newRotation = 0;
 
     set({
       playerPosition: { x: newX, y: newY },
-      playerRotation: newRotation,
       currentPosition: { currentRow: newRow, currentTile: newTile },
       movesQueue: remainingMoves,
       isMoving: true,
