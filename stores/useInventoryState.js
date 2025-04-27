@@ -54,6 +54,40 @@ export const useInventoryStore = create((set, get) => ({
     }
   },
 
+  // Add new format items and spells to inventory
+  addNew: (object) => {
+    // Check if it's a spell by looking at the type property
+    const isSpell = object.type?.includes("spell");
+
+    if (isSpell) {
+      set((state) => {
+        const exists = state.spells.find((s) => s.slug === object.slug);
+        if (exists) return state;
+        return { spells: [...state.spells, { ...object, quantity: 1 }] };
+      });
+    } else {
+      // It's an item
+      set((state) => {
+        const exists = state.items.find((i) => i.slug === object.slug);
+
+        // For stackable items (usually consumables)
+        if (exists && object.type?.includes("consumable")) {
+          return {
+            items: state.items.map((i) =>
+              i.slug === object.slug
+                ? { ...i, quantity: (i.quantity || 1) + 1 }
+                : i
+            ),
+          };
+        }
+        // For non-stackable items or new items
+        return {
+          items: [...state.items, { ...object, quantity: 1 }],
+        };
+      });
+    }
+  },
+
   // Remove one unit of an item or remove a spell
   remove: (slug) => {
     set((state) => {
