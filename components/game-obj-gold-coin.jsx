@@ -18,7 +18,7 @@ export function GoldCoin({ position = [0, 0, 0] }) {
 
   // Memo geometría y material
   const coinGeometry = useMemo(
-    () => new THREE.CylinderGeometry(6, 6, 4, 24),
+    () => new THREE.CylinderGeometry(6, 6, 2, 24),
     []
   );
   const coinMaterial = useMemo(
