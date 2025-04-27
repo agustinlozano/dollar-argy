@@ -1,14 +1,13 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 
 import { PlayerDirectionalLight } from "./game-directional-light";
+import { PlayerTorchLight } from "./game-player-torch-light";
 
-import { FoundTracker } from "@/components/ui/game-found-tracker";
-import { Controls } from "@/components/ui/game-controls";
-import { DancingIndicator } from "@/components/ui/game-dance-badge";
+import { GameUI } from "@/components/ui/game-ui";
 
 import { Player } from "./game-player";
 import { GameCamera } from "./game-camera";
@@ -25,11 +24,12 @@ import { AxisHelper2D } from "./scenario-axis-helper";
 import { ArgyFlag } from "./scenario-argy-flag.jsx";
 
 import { SpellEffect } from "./game-spell";
-import { DebugGrid } from "./dev-grid";
 
 import { enviroment } from "@/lib/env-vars";
 
 import { useGameStore } from "@/stores/useGameState";
+import { useInventoryStore } from "@/stores/useInventoryState";
+import { useInventoryUIStore } from "@/stores/useInventoryUIState";
 import { useResizeEffect } from "./game.hooks";
 
 // Game constants
@@ -45,25 +45,20 @@ export const GAME_CONSTANTS = {
 export function DollarArgyGame() {
   const {
     playerPosition,
-    playerRotation,
-    score,
     rows,
     activeSpells,
     movePlayer,
     castSpell,
     removeSpell,
-    initializeRows,
     isDancing,
     danceStartPosition,
   } = useGameStore();
 
+  const { items, spells } = useInventoryStore();
+  const { isInventoryOpen, toggleInventory } = useInventoryUIStore();
+
   const playerRef = useRef();
   const containerRef = useRef();
-
-  // Initialize rows when the component mounts
-  useEffect(() => {
-    initializeRows();
-  }, []);
 
   // Handle window resize
   const canvasSize = useResizeEffect(containerRef);
@@ -86,7 +81,7 @@ export function DollarArgyGame() {
           gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         }}
       >
-        <ambientLight intensity={0.1} />
+        <ambientLight intensity={0.03} />
         {isDancing && danceStartPosition ? (
           <>
             <DanceCamera position={danceStartPosition} />
@@ -96,6 +91,7 @@ export function DollarArgyGame() {
           <GameCamera target={playerRef} />
         )}
         <PlayerDirectionalLight />
+        <PlayerTorchLight />
 
         {/* debug grid */}
         {/* <DebugGrid /> */}
@@ -104,7 +100,7 @@ export function DollarArgyGame() {
         <ArgyFlag position={[GAME_CONSTANTS.tileSize * 2, 0, 0]} />
 
         {/* Map rows */}
-        {rows.map((row, index) =>
+        {rows.map((row) =>
           row.type === "road" ? (
             <Road
               key={row.rowIndex}
@@ -171,11 +167,7 @@ export function DollarArgyGame() {
           )
         )}
 
-        <Player
-          ref={playerRef}
-          position={playerPosition}
-          rotation={playerRotation}
-        />
+        <Player ref={playerRef} position={playerPosition} />
 
         {/* Render active spells */}
         {activeSpells.map((spell) => (
@@ -212,8 +204,14 @@ export function DollarArgyGame() {
         )}
       </Canvas>
 
-      <FoundTracker />
-      <Controls onMove={movePlayer} onCastSpell={castSpell} />
+      <GameUI
+        items={items}
+        spells={spells}
+        isInventoryOpen={isInventoryOpen}
+        onInventoryToggle={toggleInventory}
+        onMove={movePlayer}
+        onCastSpell={castSpell}
+      />
     </div>
   );
 }
