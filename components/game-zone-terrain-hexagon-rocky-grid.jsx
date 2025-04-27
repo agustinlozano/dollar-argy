@@ -4,8 +4,8 @@ import { useEffect, useMemo, useRef } from "react";
 
 const createHexagonShape = () => {
   const shape = new THREE.Shape();
-  const size = 21;
-  const vertices = 6;
+  const size = 50;
+  const vertices = 10;
 
   for (let i = 0; i < vertices; i++) {
     const angle = (i * Math.PI * 2) / vertices;
@@ -15,7 +15,7 @@ const createHexagonShape = () => {
     if (i === 0) {
       shape.moveTo(x, y);
     } else {
-      shape.lineTo(x, y);
+      shape.lineTo(x, y * 1.2);
     }
   }
   shape.closePath();
@@ -27,10 +27,10 @@ const createFacetedGeometry = (baseShape) => {
     steps: 1,
     depth: 10,
     bevelEnabled: true,
-    bevelThickness: 2,
-    bevelSize: 1,
+    bevelThickness: 1.8,
+    bevelSize: 0.8,
     bevelOffset: 0,
-    bevelSegments: 3,
+    bevelSegments: 2,
   };
 
   return new THREE.ExtrudeGeometry(baseShape, extrudeSettings);
@@ -46,24 +46,24 @@ export const HexagonalRockyZone = ({
     [hexagonShape]
   );
   const [width, height] = gridSize;
-  const hexSpacing = 42 * 0.9;
+  const hexSpacing = 42 * 1;
   const verticalSpacing = hexSpacing * 0.866;
 
   const timeRef = useRef(0);
 
   useFrame((state) => {
-    timeRef.current = state.clock.getElapsedTime();
-    // Update uniforms if needed
-    rockMaterial.userData.shader &&
-      (rockMaterial.userData.shader.uniforms.time.value = timeRef.current);
+    // timeRef.current = state.clock.getElapsedTime();
+    // // Update uniforms if needed
+    // rockMaterial.userData.shader &&
+    //   (rockMaterial.userData.shader.uniforms.time.value = timeRef.current);
   });
 
-  // Create custom shader material inspired by the reference shader
+  // Create custom shader material for the low-poly look
   const rockMaterial = useMemo(() => {
     const material = new THREE.MeshStandardMaterial({
       color: "#9c9894",
-      roughness: 0.85,
-      metalness: 0.1,
+      roughness: 0.65,
+      metalness: 0.05,
       flatShading: true,
       side: THREE.DoubleSide,
     });
@@ -71,144 +71,73 @@ export const HexagonalRockyZone = ({
     material.onBeforeCompile = (shader) => {
       material.userData.shader = shader;
 
-      // Add custom uniforms
-      shader.uniforms.time = { value: 0 };
-
-      // Common noise functions - we'll add this to both shaders
-      const noiseFunctions = `
-        uniform float time;
-        
-        // Noise functions
-        float hash(vec3 p) {
-          p = fract(p * vec3(443.897, 441.423, 437.195));
-          p += dot(p, p + 19.19);
-          return fract(p.x * p.y * p.z);
-        }
-        
-        // Simplex-style 3D noise
-        float noise3D(vec3 p) {
-          vec3 i = floor(p);
-          vec3 f = fract(p);
-          f = f*f*(3.0-2.0*f); // Smoothstep
-          
-          float n = mix(
-              mix(
-                  mix(hash(i), hash(i + vec3(1.0, 0.0, 0.0)), f.x),
-                  mix(hash(i + vec3(0.0, 1.0, 0.0)), hash(i + vec3(1.0, 1.0, 0.0)), f.x),
-                  f.y
-              ),
-              mix(
-                  mix(hash(i + vec3(0.0, 0.0, 1.0)), hash(i + vec3(1.0, 0.0, 1.0)), f.x),
-                  mix(hash(i + vec3(0.0, 1.0, 1.0)), hash(i + vec3(1.0, 1.0, 1.0)), f.x),
-                  f.y
-              ),
-              f.z
-          );
-          
-          return n;
-        }
-        
-        // FBM (Fractal Brownian Motion)
-        float fbm(vec3 p) {
-          float result = 0.0;
-          float amplitude = 0.5;
-          float frequency = 1.0;
-          
-          for(int i = 0; i < 4; i++) {
-            result += amplitude * noise3D(p * frequency);
-            amplitude *= 0.5;
-            frequency *= 2.0;
-          }
-          
-          return result;
-        }
-      `;
+      // Add custom uniforms and varyings
+      shader.uniforms.edgeBrightness = { value: 0.15 };
+      shader.uniforms.edgeWidth = { value: 0.02 };
 
       // Inject vertex shader code
       shader.vertexShader = `
-        ${noiseFunctions}
+        uniform float edgeBrightness;
+        uniform float edgeWidth;
         varying vec3 vPosition;
         varying vec3 vNormal;
+        varying float vEdgeFactor;
         
         ${shader.vertexShader}
       `;
 
-      // Modify the main vertex shader code to add displacement
+      // Modify the begin_vertex to store position and normal
       shader.vertexShader = shader.vertexShader.replace(
         "#include <begin_vertex>",
         `
         #include <begin_vertex>
         vPosition = position;
         vNormal = normal;
+        `
+      );
+
+      // Calculate the edge factor after projected position is available
+      shader.vertexShader = shader.vertexShader.replace(
+        "#include <project_vertex>",
+        `
+        #include <project_vertex>
         
-        // Create natural looking bumps and displacements
-        float displacement = fbm(position * 0.2 + time * 0.02) * 2.0;
-        // Apply more dramatic displacement at the edges
-        float edgeEffect = 1.0 - min(1.0, 3.0 * abs(dot(normalize(position), normal)));
-        displacement = mix(displacement * 0.3, displacement, edgeEffect);
-        
-        // Apply the displacement
-        transformed += normal * displacement;
+        // Calculate the edge factor based on how close this vertex is to an edge
+        // We use the dot product of the normal with the view direction to detect edges
+        vec3 worldNormal = normalMatrix * normal;
+        vec3 viewDir = normalize(-mvPosition.xyz);
+        float edge = 1.0 - abs(dot(worldNormal, viewDir));
+        vEdgeFactor = smoothstep(0.65, 0.75, edge);
         `
       );
 
       // Inject fragment shader code
       shader.fragmentShader = `
-        ${noiseFunctions}
+        uniform float edgeBrightness;
+        uniform float edgeWidth;
         varying vec3 vPosition;
         varying vec3 vNormal;
-        
-        // Stone color functions inspired by the reference shader
-        vec3 stoneColor(vec3 p, vec3 normal, float noise) {
-          // Base stone colors
-          vec3 baseColor = vec3(0.42, 0.35, 0.3);
-          vec3 secondaryColor = vec3(0.51, 0.41, 0.32);
-          vec3 accentColor = vec3(0.25, 0.22, 0.18);
-          
-          // Blend between base colors based on position and noise
-          float blend = smoothstep(0.4, 0.6, noise);
-          vec3 stoneColor = mix(baseColor, secondaryColor, blend);
-          
-          // Add subtle variations
-          float grain = fract(sin(dot(p.xy, vec2(12.9898, 78.233))) * 43758.5453);
-          stoneColor = mix(stoneColor, accentColor, grain * 0.1);
-          
-          // Adjust based on normal direction for more definition
-          float normalFactor = abs(dot(normal, vec3(0.0, 1.0, 0.0)));
-          stoneColor = mix(stoneColor * 0.9, stoneColor * 1.1, normalFactor);
-          
-          return stoneColor;
-        }
+        varying float vEdgeFactor;
         
         ${shader.fragmentShader}
       `;
 
-      // Modify the main fragment shader code to apply the stone texture
+      // Modify the main fragment shader code
       shader.fragmentShader = shader.fragmentShader.replace(
         "#include <dithering_fragment>",
         `
         #include <dithering_fragment>
         
-        // Calculate noise based on position
-        float noise = smoothstep(0.0, 1.0, fbm(vPosition * 0.5 + time * 0.01));
+        // Add a subtle brightening effect to the edges
+        gl_FragColor.rgb = mix(gl_FragColor.rgb, gl_FragColor.rgb * (1.0 + edgeBrightness), vEdgeFactor);
         
-        // Calculate fracture pattern
-        float edge = fbm(vPosition * 2.0) * 2.0 - 1.0;
-        edge = smoothstep(0.1, 0.2, abs(edge));
+        // Add subtle facet differentiation
+        float facetBrightness = dot(vNormal, vec3(0.0, 1.0, 0.0)) * 0.1;
+        gl_FragColor.rgb = gl_FragColor.rgb * (1.0 + facetBrightness);
         
-        // Apply stone coloring
-        vec3 stoneCol = stoneColor(vPosition, vNormal, noise);
-        
-        // Apply fractures
-        gl_FragColor.rgb = mix(stoneCol, stoneCol * 0.6, edge * 0.5);
-        
-        // Add subtle ambient occlusion in crevices
-        float ao = smoothstep(0.0, 0.5, fbm(vPosition * 4.0));
-        gl_FragColor.rgb *= mix(0.8, 1.0, ao);
-        
-        // Add subtle specular highlights on higher areas
-        float spec = pow(max(0.0, dot(vNormal, vec3(0.0, 1.0, 0.0))), 4.0) * 0.2;
-        gl_FragColor.rgb += vec3(spec);
+        // Very subtle noise pattern to break up the flatness just slightly
+        float noise = fract(sin(dot(vPosition.xy, vec2(12.9898, 78.233))) * 43758.5453);
+        gl_FragColor.rgb += (noise - 0.5) * 0.02;
         `
       );
     };
