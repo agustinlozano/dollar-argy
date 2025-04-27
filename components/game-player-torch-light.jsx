@@ -33,7 +33,7 @@ export function PlayerTorchLight() {
       // Offset it slightly to create directional lighting
       pointLightRef.current.position.x = playerPosition.x + 40;
       pointLightRef.current.position.y = playerPosition.y - 10; // Position slightly behind player
-      pointLightRef.current.position.z = 100; // Increased height
+      pointLightRef.current.position.z = 85; // Increased height
 
       // Flickering effect
       flickerRef.current.timer += delta;
