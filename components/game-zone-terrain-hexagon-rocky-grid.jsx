@@ -33,7 +33,46 @@ const createFacetedGeometry = (baseShape) => {
     bevelSegments: 2,
   };
 
-  return new THREE.ExtrudeGeometry(baseShape, extrudeSettings);
+  // Create the basic geometry
+  const geometry = new THREE.ExtrudeGeometry(baseShape, extrudeSettings);
+
+  // Add irregularity to the top surface
+  const positionAttribute = geometry.getAttribute("position");
+  const normalAttribute = geometry.getAttribute("normal");
+
+  // Create a simple deterministic noise function
+  const simpleNoise = (x, y) => {
+    return (
+      Math.sin(x * 0.1) * Math.cos(y * 0.1) * 2.0 +
+      Math.sin(x * 0.3 + y * 0.2) * 1.5 +
+      Math.cos(x * 0.7 + y * 0.4) * 0.5
+    );
+  };
+
+  // Modify only the top-facing vertices
+  for (let i = 0; i < positionAttribute.count; i++) {
+    const normal = new THREE.Vector3(
+      normalAttribute.getX(i),
+      normalAttribute.getY(i),
+      normalAttribute.getZ(i)
+    );
+
+    // Check if this vertex is on the top face (roughly facing up in z-direction)
+    if (normal.z > 0.5) {
+      const x = positionAttribute.getX(i);
+      const y = positionAttribute.getY(i);
+
+      // Add some height variation
+      const noise = simpleNoise(x, y);
+      const heightVariation = noise * 1.0; // Scale to control the amount of variation
+
+      positionAttribute.setZ(i, positionAttribute.getZ(i) + heightVariation);
+    }
+  }
+
+  // Update the geometry
+  geometry.computeVertexNormals();
+  return geometry;
 };
 
 export const HexagonalRockyZone = ({
@@ -119,6 +158,11 @@ export const HexagonalRockyZone = ({
         varying vec3 vNormal;
         varying float vEdgeFactor;
         
+        // Simple noise function for surface detail
+        float simpleNoise(vec2 p) {
+          return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
+        }
+        
         ${shader.fragmentShader}
       `;
 
@@ -131,13 +175,14 @@ export const HexagonalRockyZone = ({
         // Add a subtle brightening effect to the edges
         gl_FragColor.rgb = mix(gl_FragColor.rgb, gl_FragColor.rgb * (1.0 + edgeBrightness), vEdgeFactor);
         
-        // Add subtle facet differentiation
+        // Add subtle facet differentiation based on normal
         float facetBrightness = dot(vNormal, vec3(0.0, 1.0, 0.0)) * 0.1;
         gl_FragColor.rgb = gl_FragColor.rgb * (1.0 + facetBrightness);
         
-        // Very subtle noise pattern to break up the flatness just slightly
-        float noise = fract(sin(dot(vPosition.xy, vec2(12.9898, 78.233))) * 43758.5453);
-        gl_FragColor.rgb += (noise - 0.5) * 0.02;
+        // Add subtle surface texture on top faces - stronger on more upward-facing parts
+        float topFaceFactor = max(0.0, vNormal.z);
+        float surfaceNoise = mix(0.0, (simpleNoise(vPosition.xy * 0.2) - 0.5) * 0.08, topFaceFactor); 
+        gl_FragColor.rgb += vec3(surfaceNoise);
         `
       );
     };
