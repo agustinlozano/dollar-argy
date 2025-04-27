@@ -28,6 +28,9 @@ export const useGameStore = create((set, get) => ({
   rows: [],
   activeSpells: [],
 
+  // Torch Light State
+  isTorchActive: true,
+
   // Movement Queue
   movesQueue: [],
   currentPosition: { currentRow: 0, currentTile: 0 },
@@ -90,6 +93,11 @@ export const useGameStore = create((set, get) => ({
     }
 
     set({ rows: initialRows });
+  },
+
+  // Toggle torch light
+  toggleTorch: () => {
+    set((state) => ({ isTorchActive: !state.isTorchActive }));
   },
 
   // Common Player Actions
@@ -159,7 +167,7 @@ export const useGameStore = create((set, get) => ({
     if (direction === "forward") newRotation = 0;
     if (direction === "left") newRotation = Math.PI / 2;
     if (direction === "right") newRotation = -Math.PI / 2;
-    if (direction === "backward") newRotation = 2 * Math.PI;
+    if (direction === "backward") newRotation = 0;
 
     set({
       playerPosition: { x: newX, y: newY },
