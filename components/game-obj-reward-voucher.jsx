@@ -85,10 +85,10 @@ export function RewardVoucher({ position = [0, 0, 0] }) {
     const handleKey = (e) => {
       if (e.key.toLowerCase() === "e") {
         setIsCollected(true);
-        addToInventory({
-          slug: itemSlugs.rewardVoucher,
-          type: itemTypes.voucher,
-        });
+        // addToInventory({
+        //   slug: itemSlugs.rewardVoucher,
+        //   type: itemTypes.voucher,
+        // });
       }
     };
 
