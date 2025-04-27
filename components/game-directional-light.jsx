@@ -8,10 +8,12 @@ export function PlayerDirectionalLight() {
   const dirLightRef2 = useRef();
   const targetRef = useRef();
 
-  // Usar el hook useHelper de drei
-  if (enviroment === "development") {
-    useHelper(dirLightRef2, THREE.DirectionalLightHelper, 100, "blue");
-  }
+  useHelper(
+    enviroment === "development" && dirLightRef2 ? dirLightRef2 : null,
+    THREE.DirectionalLightHelper,
+    100,
+    "blue"
+  );
 
   useEffect(() => {
     if (dirLightRef2.current) {
