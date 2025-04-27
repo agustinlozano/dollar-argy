@@ -16,14 +16,10 @@ const BILL_DIMENSIONS = {
   width: 41.2,
   height: 100,
   depth: 5,
-  baseHeightForward: 55,
-  baseHeightSideways: 25,
+  baseHeight: 55,
 };
 
-export const Player = forwardRef(function PlayerBill(
-  { position, rotation },
-  ref
-) {
+export const Player = forwardRef(function PlayerBill({ position }, ref) {
   const playerRef = useRef();
   const groupRef = useRef();
   const texture = useTexture("/textures/hornero-bill.jpg");
@@ -39,10 +35,8 @@ export const Player = forwardRef(function PlayerBill(
     time: 0,
     running: false,
     stepTime: 0.2,
-    startPosition: { x: 0, y: 0, z: BILL_DIMENSIONS.baseHeightForward },
-    targetPosition: { x: 0, y: 0, z: BILL_DIMENSIONS.baseHeightForward },
-    startRotation: 0,
-    targetRotation: 0,
+    startPosition: { x: 0, y: 0, z: BILL_DIMENSIONS.baseHeight },
+    targetPosition: { x: 0, y: 0, z: BILL_DIMENSIONS.baseHeight },
     lastDelta: 0,
   });
 
@@ -51,20 +45,13 @@ export const Player = forwardRef(function PlayerBill(
     mesh: playerRef.current,
   }));
 
-  // Determine base height based on rotation
-  const getBaseHeight = (rot) => {
-    return Math.abs(rot) === Math.PI / 2
-      ? BILL_DIMENSIONS.baseHeightSideways
-      : BILL_DIMENSIONS.baseHeightForward;
-  };
-
   // Initialize player position
   useEffect(() => {
     if (!playerRef.current) return;
 
     playerRef.current.position.x = position.x;
     playerRef.current.position.y = position.y;
-    playerRef.current.position.z = BILL_DIMENSIONS.baseHeightSideways;
+    playerRef.current.position.z = BILL_DIMENSIONS.baseHeight;
 
     if (groupRef.current) {
       groupRef.current.rotation.x = Math.PI / 2;
@@ -76,23 +63,20 @@ export const Player = forwardRef(function PlayerBill(
     animationState.current.targetPosition = {
       x: position.x,
       y: position.y,
-      z: BILL_DIMENSIONS.baseHeightForward,
+      z: BILL_DIMENSIONS.baseHeight,
     };
     animationState.current.startPosition = {
       x: position.x,
       y: position.y,
-      z: BILL_DIMENSIONS.baseHeightForward,
+      z: BILL_DIMENSIONS.baseHeight,
     };
-    animationState.current.targetRotation = rotation;
-    animationState.current.startRotation = rotation;
   }, []);
 
-  // Detect changes in position or rotation
+  // Detect changes in position
   useEffect(() => {
     if (!playerRef.current) return;
 
     const currentPos = playerRef.current.position;
-    const newBaseHeight = getBaseHeight(rotation);
 
     // Update animation state
     animationState.current.startPosition = {
@@ -103,16 +87,14 @@ export const Player = forwardRef(function PlayerBill(
     animationState.current.targetPosition = {
       x: position.x,
       y: position.y,
-      z: newBaseHeight,
+      z: BILL_DIMENSIONS.baseHeight,
     };
-    animationState.current.startRotation = groupRef.current.rotation.z;
-    animationState.current.targetRotation = rotation;
     animationState.current.time = 0;
     animationState.current.progress = 0;
     animationState.current.running = true;
 
     setIsMoving(true);
-  }, [position, rotation]);
+  }, [position]);
 
   // Animation frame
   useFrame((state, delta) => {
@@ -153,19 +135,10 @@ export const Player = forwardRef(function PlayerBill(
       );
 
       // Optimized jump effect with smoother curve
-      const jumpHeight = 6; // Reduced from 8
+      const jumpHeight = 6;
       const jumpProgress = progress < 0.5 ? progress * 2 : 2 - progress * 2;
       const jumpOffset = easeOutQuad(jumpProgress) * jumpHeight;
       playerRef.current.position.z += jumpOffset;
-    }
-
-    // Interpolate rotation with smoothing
-    if (groupRef.current) {
-      groupRef.current.rotation.z = THREE.MathUtils.lerp(
-        animationState.current.startRotation,
-        animationState.current.targetRotation,
-        progress
-      );
     }
 
     // Check if animation finished
@@ -179,9 +152,6 @@ export const Player = forwardRef(function PlayerBill(
         playerRef.current.position.x = animationState.current.targetPosition.x;
         playerRef.current.position.y = animationState.current.targetPosition.y;
         playerRef.current.position.z = animationState.current.targetPosition.z;
-      }
-      if (groupRef.current) {
-        groupRef.current.rotation.z = animationState.current.targetRotation;
       }
     }
   });
@@ -211,7 +181,7 @@ export const Player = forwardRef(function PlayerBill(
   return (
     <group ref={playerRef}>
       {/* <PivotControls scale={45}> */}
-      <group ref={groupRef} rotation={[0, 0, 0]}>
+      <group ref={groupRef} rotation={[Math.PI / 2, 0, 0]}>
         <mesh
           castShadow
           receiveShadow
