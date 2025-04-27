@@ -1,6 +1,6 @@
 import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Instance, Instances } from "@react-three/drei";
+// import { Instance, Instances } from "@react-three/drei";
 import * as THREE from "three";
 
 // Reusable geometries and materials defined outside the component
@@ -8,7 +8,7 @@ const HANDLE_GEO = new THREE.CylinderGeometry(1, 1, 10, 8);
 const WRAP_GEO = new THREE.CylinderGeometry(1.5, 1, 2, 8);
 const EMBER_GEO = new THREE.SphereGeometry(2, 8, 8);
 const FLAME_GEO = new THREE.ConeGeometry(3, 8, 8);
-const SMOKE_GEO = new THREE.SphereGeometry(1, 4, 4);
+// const SMOKE_GEO = new THREE.SphereGeometry(1, 4, 4);
 
 export function GameObjTorch({
   initialPosition = [10, 0, 100],
@@ -51,11 +51,11 @@ export function GameObjTorch({
         transparent: true,
         opacity: 0.7,
       }),
-      smoke: new THREE.MeshStandardMaterial({
-        color: "#444444",
-        transparent: true,
-        opacity: 0.2,
-      }),
+      // smoke: new THREE.MeshStandardMaterial({
+      //   color: "#444444",
+      //   transparent: true,
+      //   opacity: 0.2,
+      // }),
     };
   }, []);
 
@@ -116,7 +116,7 @@ export function GameObjTorch({
       </group>
 
       {/* Smoke particles using instanced meshes for better performance */}
-      <group position={[0, 20, 0]}>
+      {/* <group position={[0, 20, 0]}>
         <Instances limit={3} geometry={SMOKE_GEO} material={materials.smoke}>
           {smokePositions.map((props, i) => (
             <Instance
@@ -128,7 +128,7 @@ export function GameObjTorch({
             />
           ))}
         </Instances>
-      </group>
+      </group> */}
     </group>
   );
 }
