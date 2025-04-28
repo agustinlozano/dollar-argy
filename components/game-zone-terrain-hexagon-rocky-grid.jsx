@@ -23,6 +23,7 @@ const createHexagonShape = () => {
 };
 
 const createFacetedGeometry = (baseShape) => {
+  // Use a simple extruded geometry with beveled edges
   const extrudeSettings = {
     steps: 1,
     depth: 10,
@@ -30,49 +31,11 @@ const createFacetedGeometry = (baseShape) => {
     bevelThickness: 1.8,
     bevelSize: 0.8,
     bevelOffset: 0,
-    bevelSegments: 2,
+    bevelSegments: 3, // Increased for better edge quality
   };
 
-  // Create the basic geometry
-  const geometry = new THREE.ExtrudeGeometry(baseShape, extrudeSettings);
-
-  // Add irregularity to the top surface
-  const positionAttribute = geometry.getAttribute("position");
-  const normalAttribute = geometry.getAttribute("normal");
-
-  // Create a simple deterministic noise function
-  const simpleNoise = (x, y) => {
-    return (
-      Math.sin(x * 0.1) * Math.cos(y * 0.1) * 2.0 +
-      Math.sin(x * 0.3 + y * 0.2) * 1.5 +
-      Math.cos(x * 0.7 + y * 0.4) * 0.5
-    );
-  };
-
-  // Modify only the top-facing vertices
-  for (let i = 0; i < positionAttribute.count; i++) {
-    const normal = new THREE.Vector3(
-      normalAttribute.getX(i),
-      normalAttribute.getY(i),
-      normalAttribute.getZ(i)
-    );
-
-    // Check if this vertex is on the top face (roughly facing up in z-direction)
-    if (normal.z > 0.5) {
-      const x = positionAttribute.getX(i);
-      const y = positionAttribute.getY(i);
-
-      // Add some height variation
-      const noise = simpleNoise(x, y);
-      const heightVariation = noise * 1.0; // Scale to control the amount of variation
-
-      positionAttribute.setZ(i, positionAttribute.getZ(i) + heightVariation);
-    }
-  }
-
-  // Update the geometry
-  geometry.computeVertexNormals();
-  return geometry;
+  // Create the base geometry with no modifications
+  return new THREE.ExtrudeGeometry(baseShape, extrudeSettings);
 };
 
 export const HexagonalRockyZone = ({
@@ -88,22 +51,13 @@ export const HexagonalRockyZone = ({
   const hexSpacing = 42 * 1;
   const verticalSpacing = hexSpacing * 0.866;
 
-  const timeRef = useRef(0);
-
-  useFrame((state) => {
-    // timeRef.current = state.clock.getElapsedTime();
-    // // Update uniforms if needed
-    // rockMaterial.userData.shader &&
-    //   (rockMaterial.userData.shader.uniforms.time.value = timeRef.current);
-  });
-
-  // Create custom shader material for the low-poly look
+  // Create custom shader material for the low-poly look with surface variation
   const rockMaterial = useMemo(() => {
     const material = new THREE.MeshStandardMaterial({
       color: "#9c9894",
       roughness: 0.65,
       metalness: 0.05,
-      flatShading: true,
+      flatShading: true, // Important for the low-poly look
       side: THREE.DoubleSide,
     });
 
@@ -113,25 +67,59 @@ export const HexagonalRockyZone = ({
       // Add custom uniforms and varyings
       shader.uniforms.edgeBrightness = { value: 0.15 };
       shader.uniforms.edgeWidth = { value: 0.02 };
+      shader.uniforms.surfaceDepth = { value: 0.8 }; // Control the perceived depth of surface variation
 
       // Inject vertex shader code
       shader.vertexShader = `
         uniform float edgeBrightness;
         uniform float edgeWidth;
+        uniform float surfaceDepth;
         varying vec3 vPosition;
         varying vec3 vNormal;
         varying float vEdgeFactor;
         
+        // Simple noise function for displacement
+        float noise(vec2 p) {
+          return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
+        }
+        
+        // Simple FBM for more natural variations
+        float fbm(vec2 p) {
+          float f = 0.0;
+          f += 0.5000 * noise(p * 1.0);
+          f += 0.2500 * noise(p * 2.0);
+          f += 0.1250 * noise(p * 4.0);
+          return f;
+        }
+        
         ${shader.vertexShader}
       `;
 
-      // Modify the begin_vertex to store position and normal
+      // Modify the begin_vertex to store position and normal and apply displacement
       shader.vertexShader = shader.vertexShader.replace(
         "#include <begin_vertex>",
         `
         #include <begin_vertex>
         vPosition = position;
         vNormal = normal;
+        
+        // Apply vertex displacement only to top-facing vertices away from edges
+        if (normal.z > 0.7) {
+          // Determine if we're near an edge - edges are usually where xy is largest
+          float distToCenter = length(position.xy);
+          float edgeFactor = smoothstep(40.0, 35.0, distToCenter);
+          
+          // Add displacement based on position
+          float displacement = 
+            sin(position.x * 0.05) * cos(position.y * 0.05) +
+            sin(position.x * 0.1 + position.y * 0.2) * 0.5;
+          
+          // Scale based on distance from edge and user parameter
+          displacement *= edgeFactor * surfaceDepth;
+          
+          // Apply the displacement along the normal
+          transformed += normal * displacement;
+        }
         `
       );
 
