@@ -1,6 +1,5 @@
-import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { useEffect, useMemo, useRef } from "react";
+import { useMemo } from "react";
 
 // Create a texture loader and cache for reuse
 const textureLoader = new THREE.TextureLoader();
