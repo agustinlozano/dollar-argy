@@ -2,6 +2,21 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { useEffect, useMemo, useRef } from "react";
 
+// Create a texture loader and cache for reuse
+const textureLoader = new THREE.TextureLoader();
+const textureCache = {};
+
+// Function to load texture once and reuse
+const loadTexture = (path) => {
+  if (!textureCache[path]) {
+    textureCache[path] = textureLoader.load(path);
+    // Apply optimizations to the texture
+    textureCache[path].wrapS = textureCache[path].wrapT = THREE.RepeatWrapping;
+    textureCache[path].anisotropy = 4; // Improve texture quality at angles
+  }
+  return textureCache[path];
+};
+
 const createHexagonShape = () => {
   const shape = new THREE.Shape();
   const size = 50;
@@ -51,23 +66,33 @@ export const HexagonalRockyZone = ({
   const hexSpacing = 42 * 1;
   const verticalSpacing = hexSpacing * 0.866;
 
+  // Load the stone texture once and reuse it
+  const stoneTexture = useMemo(() => {
+    const texture = loadTexture("/textures/stone-floor.jpg");
+    // Set a reasonable repeat scale for the texture
+    texture.repeat.set(0.01, 0.01);
+    return texture;
+  }, []);
+
   // Create custom shader material for the low-poly look with surface variation
   const rockMaterial = useMemo(() => {
     const material = new THREE.MeshStandardMaterial({
-      color: "#9c9894",
+      color: "#757575",
       roughness: 0.65,
       metalness: 0.05,
       flatShading: true, // Important for the low-poly look
       side: THREE.DoubleSide,
+      map: stoneTexture,
     });
 
     material.onBeforeCompile = (shader) => {
       material.userData.shader = shader;
 
       // Add custom uniforms and varyings
-      shader.uniforms.edgeBrightness = { value: 0.15 };
-      shader.uniforms.edgeWidth = { value: 0.02 };
-      shader.uniforms.surfaceDepth = { value: 0.8 }; // Control the perceived depth of surface variation
+      // shader.uniforms.edgeBrightness = { value: 0.15 };
+      // shader.uniforms.edgeWidth = { value: 0.02 };
+      // shader.uniforms.surfaceDepth = { value: 0.8 }; // Control the perceived depth of surface variation
+      // shader.uniforms.textureOpacity = { value: 0.2 }; // 50% texture opacity
 
       // Inject vertex shader code
       shader.vertexShader = `
@@ -77,6 +102,7 @@ export const HexagonalRockyZone = ({
         varying vec3 vPosition;
         varying vec3 vNormal;
         varying float vEdgeFactor;
+        varying vec2 vUvCustom;
         
         // Simple noise function for displacement
         float noise(vec2 p) {
@@ -94,6 +120,15 @@ export const HexagonalRockyZone = ({
         
         ${shader.vertexShader}
       `;
+
+      // Add UV capturing from the standard THREE.js vertex shader
+      shader.vertexShader = shader.vertexShader.replace(
+        "#include <uv_vertex>",
+        `
+        #include <uv_vertex>
+        vUvCustom = uv;
+        `
+      );
 
       // Modify the begin_vertex to store position and normal and apply displacement
       shader.vertexShader = shader.vertexShader.replace(
@@ -142,9 +177,11 @@ export const HexagonalRockyZone = ({
       shader.fragmentShader = `
         uniform float edgeBrightness;
         uniform float edgeWidth;
+        uniform float textureOpacity;
         varying vec3 vPosition;
         varying vec3 vNormal;
         varying float vEdgeFactor;
+        varying vec2 vUvCustom;
         
         // Simple noise function for surface detail
         float simpleNoise(vec2 p) {
@@ -153,6 +190,20 @@ export const HexagonalRockyZone = ({
         
         ${shader.fragmentShader}
       `;
+
+      // Instead of replacing map_fragment, which is complex, we'll apply our texture blending in color_fragment
+      shader.fragmentShader = shader.fragmentShader.replace(
+        "#include <color_fragment>",
+        `
+        #include <color_fragment>
+        
+        // Apply texture blending with base color
+        #ifdef USE_MAP
+          vec4 texelColor = texture2D(map, vUvCustom);
+          diffuseColor.rgb = mix(diffuseColor.rgb, texelColor.rgb, textureOpacity);
+        #endif
+        `
+      );
 
       // Modify the main fragment shader code
       shader.fragmentShader = shader.fragmentShader.replace(
@@ -176,7 +227,7 @@ export const HexagonalRockyZone = ({
     };
 
     return material;
-  }, []);
+  }, [stoneTexture]);
 
   return (
     <group position={position} rotation={[Math.PI / 2, 0, 0]}>
