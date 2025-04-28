@@ -63,8 +63,12 @@ export const HexagonalRockyZone = ({
     [hexagonShape]
   );
   const [width, height] = gridSize;
-  const hexSpacing = 42 * 1;
-  const verticalSpacing = hexSpacing * 0.866;
+
+  // Adjust spacing to prevent overlaps
+  // For hexagonal grid, we need to adjust both X and Z spacing
+  const hexSize = 20; // Base size of hexagons
+  const xSpacing = hexSize * 2.1; // Slightly larger than diameter to prevent overlaps
+  const zSpacing = hexSize * 1.82; // Adjusted for the hexagonal grid pattern
 
   // Load the stone texture once and reuse it
   const stoneTexture = useMemo(() => {
@@ -83,16 +87,22 @@ export const HexagonalRockyZone = ({
       flatShading: true, // Important for the low-poly look
       side: THREE.DoubleSide,
       map: stoneTexture,
+      // Add depth write and depth test settings to help with z-fighting
+      depthWrite: true,
+      depthTest: true,
+      // Add polygon offset to help with z-fighting
+      polygonOffset: true,
+      polygonOffsetFactor: 1,
+      polygonOffsetUnits: 1,
     });
 
     material.onBeforeCompile = (shader) => {
       material.userData.shader = shader;
 
       // Add custom uniforms and varyings
-      // shader.uniforms.edgeBrightness = { value: 0.15 };
-      // shader.uniforms.edgeWidth = { value: 0.02 };
-      // shader.uniforms.surfaceDepth = { value: 0.8 }; // Control the perceived depth of surface variation
-      // shader.uniforms.textureOpacity = { value: 0.2 }; // 50% texture opacity
+      shader.uniforms.edgeBrightness = { value: 0.15 };
+      shader.uniforms.edgeWidth = { value: 0.02 };
+      shader.uniforms.surfaceDepth = { value: 0.8 }; // Control the perceived depth of surface variation
 
       // Inject vertex shader code
       shader.vertexShader = `
@@ -234,18 +244,24 @@ export const HexagonalRockyZone = ({
       {Array.from({ length: height }, (_, row) => {
         const isEvenRow = row % 2 === 0;
         return Array.from({ length: width }, (_, col) => {
-          const xPos = col * hexSpacing + (isEvenRow ? 0 : hexSpacing / 2);
-          const zPos = row * verticalSpacing;
+          // Calculate position with proper spacing for hexagonal grid
+          const xPos = col * xSpacing + (isEvenRow ? 0 : xSpacing / 2);
+          const zPos = row * zSpacing;
+
+          // Add a tiny random offset to z-position to avoid exact overlaps
+          // This helps prevent z-fighting while being visually imperceptible
+          const zOffset = Math.random() * 0.05;
 
           return (
             <mesh
               key={`hex-${row}-${col}`}
-              position={[xPos, 0, zPos]}
+              position={[xPos, zOffset, zPos]} // Added z-offset
               rotation={[-Math.PI / 2, 0, 0]}
               geometry={geometry}
               material={rockMaterial}
               castShadow
               receiveShadow
+              renderOrder={row} // Add render order based on row to help with overlaps
             />
           );
         });
