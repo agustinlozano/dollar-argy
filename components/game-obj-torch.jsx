@@ -60,15 +60,15 @@ export function GameObjTorch({
   }, []);
 
   // Smoke positions calculated once
-  const smokePositions = useMemo(() => {
-    return Array(3)
-      .fill()
-      .map((_, i) => ({
-        position: [Math.sin(i * 2) * 2, i * 2, Math.cos(i * 2) * 2],
-        scale: [0.5 + i * 0.3, 0.5 + i * 0.3, 0.5 + i * 0.3],
-        opacity: 0.2 - i * 0.05,
-      }));
-  }, []);
+  // const smokePositions = useMemo(() => {
+  //   return Array(3)
+  //     .fill()
+  //     .map((_, i) => ({
+  //       position: [Math.sin(i * 2) * 2, i * 2, Math.cos(i * 2) * 2],
+  //       scale: [0.5 + i * 0.3, 0.5 + i * 0.3, 0.5 + i * 0.3],
+  //       opacity: 0.2 - i * 0.05,
+  //     }));
+  // }, []);
 
   // Animate the flame - optimized to avoid unnecessary calculations
   useFrame((state) => {
