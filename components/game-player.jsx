@@ -11,6 +11,7 @@ import { useTexture } from "@react-three/drei";
 import { useGameStore } from "@/stores/useGameState";
 // import { PivotControls } from "@react-three/drei";
 import { M16M1 } from "./game-weapon-m16";
+import { TorchLight } from "./game-light-torch";
 
 const BILL_DIMENSIONS = {
   width: 41.2,

@@ -1,7 +1,7 @@
 import { useFrame } from "@react-three/fiber";
 import { FoundationsRockyZone } from "./game-zone-terrain-rocky-fundations";
 import { GameObjTorch } from "./game-obj-torch";
-import { PlayerTorchLight } from "./game-player-torch-light";
+import { PlayerTorchLight } from "./game-light-torch";
 
 export const FirstZone = ({ position }) => {
   // Animación o lógica para el Enclave (e.g., brillo en el mapa)

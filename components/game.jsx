@@ -5,7 +5,7 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 
 import { PlayerDirectionalLight } from "./game-directional-light";
-import { PlayerTorchLight } from "./game-player-torch-light";
+import { TorchLight } from "./game-light-torch";
 
 import { GameUI } from "@/components/ui/game-ui";
 
@@ -94,7 +94,7 @@ export function DollarArgyGame() {
           <GameCamera target={playerRef} />
         )}
         <PlayerDirectionalLight />
-        <PlayerTorchLight />
+        <TorchLight />
 
         {/* debug grid */}
         {/* <DebugGrid /> */}
