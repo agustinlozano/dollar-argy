@@ -66,7 +66,7 @@ export function PlayerTorchLight() {
         shadow-mapSize-height={512}
         shadow-camera-near={1}
         shadow-camera-far={400}
-        power={4} // Add power to increase overall light intensity
+        power={14} // Add power to increase overall light intensity
       >
         {/* Optional: Add a small sphere to visualize the light source */}
         {/* {enviroment === "development" && (
