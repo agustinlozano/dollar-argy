@@ -201,7 +201,8 @@ export const Player = forwardRef(function PlayerBill({ position }, ref) {
         {/* Add M16 weapon object */}
         <M16M1 position={[30, 25, 5]} rotation={[0, Math.PI / 2, 0]} />
         {/* Add torch light object */}
-        <TorchLight position={[40, 0, 0]} />
+        <TorchLight position={[0, 0, 30]} hideTorchObj />
+        <TorchLight position={[0, 0, -15]} hideTorchObj />
       </group>
       {/* </PivotControls> */}
     </group>
