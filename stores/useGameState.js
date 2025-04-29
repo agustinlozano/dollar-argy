@@ -50,6 +50,13 @@ export const useGameStore = create((set, get) => ({
           rewards: [],
           chests: [],
         });
+      } else if (i === 22) {
+        // Special campaign zone at row 6
+        initialRows.push({
+          type: "special",
+          rowIndex: i,
+          component: "FirstZone",
+        });
       } else if (i > GAME_CONSTANTS.initialRows - BASE_ROWS) {
         initialRows.push({
           type: "grass",
