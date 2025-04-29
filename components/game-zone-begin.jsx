@@ -1,5 +1,4 @@
 import { useFrame } from "@react-three/fiber";
-import { useState } from "react";
 import { HexagonalRockyZone } from "./game-zone-terrain-hexagon-rocky-grid";
 
 export const FirstZone = ({ position }) => {
