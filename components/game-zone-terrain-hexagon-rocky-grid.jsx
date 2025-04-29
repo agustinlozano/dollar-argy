@@ -80,6 +80,13 @@ export const HexagonalRockyZone = ({
       flatShading: true,
       emissive: "#404040",
       emissiveIntensity: 0.2,
+      // Add polygon offset to prevent z-fighting
+      polygonOffset: true,
+      polygonOffsetFactor: 1,
+      polygonOffsetUnits: 1,
+      // Ensure proper depth handling
+      depthWrite: true,
+      depthTest: true,
     });
   }, []);
 
@@ -90,17 +97,21 @@ export const HexagonalRockyZone = ({
         return Array.from({ length: width }, (_, col) => {
           const xPos = col * xSpacing + (isEvenRow ? 0 : xSpacing / 2);
           const zPos = row * zSpacing;
-          const zOffset = Math.random() * 0.05;
+
+          // Instead of random z-offset, use renderOrder based on position
+          // This ensures consistent rendering order
+          const renderOrder = row * width + col;
 
           return (
             <mesh
               key={`hex-${row}-${col}`}
-              position={[xPos, zOffset, zPos]}
+              position={[xPos, 0, zPos]}
               rotation={[-Math.PI / 2, 0, 0]}
               geometry={geometry}
               material={rockMaterial}
               castShadow
               receiveShadow
+              renderOrder={renderOrder}
             />
           );
         });
