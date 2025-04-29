@@ -6,7 +6,11 @@ import { useGameStore } from "@/stores/useGameState";
 import { enviroment } from "@/lib/env-vars";
 import { GameObjTorch } from "./game-obj-torch";
 
-export function TorchLight({ position = [0, 0, 100] }) {
+export function TorchLight({
+  position = [0, 0, 100],
+  rotation = [0, 0, 0],
+  hideTorchObj = false,
+}) {
   const pointLightRef = useRef();
   const isTorchActive = useGameStore((state) => state.isTorchActive);
 
@@ -45,7 +49,7 @@ export function TorchLight({ position = [0, 0, 100] }) {
   if (!isTorchActive) return null;
 
   return (
-    <group position={position}>
+    <group position={position} rotation={rotation}>
       {/* Main torch light */}
       <pointLight
         ref={pointLightRef}
@@ -61,7 +65,7 @@ export function TorchLight({ position = [0, 0, 100] }) {
         power={14} // Add power to increase overall light intensity
       >
         {/* Torch object */}
-        <GameObjTorch initialPosition={[0, 0, 0]} />
+        {hideTorchObj ? null : <GameObjTorch initialPosition={[0, 0, 0]} />}
       </pointLight>
     </group>
   );
