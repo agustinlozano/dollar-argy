@@ -4,8 +4,8 @@ import { GAME_CONSTANTS } from "./game";
 
 // Define colors outside the component for reuse
 const SECTION_COLORS = {
-  middle: "#60993e",
-  sides: "#065143",
+  middle: "#8fa184",
+  sides: "#6c8060",
 };
 
 // Create shared materials
