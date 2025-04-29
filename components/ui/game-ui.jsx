@@ -77,7 +77,11 @@ export function GameUI({
 
       {/* Center UI Elements */}
       <div className="fixed inset-0 z-40 pointer-events-none flex items-center justify-center">
-        <Controls onMove={onMove} onCastSpell={onCastSpell} />
+        <Controls
+          onMove={onMove}
+          onCastSpell={onCastSpell}
+          isInventoryOpen={isInventoryOpen}
+        />
       </div>
 
       {/* Inventory Modal */}
