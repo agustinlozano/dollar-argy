@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { GameButton } from "@/components/ui/game-button";
 import { useDanceAnimation } from "@/hooks/useDanceAnimation";
 
-export function Controls({ onMove, onCastSpell }) {
+export function Controls({ onMove, onCastSpell, isInventoryOpen }) {
   const { startDance, stopDance } = useDanceAnimation();
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export function Controls({ onMove, onCastSpell }) {
     };
 
     const handleMouseDown = (e) => {
-      if (e.button === 0) {
+      if (e.button === 0 && !isInventoryOpen) {
         // Left click
         stopDance();
         onCastSpell();
@@ -59,7 +59,7 @@ export function Controls({ onMove, onCastSpell }) {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("mousedown", handleMouseDown);
     };
-  }, [onMove, onCastSpell, startDance, stopDance]);
+  }, [onMove, onCastSpell, isInventoryOpen, startDance, stopDance]);
 
   return (
     <div className="absolute bottom-5 w-full flex justify-center items-end">
