@@ -50,12 +50,28 @@ export const useGameStore = create((set, get) => ({
           rewards: [],
           chests: [],
         });
-      } else if (i === 22) {
+      } else if (i === 8 || i === 9) {
+        initialRows.push({
+          type: "grass",
+          rowIndex: i,
+          trees: [],
+          rewards: [],
+          chests: [],
+        });
+      } else if (i === 10) {
         // Special campaign zone at row 6
         initialRows.push({
           type: "special",
           rowIndex: i,
           component: "FirstZone",
+        });
+      } else if (i === 11 || i === 12) {
+        initialRows.push({
+          type: "grass",
+          rowIndex: i,
+          trees: [],
+          rewards: [],
+          chests: [],
         });
       } else if (i > GAME_CONSTANTS.initialRows - BASE_ROWS) {
         initialRows.push({
@@ -90,7 +106,7 @@ export const useGameStore = create((set, get) => ({
           initialRows.push({
             type: "grass",
             rowIndex: i,
-            trees: [],
+            trees: generateObstacle(),
             rewards: [],
             chests: [],
           });
