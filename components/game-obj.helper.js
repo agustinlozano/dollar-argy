@@ -52,7 +52,7 @@ export const generateObstacle = () => {
         occupiedTiles.add(tileIndex);
 
         // Variar alturas con más opciones para más naturalidad
-        const heightOptions = [45, 65, 85, 74, 105];
+        const heightOptions = [45, 65, 80, 74, 105];
         const height =
           heightOptions[Math.floor(Math.random() * heightOptions.length)];
 
