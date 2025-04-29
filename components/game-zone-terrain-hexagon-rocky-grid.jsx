@@ -16,106 +16,98 @@ const loadTexture = (path) => {
   return textureCache[path];
 };
 
-const createHexagonShape = () => {
-  const shape = new THREE.Shape();
-  const size = 50;
-  const vertices = 10;
-
-  for (let i = 0; i < vertices; i++) {
-    const angle = (i * Math.PI * 2) / vertices;
-    const x = size * Math.cos(angle);
-    const y = size * Math.sin(angle);
-
-    if (i === 0) {
-      shape.moveTo(x, y);
-    } else {
-      shape.lineTo(x, y * 1.2);
-    }
-  }
-  shape.closePath();
-  return shape;
-};
-
-const createFacetedGeometry = (baseShape) => {
-  // Use a simple extruded geometry with beveled edges
-  const extrudeSettings = {
-    steps: 5,
-    depth: 10,
-    bevelEnabled: true,
-    bevelThickness: 1.8,
-    bevelSize: 0.8,
-    bevelOffset: 0,
-    bevelSegments: 3,
-  };
-
-  return new THREE.ExtrudeGeometry(baseShape, extrudeSettings);
-};
-
+// Creamos una base única con forma irregular
 export const HexagonalRockyZone = ({
   position = [0, 0, 5],
   gridSize = [3, 3],
 }) => {
-  const hexagonShape = useMemo(() => createHexagonShape(), []);
-  const geometry = useMemo(
-    () => createFacetedGeometry(hexagonShape),
-    [hexagonShape]
-  );
-  const [width, height] = gridSize;
+  // Creamos una forma compuesta con bordes irregulares
+  const baseShape = useMemo(() => {
+    const shape = new THREE.Shape();
 
-  // Adjust spacing to prevent overlaps
-  const hexSize = 20; // Base size of hexagons
-  const xSpacing = hexSize * 2.1; // Slightly larger than diameter to prevent overlaps
-  const zSpacing = hexSize * 1.82; // Adjusted for the hexagonal grid pattern
+    // Tamaño base de la plataforma
+    const [width, height] = gridSize;
+    const hexSize = 20;
+    const totalWidth = width * hexSize * 2.1;
+    const totalHeight = height * hexSize * 1.82;
 
-  // Create a simple material with texture and emissive properties
+    // Punto central
+    const centerX = totalWidth / 2;
+    const centerY = totalHeight / 2;
+
+    // Radio base (aproximadamente la mitad del ancho total)
+    const baseRadius = Math.min(totalWidth, totalHeight) / 2;
+
+    // Número de puntos para el contorno irregular
+    const points = 12;
+
+    // Generar forma irregular con variaciones aleatorias pero consistentes
+    for (let i = 0; i < points; i++) {
+      const angle = (i / points) * Math.PI * 2;
+      // Variamos el radio para crear irregularidad
+      const radiusVariation = 0.8 + Math.sin(i * 5) * 0.2;
+      const radius = baseRadius * radiusVariation;
+
+      const x = centerX + Math.cos(angle) * radius;
+      const y = centerY + Math.sin(angle) * radius;
+
+      if (i === 0) {
+        shape.moveTo(x, y);
+      } else {
+        shape.lineTo(x, y);
+      }
+    }
+
+    shape.closePath();
+    return shape;
+  }, [gridSize]);
+
+  // Creamos geometría extruida con bisel para dar efecto de piedra tallada
+  const geometry = useMemo(() => {
+    const extrudeSettings = {
+      steps: 2,
+      depth: 8,
+      bevelEnabled: true,
+      bevelThickness: 3,
+      bevelSize: 2,
+      bevelOffset: 0,
+      bevelSegments: 3,
+    };
+
+    return new THREE.ExtrudeGeometry(baseShape, extrudeSettings);
+  }, [baseShape]);
+
+  // Material con textura de piedra y propiedades para destacar
   const rockMaterial = useMemo(() => {
     const texture = loadTexture("/textures/stone-floor.jpg");
-    texture.repeat.set(0.01, 0.01);
+    texture.repeat.set(0.1, 0.1);
 
     return new THREE.MeshStandardMaterial({
       color: "#757575",
-      roughness: 0.7,
+      roughness: 0.8,
       metalness: 0.1,
       map: texture,
       flatShading: true,
       emissive: "#404040",
       emissiveIntensity: 0.2,
-      // Add polygon offset to prevent z-fighting
       polygonOffset: true,
       polygonOffsetFactor: 1,
       polygonOffsetUnits: 1,
-      // Ensure proper depth handling
       depthWrite: true,
       depthTest: true,
     });
   }, []);
 
+  // Retornamos una única malla con la geometría combinada
   return (
-    <group position={position} rotation={[Math.PI / 2, 0, 0]}>
-      {Array.from({ length: height }, (_, row) => {
-        const isEvenRow = row % 2 === 0;
-        return Array.from({ length: width }, (_, col) => {
-          const xPos = col * xSpacing + (isEvenRow ? 0 : xSpacing / 2);
-          const zPos = row * zSpacing;
-
-          // Instead of random z-offset, use renderOrder based on position
-          // This ensures consistent rendering order
-          const renderOrder = row * width + col;
-
-          return (
-            <mesh
-              key={`hex-${row}-${col}`}
-              position={[xPos, 0, zPos]}
-              rotation={[-Math.PI / 2, 0, 0]}
-              geometry={geometry}
-              material={rockMaterial}
-              castShadow
-              receiveShadow
-              renderOrder={renderOrder}
-            />
-          );
-        });
-      })}
+    <group position={position}>
+      <mesh
+        rotation={[0, 0, 0]}
+        geometry={geometry}
+        material={rockMaterial}
+        castShadow
+        receiveShadow
+      />
     </group>
   );
 };
