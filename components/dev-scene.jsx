@@ -6,6 +6,8 @@ import { Canvas } from "@react-three/fiber";
 import Grass from "./game-terrain-grass";
 import Road from "./game-terrain-road";
 
+import { FirstZone } from "./game-zone-begin";
+
 import { PlayerDirectionalLight } from "./game-directional-light";
 import { Player } from "./game-player";
 import { ObstacleObj } from "./game-obj-tree";
@@ -129,7 +131,7 @@ export function DevScene() {
         <DevCamera />
 
         {/* Debug grid - always visible in dev scene */}
-        <DebugGrid />
+        {/* <DebugGrid /> */}
 
         {/* M16 con iluminación de estudio */}
         <group position={[0, 0, 100]}>
@@ -140,6 +142,9 @@ export function DevScene() {
           />
           <M16M1 position={[0, -20, 0]} />
         </group>
+
+        {/* Zones */}
+        <FirstZone position={[0, 380, 0]} />
 
         <GameObjTorch />
 
