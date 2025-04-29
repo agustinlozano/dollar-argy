@@ -15,6 +15,8 @@ import { DanceCamera } from "./game-dance-camera";
 
 import Grass from "./game-terrain-grass";
 import Road from "./game-terrain-road";
+import { TerrainSection } from "./game-terrain-section";
+import { FirstZone } from "./game-zone-begin";
 
 import { ObstacleObj } from "./game-obj-tree";
 import { MoneyChest } from "./game-obj-money-chest";
@@ -101,72 +103,82 @@ export function DollarArgyGame() {
         <ArgyFlag position={[GAME_CONSTANTS.tileSize * 2, 0, 0]} />
 
         {/* Map rows */}
-        {rows.map((row) =>
-          row.type === "road" ? (
-            <Road
-              key={row.rowIndex}
-              rowIndex={row.rowIndex}
-              variant={row.variant}
-            />
-          ) : (
-            <group key={row.rowIndex}>
-              <Grass rowIndex={row.rowIndex} />
-              {row.trees &&
-                row.trees.map((tree, treeIndex) => (
-                  <ObstacleObj
-                    key={`tree-${row.rowIndex}-${treeIndex}`}
-                    tileIndex={tree.tileIndex}
-                    height={tree.height}
-                    position={[
-                      tree.tileIndex * GAME_CONSTANTS.tileSize,
+        {rows.map((row) => {
+          if (row.type === "road") {
+            return (
+              <Road
+                key={row.rowIndex}
+                rowIndex={row.rowIndex}
+                variant={row.variant}
+              />
+            );
+          } else if (row.type === "special") {
+            return (
+              <TerrainSection key={row.rowIndex} rowIndex={row.rowIndex}>
+                <FirstZone position={[0, 0, 0]} />
+              </TerrainSection>
+            );
+          } else {
+            return (
+              <group key={row.rowIndex}>
+                <Grass rowIndex={row.rowIndex} />
+                {row.trees &&
+                  row.trees.map((tree, treeIndex) => (
+                    <ObstacleObj
+                      key={`tree-${row.rowIndex}-${treeIndex}`}
+                      tileIndex={tree.tileIndex}
+                      height={tree.height}
+                      position={[
+                        tree.tileIndex * GAME_CONSTANTS.tileSize,
+                        row.rowIndex * GAME_CONSTANTS.tileSize,
+                        0,
+                      ]}
+                    />
+                  ))}
+                {/* Render rewards (coins and vouchers) */}
+                {row.rewards &&
+                  row.rewards.map((reward, rewardIndex) => {
+                    const position = [
+                      reward.tileIndex * GAME_CONSTANTS.tileSize,
                       row.rowIndex * GAME_CONSTANTS.tileSize,
-                      0,
-                    ]}
-                  />
-                ))}
-              {/* Render rewards (coins and vouchers) */}
-              {row.rewards &&
-                row.rewards.map((reward, rewardIndex) => {
-                  const position = [
-                    reward.tileIndex * GAME_CONSTANTS.tileSize,
-                    row.rowIndex * GAME_CONSTANTS.tileSize,
-                    reward.zOffset,
-                  ];
+                      reward.zOffset,
+                    ];
 
-                  switch (reward.type) {
-                    case "coins":
-                      return (
-                        <GoldCoin
-                          key={`coin-${row.rowIndex}-${rewardIndex}`}
-                          position={position}
-                        />
-                      );
-                    case "voucher":
-                      return (
-                        <RewardVoucher
-                          key={`voucher-${row.rowIndex}-${rewardIndex}`}
-                          position={position}
-                        />
-                      );
-                    default:
-                      return null;
-                  }
-                })}
-              {/* Render chests separately */}
-              {row.chests &&
-                row.chests.map((chest, chestIndex) => (
-                  <MoneyChest
-                    key={`chest-${row.rowIndex}-${chestIndex}`}
-                    position={[
-                      chest.tileIndex * GAME_CONSTANTS.tileSize,
-                      row.rowIndex * GAME_CONSTANTS.tileSize,
-                      chest.zOffset,
-                    ]}
-                  />
-                ))}
-            </group>
-          )
-        )}
+                    switch (reward.type) {
+                      case "coins":
+                        return (
+                          <GoldCoin
+                            key={`coin-${row.rowIndex}-${rewardIndex}`}
+                            position={position}
+                          />
+                        );
+                      case "voucher":
+                        return (
+                          <RewardVoucher
+                            key={`voucher-${row.rowIndex}-${rewardIndex}`}
+                            position={position}
+                          />
+                        );
+                      default:
+                        return null;
+                    }
+                  })}
+                {/* Render chests separately */}
+                {row.chests &&
+                  row.chests.map((chest, chestIndex) => (
+                    <MoneyChest
+                      key={`chest-${row.rowIndex}-${chestIndex}`}
+                      position={[
+                        chest.tileIndex * GAME_CONSTANTS.tileSize,
+                        row.rowIndex * GAME_CONSTANTS.tileSize,
+                        chest.zOffset,
+                      ]}
+                    />
+                  ))}
+              </group>
+            );
+          }
+        })}
 
         <Player ref={playerRef} position={playerPosition} />
 
