@@ -6,7 +6,7 @@ import { enviroment } from "@/lib/env-vars";
 
 export function GameCamera({
   target,
-  followSpeed = 0.05,
+  followSpeed = 0.1,
   followDistance = 300,
 }) {
   const cameraRef = useRef();
@@ -94,7 +94,7 @@ export function GameCamera({
       top={height / 2}
       bottom={height / -2}
       near={100}
-      far={enviroment === "development" ? 4000 : 800}
+      far={enviroment === "test" ? 4000 : 800}
     />
   );
 }
