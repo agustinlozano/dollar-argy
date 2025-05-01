@@ -16,61 +16,61 @@ const loadTexture = (path) => {
   return textureCache[path];
 };
 
-// Creamos una base única con forma gótica
+// Create a unique base with a gothic shape
 export const FoundationsRockyZone = ({
   position = [0, 0, 5],
   gridSize = [3, 3],
 }) => {
-  // Creamos una forma gótica simétrica
+  // Create a symmetrical gothic shape
   const baseShape = useMemo(() => {
     const shape = new THREE.Shape();
 
-    // Tamaño base de la plataforma
+    // Base size of the platform
     const [width, height] = gridSize;
     const hexSize = 50;
     const totalWidth = width * hexSize * 2.1;
     const totalHeight = height * hexSize * 1.82;
 
-    // Punto central
+    // Central point
     const centerX = totalWidth / 2;
     const centerY = totalHeight / 2;
 
-    // Radio base (aproximadamente la mitad del ancho total)
+    // Base radius (approximately half of the total width)
     const baseRadius = Math.min(totalWidth, totalHeight) / 2;
 
-    // Crear forma gótica con puntas y arcos
-    const points = 8; // Número de puntas (par para simetría)
-    const innerRadius = baseRadius * 0.85; // Radio interior para los arcos
+    // Create gothic shape with points and arches
+    const points = 8; // Number of points (even for symmetry)
+    const innerRadius = baseRadius * 0.85; // Inner radius for the arches
 
-    // Primera punta
+    // First point
     let startX = centerX + baseRadius * Math.cos(0);
     let startY = centerY + baseRadius * Math.sin(0);
     shape.moveTo(startX, startY);
 
-    // Crear las puntas y arcos góticos
+    // Create the gothic points and arches
     for (let i = 0; i < points; i++) {
-      // Ángulo actual y siguiente
+      // Current and next angle
       const angle = (i / points) * Math.PI * 2;
       const nextAngle = ((i + 1) / points) * Math.PI * 2;
 
-      // Puntos de la punta actual y siguiente
+      // Current and next point coordinates
       const x1 = centerX + baseRadius * Math.cos(angle);
       const y1 = centerY + baseRadius * Math.sin(angle);
       const x2 = centerX + baseRadius * Math.cos(nextAngle);
       const y2 = centerY + baseRadius * Math.sin(nextAngle);
 
-      // Punto medio para el arco gótico
+      // Midpoint for the gothic arch
       const midAngle = (angle + nextAngle) / 2;
-      const archDepth = 0.3; // Profundidad del arco gótico
+      const archDepth = 0.3; // Depth of the gothic arch
 
-      // Punto interior del arco
+      // Inner point of the arch
       const archX = centerX + innerRadius * Math.cos(midAngle);
       const archY = centerY + innerRadius * Math.sin(midAngle);
 
-      // Añadir curva de control para el arco gótico
-      // Primero dibujamos desde el punto actual al punto interior del arco
+      // Add control curve for the gothic arch
+      // First draw from the current point to the inner arch point
       shape.lineTo(archX, archY);
-      // Luego desde el punto interior del arco hasta el siguiente punto exterior
+      // Then from the inner arch point to the next outer point
       shape.lineTo(x2, y2);
     }
 
@@ -78,7 +78,7 @@ export const FoundationsRockyZone = ({
     return shape;
   }, [gridSize]);
 
-  // Creamos geometría extruida con bisel pronunciado para acentuar el estilo gótico
+  // Create extruded geometry with pronounced bevel to accentuate the gothic style
   const geometry = useMemo(() => {
     const extrudeSettings = {
       steps: 2,
@@ -93,18 +93,18 @@ export const FoundationsRockyZone = ({
     return new THREE.ExtrudeGeometry(baseShape, extrudeSettings);
   }, [baseShape]);
 
-  // Material con textura de piedra con aspecto más oscuro y antiguo
+  // Material with stone texture with a darker and older appearance
   const rockMaterial = useMemo(() => {
-    const texture = loadTexture("/textures/stone-floor.jpg");
+    const texture = loadTexture("/textures/stony.jpg");
     texture.repeat.set(0.01, 0.01);
 
     return new THREE.MeshStandardMaterial({
-      color: "#575757", // Más oscuro para apariencia gótica
+      color: "#575757",
       roughness: 0.9, // Más rugoso para simular piedra antigua
       metalness: 0.15,
       map: texture,
       flatShading: true,
-      emissive: "#303030", // Emisivo más sutil y oscuro
+      emissive: "#303030",
       emissiveIntensity: 0.35,
       polygonOffset: true,
       polygonOffsetFactor: 1,
@@ -114,7 +114,7 @@ export const FoundationsRockyZone = ({
     });
   }, []);
 
-  // Retornamos una única malla con la geometría combinada
+  // Return a unique mesh with the combined geometry
   return (
     <group position={position}>
       <mesh
