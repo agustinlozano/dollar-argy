@@ -61,27 +61,27 @@ FlagSun.displayName = "FlagSun";
 const FlagStripes = memo(({ position, materials }) => (
   <group position={position}>
     {/* Top stripe */}
-    <mesh position={[0, 0, 0]} castShadow>
+    <mesh position={[0, -22, 0]} castShadow>
       <boxGeometry args={[120, 24, 0.4]} />
       <meshStandardMaterial {...materials.flagBlue} />
     </mesh>
 
     {/* Middle white stripe */}
-    <mesh position={[0, -24, 0]} castShadow>
+    <mesh position={[0, -46, 0]} castShadow>
       <boxGeometry args={[120, 24, 0.4]} />
       <meshStandardMaterial {...materials.flagWhite} />
     </mesh>
 
     {/* Bottom blue stripe */}
-    <mesh position={[0, -48, 0]} castShadow>
+    <mesh position={[0, -70, 0]} castShadow>
       <boxGeometry args={[120, 24, 0.4]} />
       <meshStandardMaterial {...materials.flagBlue} />
     </mesh>
 
     {/* Sol de Mayo - front */}
-    <FlagSun position={[0, -24, 0.4]} sunMaterial={materials.sun} />
+    <FlagSun position={[0, -44, 0.4]} sunMaterial={materials.sun} />
     {/* Sol de Mayo - back */}
-    <FlagSun position={[0, -24, -0.4]} sunMaterial={materials.sun} />
+    <FlagSun position={[0, -44, -0.4]} sunMaterial={materials.sun} />
   </group>
 ));
 
@@ -89,21 +89,21 @@ FlagStripes.displayName = "FlagStripes";
 
 // FlagPole component memoized
 const FlagPole = memo(({ materials }) => (
-  <group position={[-10, 0, 20]}>
+  <group position={[-10, 60, 20]}>
     {/* Base */}
-    <mesh position={[0, 80, 0]} castShadow>
-      <cylinderGeometry args={[4, 3, 25]} />
+    <mesh position={[0, 0, 0]} castShadow>
+      <cylinderGeometry args={[14, 10, 60]} />
       <meshStandardMaterial {...materials.pole} />
     </mesh>
 
     {/* Pole */}
-    <mesh position={[0, 0, 0]} castShadow>
-      <cylinderGeometry args={[2, 2, 180, 12]} />
+    <mesh position={[0, -100, 0]} castShadow>
+      <cylinderGeometry args={[2, 2, 150, 12]} />
       <meshStandardMaterial {...materials.pole} />
     </mesh>
 
     {/* Ornament or finial */}
-    <mesh position={[0, -90, 0]} castShadow>
+    <mesh position={[0, -175, 0]} castShadow>
       <sphereGeometry args={[3, 16, 16]} />
       <meshStandardMaterial {...materials.ornament} />
     </mesh>
@@ -167,9 +167,12 @@ export function ArgyFlag({ position = [0, 0, 0] }) {
   });
 
   return (
-    <group position={initialPosition} rotation={[-Math.PI / 2, -Math.PI, 0]}>
+    <group
+      position={initialPosition}
+      // rotation={[-Math.PI / 2, -Math.PI, 0]}
+    >
       <FlagPole materials={materials} />
-      <group position={[-70, -25, 20]} ref={flagRef}>
+      <group position={[-72, -25, 20]} ref={flagRef}>
         <FlagStripes position={[0, 0, 0]} materials={materials} />
       </group>
     </group>
