@@ -87,28 +87,44 @@ const FlagStripes = memo(({ position, materials }) => (
 
 FlagStripes.displayName = "FlagStripes";
 
+// Function to load texture once and reuse
+const loadTexture = (path) => {
+  const textureLoader = new THREE.TextureLoader();
+  return textureLoader.load(path);
+};
+
 // FlagPole component memoized
-const FlagPole = memo(({ materials }) => (
-  <group position={[-10, 60, 20]}>
-    {/* Base */}
-    <mesh position={[0, 0, 0]} castShadow>
-      <cylinderGeometry args={[14, 10, 60]} />
-      <meshStandardMaterial {...materials.pole} />
-    </mesh>
+const FlagPole = memo(({ materials }) => {
+  const baseMaterial = useMemo(
+    () => ({
+      map: loadTexture("/textures/stony.jpg"),
+    }),
+    []
+  );
 
-    {/* Pole */}
-    <mesh position={[0, -100, 0]} castShadow>
-      <cylinderGeometry args={[2, 2, 150, 12]} />
-      <meshStandardMaterial {...materials.pole} />
-    </mesh>
+  return (
+    <group position={[-10, 60, 20]}>
+      {/* Base */}
+      <mesh position={[0, 0, 0]} castShadow>
+        <cylinderGeometry args={[14, 10, 60]} />
+        <meshStandardMaterial {...baseMaterial} />{" "}
+        {/* Apply the texture to the base */}
+      </mesh>
 
-    {/* Ornament or finial */}
-    <mesh position={[0, -175, 0]} castShadow>
-      <sphereGeometry args={[3, 16, 16]} />
-      <meshStandardMaterial {...materials.ornament} />
-    </mesh>
-  </group>
-));
+      {/* Pole */}
+      <mesh position={[0, -100, 0]} castShadow>
+        <cylinderGeometry args={[2, 2, 150, 12]} />
+        <meshStandardMaterial {...materials.pole} />
+      </mesh>
+
+      {/* Ornament or finial */}
+      <mesh position={[0, -175, 0]} castShadow>
+        <sphereGeometry args={[3, 16, 16]} />
+        <meshStandardMaterial {...materials.ornament} />
+      </mesh>
+    </group>
+  );
+});
 
 FlagPole.displayName = "FlagPole";
 
@@ -167,10 +183,7 @@ export function ArgyFlag({ position = [0, 0, 0] }) {
   });
 
   return (
-    <group
-      position={initialPosition}
-      // rotation={[-Math.PI / 2, -Math.PI, 0]}
-    >
+    <group position={initialPosition} rotation={[-Math.PI / 2, -Math.PI, 0]}>
       <FlagPole materials={materials} />
       <group position={[-72, -25, 20]} ref={flagRef}>
         <FlagStripes position={[0, 0, 0]} materials={materials} />
