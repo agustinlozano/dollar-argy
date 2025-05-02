@@ -1,6 +1,5 @@
 import { useRef, useMemo, memo } from "react";
 import { useFrame } from "@react-three/fiber";
-import { GAME_CONSTANTS } from "./game";
 import * as THREE from "three";
 
 const UNITS_UP = 92;
@@ -107,8 +106,7 @@ const FlagPole = memo(({ materials }) => {
       {/* Base */}
       <mesh position={[0, 0, 0]} castShadow>
         <cylinderGeometry args={[14, 10, 60]} />
-        <meshStandardMaterial {...baseMaterial} />{" "}
-        {/* Apply the texture to the base */}
+        <meshStandardMaterial {...baseMaterial} />
       </mesh>
 
       {/* Pole */}
@@ -141,6 +139,8 @@ export function ArgyFlag({ position = [0, 0, 0] }) {
         side: THREE.DoubleSide,
         metalness: 0.2,
         roughness: 0.3,
+        emissive: COLORS.sunGold,
+        emissiveIntensity: 0.1,
       },
       pole: {
         color: COLORS.poleMetal,
