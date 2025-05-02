@@ -53,3 +53,16 @@ export const AxisHelper2D = ({
     </group>
   );
 };
+
+// Usage
+{
+  /* <AxisHelper2D
+    position={[100, -80, 1]}
+    rotation={[0, 0, Math.PI / 2]}
+    lengthX={1000}
+    lengthY={800}
+    thickness={5}
+    colorX="#ffffff"
+    colorY="#ffffff"
+  /> */
+}
