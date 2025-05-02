@@ -39,3 +39,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+original-vanilla-game.js
+@todo.md
+/_data
+components/ui/inventory/inventory-bar.jsx
+public/textures/concrete-scratched.jpg
+public/textures/glitch-texture.jpg
+public/textures/metal-texture.jpg
+public/textures/concrete-wall-texture.jpg
+public/textures/stiff-paint.jpg
+public/textures/grunge-frame.jpg
+public/sprite-1-original.png
+public/sprite-1.jpg
