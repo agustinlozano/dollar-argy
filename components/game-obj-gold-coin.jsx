@@ -82,7 +82,7 @@ export function GoldCoin({ position = [0, 0, 0] }) {
     if (!coin || !isCollected) return;
 
     animationProgress.current = Math.min(
-      animationProgress.current + delta * 2,
+      animationProgress.current + delta * 4,
       1
     );
 

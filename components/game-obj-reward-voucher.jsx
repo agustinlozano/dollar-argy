@@ -102,7 +102,7 @@ export function RewardVoucher({ position = [0, 0, 0] }) {
     if (!voucher || !isCollected) return;
 
     animationProgress.current = Math.min(
-      animationProgress.current + delta * 2,
+      animationProgress.current + delta * 4,
       1
     );
 
