@@ -5,9 +5,9 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 
 import { PlayerDirectionalLight } from "./game-directional-light";
-import { TorchLight } from "./game-light-torch";
 
 import { GameUI } from "@/components/ui/game-ui";
+import { DancingIndicator } from "./ui/game-dance-badge";
 
 import { Player } from "./game-player";
 import { GameCamera } from "./game-camera";
@@ -15,16 +15,15 @@ import { DanceCamera } from "./game-dance-camera";
 
 import Grass from "./game-terrain-grass";
 import Road from "./game-terrain-road";
+
 import { TerrainSection } from "./game-terrain-section";
 import { FirstZone } from "./game-zone-begin";
+import { GameZonePlayerBase } from "./game-zone-player-base";
 
 import { ObstacleObj } from "./game-obj-tree";
 import { MoneyChest } from "./game-obj-money-chest";
 import { GoldCoin } from "./game-obj-gold-coin";
 import { RewardVoucher } from "./game-obj-reward-voucher";
-
-import { AxisHelper2D } from "./scenario-axis-helper";
-import { ArgyFlag } from "./scenario-argy-flag.jsx";
 
 import { SpellEffect } from "./game-spell";
 
@@ -33,6 +32,7 @@ import { enviroment } from "@/lib/env-vars";
 import { useGameStore } from "@/stores/useGameState";
 import { useInventoryStore } from "@/stores/useInventoryState";
 import { useInventoryUIStore } from "@/stores/useInventoryUIState";
+
 import { useResizeEffect } from "./game.hooks";
 
 // Game constants
@@ -93,14 +93,27 @@ export function DollarArgyGame() {
         ) : (
           <GameCamera target={playerRef} />
         )}
-        <PlayerDirectionalLight />
-        <TorchLight />
 
         {/* debug grid */}
         {/* <DebugGrid /> */}
 
-        {/* Static scenario elements */}
-        <ArgyFlag position={[GAME_CONSTANTS.tileSize * 2, 0, 0]} />
+        {/* Scenario stuff */}
+        {/* <TorchLight position={[0, -30, 6.5]} rotation={[Math.PI / 2, 0, 0]} /> */}
+        {/* <ArgyFlag position={[GAME_CONSTANTS.tileSize * 2, 0, 0]} />
+        <GameTile position={[0, 0, 0]} /> */}
+        <GameZonePlayerBase position={[-180, -42, 0]} />
+
+        <Player ref={playerRef} position={playerPosition} />
+        <PlayerDirectionalLight />
+
+        {/* Render active spells */}
+        {activeSpells.map((spell) => (
+          <SpellEffect
+            key={spell.id}
+            position={spell.position}
+            onComplete={() => removeSpell(spell.id)}
+          />
+        ))}
 
         {/* Map rows */}
         {rows.map((row) => {
@@ -180,30 +193,8 @@ export function DollarArgyGame() {
           }
         })}
 
-        <Player ref={playerRef} position={playerPosition} />
-
-        {/* Render active spells */}
-        {activeSpells.map((spell) => (
-          <SpellEffect
-            key={spell.id}
-            position={spell.position}
-            onComplete={() => removeSpell(spell.id)}
-          />
-        ))}
-
         {/* Optional - For debugging */}
         <axesHelper args={[100]} />
-
-        {/* Scenario stuff */}
-        <AxisHelper2D
-          position={[100, -80, 1]}
-          rotation={[0, 0, Math.PI / 2]}
-          lengthX={1000}
-          lengthY={800}
-          thickness={5}
-          colorX="#ffffff"
-          colorY="#ffffff"
-        />
 
         {enviroment === "test" && (
           <OrbitControls
