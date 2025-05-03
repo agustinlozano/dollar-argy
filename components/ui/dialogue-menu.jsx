@@ -1,5 +1,5 @@
 export function DialogueMenu({
-  dialogueText = '"La gente me rechaza, merezco una oportunidad digna en la vida."',
+  dialogueText = '"La gente me rechaza, merezco una oportunidad digna."',
   characterImage = "/characters/hornero-portrait.png",
   characterName = "Hornero Peso Argentino",
 }) {
@@ -11,12 +11,12 @@ export function DialogueMenu({
       ></div>
       {/* Left side - Dialogue */}
       <div className="flex h-full">
-        <div className="flex-1 p-8 border">
+        <div className="p-8 border w-md max-w-md">
           <p className="text-primary/80 font-mono">{dialogueText}</p>
         </div>
 
         {/* Right side - Character Image */}
-        <div className="w-1/3 flex flex-col items-center border">
+        <div className="flex flex-col items-center border bg-primary/10 w-52">
           <div className="p-2">
             <img
               src={characterImage || "/placeholder.svg"}
