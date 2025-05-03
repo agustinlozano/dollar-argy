@@ -1,12 +1,10 @@
 import React from "react";
-import "./gothic-button.css";
+import { cn } from "@/lib/utils";
+import s from "./gothic-button.module.css";
 
 export function GothicButton({ onClick, isActive, children }) {
   return (
-    <button
-      className={`gothic-button-3d ${isActive ? "active" : ""}`}
-      onClick={onClick}
-    >
+    <button className={cn(s.button)} onClick={onClick}>
       {children}
     </button>
   );
