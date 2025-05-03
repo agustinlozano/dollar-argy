@@ -9,11 +9,11 @@ export function InventoryToggleButton({ onClick, isOpen }) {
       <button
         onClick={onClick}
         className={cn(
-          "inventory-button-3d relative size-12 rounded-full border-2 border-dashed border-[#352879] bg-[#f8d800] text-[#352879] flex items-center justify-center",
+          "inventory-button-3d font-cormorant relative px-4 py-2 border-b bg-purple-200 flex items-center justify-center",
           isOpen && "active"
         )}
       >
-        <Backpack className="z-10 size-6" />
+        Inventory
       </button>
     </div>
   );
