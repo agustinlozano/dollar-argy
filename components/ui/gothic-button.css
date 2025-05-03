@@ -1,0 +1,67 @@
+.gothic-button-3d {
+  transform-style: preserve-3d;
+  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1);
+  cursor: pointer;
+  position: relative;
+  z-index: 10;
+  padding: 0.8em 1.5em;
+  font-family: "Cormorant Unicase", serif;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #c0c0c0;
+  background: linear-gradient(45deg, #2a2a2a, #1a1a1a);
+  border: 2px solid #3a3a3a;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    0 100%
+  );
+}
+
+.gothic-button-3d::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, #4a0000, #2a0000);
+  border: 2px solid #500;
+  box-shadow: 0 0 0 2px #300, 0 0.3em 0 1px #000,
+    inset 0 0 15px rgba(255, 0, 0, 0.2);
+  transform: translate3d(0, 0.2em, -1em);
+  z-index: -1;
+  transition: transform 150ms cubic-bezier(0, 0, 0.58, 1),
+    box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    0 100%
+  );
+}
+
+.gothic-button-3d:hover {
+  transform: translateY(0.15em);
+  color: #ff9999;
+  text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+}
+
+.gothic-button-3d:hover::before {
+  box-shadow: 0 0 0 2px #500, 0 0.35em 0 1px #000,
+    inset 0 0 20px rgba(255, 0, 0, 0.3);
+  transform: translate3d(0, 0.25em, -1em);
+}
+
+.gothic-button-3d:active,
+.gothic-button-3d.active {
+  transform: translateY(0.4em);
+  color: #ff6666;
+  text-shadow: 0 0 8px rgba(255, 0, 0, 0.7);
+}
+
+.gothic-button-3d:active::before,
+.gothic-button-3d.active::before {
+  transform: translate3d(0, 0, -1em);
+  box-shadow: 0 0 0 2px #500, 0 0 #000, inset 0 0 25px rgba(255, 0, 0, 0.4);
+}
