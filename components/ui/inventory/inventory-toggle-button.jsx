@@ -3,7 +3,7 @@ import { Backpack } from "lucide-react";
 
 import "./inventory-toggle-button.css";
 
-export function InventoryToggleButton({ onClick, isOpen }) {
+export function InventoryToggleButton({ children, onClick, isOpen }) {
   return (
     <div className="relative flex gap-x-4 justify-between items-center z-10">
       <button
@@ -13,7 +13,7 @@ export function InventoryToggleButton({ onClick, isOpen }) {
           isOpen && "active"
         )}
       >
-        Inventory
+        {children}
       </button>
     </div>
   );
