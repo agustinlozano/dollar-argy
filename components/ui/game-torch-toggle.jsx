@@ -9,11 +9,11 @@ export function TorchToggleButton() {
   const toggleTorch = useGameStore((state) => state.toggleTorch);
 
   return (
-    <div className="relative flex gap-x-4 justify-between items-center z-10 px-4">
+    <div className="relative flex gap-x-4 justify-between items-center z-10">
       <button
         onClick={toggleTorch}
         className={cn(
-          "torch-button-3d relative size-12 rounded-full border-2 border-dashed border-[#992200] bg-[#f86800] text-[#992200] flex items-center justify-center",
+          "torch-button-3d relative size-10 rounded-full border-2 border-dashed border-[#992200] bg-[#f86800] text-[#992200] flex items-center justify-center",
           isTorchActive && "active"
         )}
         title={isTorchActive ? "Turn off torch" : "Turn on torch"}
