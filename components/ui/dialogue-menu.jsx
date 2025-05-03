@@ -1,18 +1,18 @@
 export function DialogueMenu({
-  dialogueText = "You can raise just about anything in one of those... But some of the fancier fish are real fussy!",
-  characterImage = "/placeholder.svg?height=100&width=100",
-  characterName = "Character Name",
+  dialogueText = '"La gente me rechaza, merezco una oportunidad digna en la vida."',
+  characterImage = "/characters/hornero-portrait.png",
+  characterName = "Hornero Peso Argentino",
 }) {
   return (
-    <div className="h-[460px] w-[818px] border overflow-hidden py-20 z-30">
+    <div className="h-[460px] w-[818px] border overflow-hidden p-20 z-30">
       <div
         role="presentation"
         className="pointer-events-none absolute inset-0 bg-[url('/textures/stiff-paint-opt.jpg')] bg-cover opacity-100 -z-20"
       ></div>
       {/* Left side - Dialogue */}
-      <div className="flex h-full border px-8">
-        <div className="flex-1 p-4 border">
-          <p>{dialogueText}</p>
+      <div className="flex h-full">
+        <div className="flex-1 p-8 border">
+          <p className="text-primary/80 font-mono">{dialogueText}</p>
         </div>
 
         {/* Right side - Character Image */}
@@ -24,8 +24,8 @@ export function DialogueMenu({
               className="w-full"
             />
           </div>
-          <div className="w-full text-center p-2">
-            <p>{characterName}</p>
+          <div className="w-full text-center p-2 font">
+            <p className="font-cormorant text-lg">{characterName}</p>
           </div>
         </div>
       </div>
