@@ -11,10 +11,6 @@ import { FirstZone } from "./game-zone-begin";
 import { PlayerDirectionalLight } from "./game-directional-light";
 import { Player } from "./game-player";
 import { ObstacleObj } from "./game-obj-tree";
-import { MoneyChest } from "./game-obj-money-chest";
-import { GoldCoin } from "./game-obj-gold-coin";
-import { RewardVoucher } from "./game-obj-reward-voucher";
-import { DebugGrid } from "./dev-grid";
 import { DevCamera } from "./dev-camera";
 import { GAME_CONSTANTS } from "./game";
 import { M16M1 } from "./game-weapon-m16";
@@ -24,7 +20,7 @@ import { chestTypes, rewardTypes } from "@/lib/consts";
 import { useResizeEffect } from "./game.hooks";
 import { ModeToggle } from "@/app/theme-toggle";
 import { GameObjTorch } from "./game-obj-torch";
-
+import { GameZonePlayerBase } from "./game-zone-player-base";
 // Hardcoded scene data
 const hardcodedScene = {
   // 4 rows of grass (0-3)
@@ -126,8 +122,8 @@ export function DevScene() {
           gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         }}
       >
-        <ambientLight intensity={0.01} />
-        <PlayerDirectionalLight />
+        <ambientLight intensity={0.5} />
+        {/* <PlayerDirectionalLight /> */}
         <DevCamera />
 
         {/* Debug grid - always visible in dev scene */}
@@ -137,16 +133,24 @@ export function DevScene() {
         <group position={[0, 0, 100]}>
           <DevStudioLight
             position={[0, -42, 25]}
-            intensity={1.2}
+            intensity={0.1}
             showHelper={true}
           />
           <M16M1 position={[0, -20, 0]} />
         </group>
 
+        {/* Player at center position */}
+        <Player ref={playerRef} position={{ x: 140, y: 280 }} rotation={0} />
+
         {/* Zones */}
         <FirstZone position={[0, 380, 0]} />
 
         <GameObjTorch />
+
+        {/* <ArgyFlag position={[0, 0, 0]} /> */}
+        {/* <GameTile position={[0, 0, 0]} /> */}
+
+        <GameZonePlayerBase position={[0, 0, 0]} />
 
         <DevStudioLight
           position={[300, 180, 0]}
@@ -183,7 +187,7 @@ export function DevScene() {
         ))}
 
         {/* Coins */}
-        {hardcodedScene.coins.map((coin, index) => (
+        {/* {hardcodedScene.coins.map((coin, index) => (
           <GoldCoin
             key={`coin-${index}`}
             position={[
@@ -192,10 +196,10 @@ export function DevScene() {
               coin.zOffset,
             ]}
           />
-        ))}
+        ))} */}
 
         {/* Vouchers */}
-        {hardcodedScene.vouchers.map((voucher, index) => (
+        {/* {hardcodedScene.vouchers.map((voucher, index) => (
           <RewardVoucher
             key={`voucher-${index}`}
             position={[
@@ -204,10 +208,10 @@ export function DevScene() {
               voucher.zOffset,
             ]}
           />
-        ))}
+        ))} */}
 
         {/* Chests */}
-        {hardcodedScene.chests.map((chest, index) => (
+        {/* {hardcodedScene.chests.map((chest, index) => (
           <MoneyChest
             key={`chest-${index}`}
             position={[
@@ -216,10 +220,7 @@ export function DevScene() {
               chest.zOffset,
             ]}
           />
-        ))}
-
-        {/* Player at center position */}
-        <Player ref={playerRef} position={{ x: 140, y: 100 }} rotation={0} />
+        ))} */}
 
         {/* Helper axes for development */}
         <axesHelper args={[100]} />
