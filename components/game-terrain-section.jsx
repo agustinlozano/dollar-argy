@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import * as THREE from "three";
-import { GAME_CONSTANTS } from "./game";
+import { GAME_CONSTANTS } from "@/lib/consts";
 
 // Define colors outside the component for reuse
 const SECTION_COLORS = {

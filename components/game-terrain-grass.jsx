@@ -1,6 +1,6 @@
 import { useMemo, memo } from "react";
-import { GAME_CONSTANTS } from "./game";
 import * as THREE from "three";
+import { GAME_CONSTANTS } from "@/lib/consts";
 
 // Definir colores fuera del componente
 const GRASS_COLORS = {

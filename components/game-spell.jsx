@@ -1,7 +1,7 @@
 import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { GAME_CONSTANTS } from "./game";
+import { GAME_CONSTANTS } from "@/lib/consts";
 
 /**
  * SpellEffect Component

@@ -1,5 +1,5 @@
 // hooks/useGameState.js
-import { GAME_CONSTANTS } from "@/components/game";
+import { GAME_CONSTANTS } from "@/lib/consts";
 import {
   generateObstacle,
   generateRewards,

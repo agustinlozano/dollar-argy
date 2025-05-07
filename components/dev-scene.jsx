@@ -12,11 +12,10 @@ import { PlayerDirectionalLight } from "./game-directional-light";
 import { Player } from "./game-player";
 import { ObstacleObj } from "./game-obj-tree";
 import { DevCamera } from "./dev-camera";
-import { GAME_CONSTANTS } from "./game";
 import { M16M1 } from "./game-weapon-m16";
 import { DevStudioLight } from "./dev-studio-light";
 
-import { chestTypes, rewardTypes } from "@/lib/consts";
+import { GAME_CONSTANTS, chestTypes, rewardTypes } from "@/lib/consts";
 import { useResizeEffect } from "./game.hooks";
 import { ModeToggle } from "@/app/theme-toggle";
 import { GameObjTorch } from "./game-obj-torch";

@@ -34,14 +34,7 @@ import { useInventoryStore } from "@/stores/useInventoryState";
 import { useInventoryUIStore } from "@/stores/useInventoryUIState";
 
 import { useResizeEffect } from "./game.hooks";
-
-// Game constants
-export const GAME_CONSTANTS = {
-  minTileIndex: -8,
-  maxTileIndex: 8,
-  tileSize: 42,
-  initialRows: 50,
-};
+import { GAME_CONSTANTS } from "@/lib/consts";
 
 // Main game component
 // Dollar Argy is a game where a thousand Peso Argentino bill fights against a One Dollar Bill.

@@ -1,4 +1,4 @@
-import { GAME_CONSTANTS } from "./game";
+import { GAME_CONSTANTS } from "@/lib/consts";
 
 export function ObstacleObj({ tileIndex, height = 45, position = [0, 0, 0] }) {
   const tileSize = GAME_CONSTANTS.tileSize;

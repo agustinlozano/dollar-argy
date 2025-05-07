@@ -1,6 +1,6 @@
 import { useRef, useMemo, memo } from "react";
 import * as THREE from "three";
-import { GAME_CONSTANTS } from "./game";
+import { GAME_CONSTANTS } from "@/lib/consts";
 
 // Define road colors outside component to prevent recreations
 const roadColors = {

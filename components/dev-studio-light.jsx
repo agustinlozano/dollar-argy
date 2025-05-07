@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { DirectionalLightHelper } from "three";
 import { useHelper } from "@react-three/drei";
-import { GAME_CONSTANTS } from "./game";
+import { GAME_CONSTANTS } from "@/lib/consts";
 
 export function DevStudioLight({
   position = [0, 0, 0],
