@@ -10,3 +10,4 @@ alwaysApply: false
     - Always use kebab-case for component names (e.g. my-component.tsx)
     - Always add loading and error states to data fetching components
     - Implement error handling and error logging
+    - Functional component syntax
