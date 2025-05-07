@@ -1,4 +1,4 @@
-import { GAME_CONSTANTS } from "./game";
+import { GAME_CONSTANTS } from "@/lib/consts";
 import { rewardTypes, chestTypes } from "@/lib/consts";
 
 // Generate obstacles (trees)
