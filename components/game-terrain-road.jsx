@@ -1,11 +1,6 @@
 import { useRef, useMemo, memo } from "react";
 import * as THREE from "three";
-
-const GAME_CONSTANTS = {
-  minTileIndex: -8,
-  maxTileIndex: 8,
-  tileSize: 42,
-};
+import { GAME_CONSTANTS } from "./game";
 
 // Define road colors outside component to prevent recreations
 const roadColors = {
