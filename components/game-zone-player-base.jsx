@@ -29,26 +29,8 @@ export const GameZonePlayerBase = ({
     return positions;
   }, []);
 
-  // Calculate torch positions at the corners and middle
-  const torchPositions = useMemo(
-    () => [
-      // Front corners
-      [0, TILE_HEIGHT, 0],
-      [TILE_SIZE * (COLS - 1), TILE_HEIGHT, 0],
-      // Back corners
-      [0, TILE_HEIGHT * 2, 0],
-      [TILE_SIZE * (COLS - 1), TILE_HEIGHT * 2, 0],
-      // Middle positions
-      [TILE_SIZE * 2, TILE_HEIGHT * 1.5, 0],
-      [TILE_SIZE * 4, TILE_HEIGHT * 1.5, 0],
-    ],
-    []
-  );
-
   // Flag position in the middle of the base
   const flagPosition = useMemo(() => [TILE_SIZE * 1.5, TILE_SIZE * 1.5, 0], []);
-
-  console.log(tilesPositions);
 
   return (
     <group position={position} rotation={rotation}>
