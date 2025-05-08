@@ -19,7 +19,7 @@ export function FoundTracker() {
       <div
         id="found-tacker-coin-icon"
         className={cn(
-          "coin-3d relative size-12 rounded-full border-2 border-dashed border-yellow-700 bg-yellow-400 text-yellow-900 flex items-center justify-center"
+          "coin-3d relative size-12 rounded-full border border-dashed border-yellow-700 bg-yellow-400 text-yellow-900 flex items-center justify-center"
         )}
       >
         <DollarSign className="z-10" />
