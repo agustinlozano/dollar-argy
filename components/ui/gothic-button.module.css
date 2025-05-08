@@ -76,6 +76,6 @@
 }
 
 /* Shared hover effect for both variants */
-.inventoryButton3d:hover {
+/* .inventoryButton3d:hover {
   transform: translateY(0.15em);
-}
+} */
