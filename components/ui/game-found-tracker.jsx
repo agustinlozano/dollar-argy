@@ -13,7 +13,7 @@ export function FoundTracker() {
       <div
         className={cn(
           "absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2",
-          "rounded bg-accent-foreground/75 h-8 w-full flex items-center justify-center -z-10"
+          "rounded bg-primary-foreground/75 h-8 w-full flex items-center justify-center -z-10"
         )}
       />
       <div
@@ -27,7 +27,7 @@ export function FoundTracker() {
 
       <div
         aria-label="amount"
-        className="flex items-center gap-2 font-bold text-accent text-lg"
+        className="flex items-center gap-2 font-bold text-lg"
       >
         <span>{found || 0}</span>
       </div>
