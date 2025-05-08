@@ -3,9 +3,7 @@ import { useEffect } from "react";
 import { Controls } from "./game-controls";
 import { Inventory } from "./inventory/inventory";
 import { FoundTracker } from "./game-found-tracker";
-import { TorchToggleButton } from "./game-torch-toggle";
 import { InventoryToggleButton } from "./inventory/inventory-toggle-button";
-import { DialogueMenu } from "./dialogue-menu";
 
 import { useGameStore } from "@/stores/useGameState";
 import { useInventoryStore } from "@/stores/useInventoryState";
@@ -16,7 +14,7 @@ import * as defensiveSpells from "@/lib/spells.defensives";
 import * as buffSpells from "@/lib/spells.buffs";
 import * as consumables from "@/lib/items.consumable";
 import * as magicItems from "@/lib/items.magic";
-import { BgGradient } from "./bg-gradient";
+
 import { GothicButton } from "./gothic-button";
 import { DialogueWrapper } from "./dialogue-wrapper";
 
