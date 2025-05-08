@@ -11,7 +11,7 @@ export function DialogueMenu({
       {onClose && (
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 z-50 p-1 rounded-full border bg-card/50 hover:border-primary/75 transition-colors"
+          className="absolute top-2 right-2 z-50 p-1 rounded-full border bg-card/50 hover:bg-primary/20 hover:border-primary/75 transform hover:scale-110 transition-all duration-200"
         >
           <X size={20} className="opacity-75" />
         </button>
