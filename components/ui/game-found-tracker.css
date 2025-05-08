@@ -4,6 +4,9 @@
   cursor: pointer;
   position: relative;
   z-index: 10;
+  box-shadow: inset 0 0 0 1px rgba(248, 216, 0, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.2);
+  background: radial-gradient(ellipse at bottom, #f8d800 0%, #f8b800 45%);
 }
 
 .coin-3d::before {
@@ -11,8 +14,8 @@
   position: absolute;
   inset: 0;
   border-radius: 9999px;
-  background: radial-gradient(circle at 30% 30%, #d4af37, #b8860b);
-  box-shadow: 0 0 0 2px #c2942c, 0 0.3em 0 1px #a37417;
+  background: #f8d800;
+  box-shadow: 0 0 0 2px #885800, 0 0.3em 0 1px #352879;
   transform: translate3d(0, 0.2em, -1em);
   z-index: -1;
   transition: transform 150ms cubic-bezier(0, 0, 0.58, 1),
@@ -24,7 +27,7 @@
 }
 
 .coin-3d:hover::before {
-  box-shadow: 0 0 0 3px #c2942c, 0 0.35em 0 1px #a37417;
+  box-shadow: 0 0 0 1.5px #885800, 0 0.45em 0 1px #352879;
   transform: translate3d(0, 0.25em, -1em);
 }
 
@@ -34,5 +37,20 @@
 
 .coin-3d:active::before {
   transform: translate3d(0, 0, -1em);
-  box-shadow: 0 0 0 2px #b8860b, 0 0 #a37417;
+  box-shadow: 0 0 0 2px #885800, 0 0 #352879;
+}
+
+/* Añadir brillo a la moneda */
+.coin-3d::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.4) 0%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  z-index: 1;
 }
