@@ -29,7 +29,7 @@ export function Inventory({ items, spells, onClose }) {
   }, [activeTab, items, spells]);
 
   return (
-    <aside className="fixed flex top-1 right-1 w-md h-[624px] overflow-hidden">
+    <aside className="fixed flex top-14 right-3 w-md h-[624px] overflow-hidden">
       {/* <div className="absolute inset-0 bg-[url('/textures/glitch-texture.jpg')] bg-cover opacity-90"></div> */}
       {/* <div className="absolute inset-0 bg-[url('/textures/concrete-wall-texture.jpg')] bg-cover opacity-90"></div> */}
       {/* <div className="absolute inset-0 bg-[url('/textures/concrete-scratched.jpg')] bg-cover opacity-40"></div> */}
