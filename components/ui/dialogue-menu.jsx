@@ -1,16 +1,23 @@
+import { X } from "lucide-react";
+
 export function DialogueMenu({
   dialogueText = '"La gente me rechaza, merezco una oportunidad digna."',
   characterImage = "/characters/hornero-portrait.png",
   characterName = "Hornero Peso Argentino 🇦🇷",
+  onClose,
 }) {
   return (
-    <div className="h-[460px] w-[818px] border overflow-hidden p-20 z-30">
-      <div
-        role="presentation"
-        className="pointer-events-none absolute inset-0 bg-[url('/textures/stiff-paint-opt.jpg')] bg-cover opacity-100 -z-20"
-      ></div>
+    <div className="relative h-[460px] w-[818px] border overflow-hidden p-20 z-30">
+      {onClose && (
+        <button
+          onClick={onClose}
+          className="absolute top-2 right-2 z-50 p-1 rounded-full border bg-card/50 hover:border-primary/75 transition-colors"
+        >
+          <X size={20} className="opacity-75" />
+        </button>
+      )}
       {/* Left side - Dialogue */}
-      <div className="flex h-full">
+      <div className="relative flex h-full">
         <div className="p-8 border w-md max-w-md">
           <p className="text-primary/80 font-mono">{dialogueText}</p>
         </div>
