@@ -18,6 +18,7 @@ import * as consumables from "@/lib/items.consumable";
 import * as magicItems from "@/lib/items.magic";
 import { BgGradient } from "./bg-gradient";
 import { GothicButton } from "./gothic-button";
+import { DialogueWrapper } from "./dialogue-wrapper";
 
 export function GameUI({
   items,
@@ -92,16 +93,7 @@ export function GameUI({
 
       {/* Dialogue */}
       {/* create a fixed position on the center of the screen */}
-      <div className="fixed inset-0 z-30 pointer-events-none flex items-center justify-center">
-        <div className="relative z-10">
-          <BgGradient className="-z-10" />
-          <div
-            role="presentation"
-            className="pointer-events-none absolute inset-0 opacity-35 z-10 texture-fade bg-[url('/textures/grunge-frame-3.1.png')] bg-cover bg-center rounded invert"
-          ></div>
-          <DialogueMenu />
-        </div>
-      </div>
+      <DialogueWrapper toOpen={true} />
 
       {/* Inventory Modal */}
       {isInventoryOpen && (
