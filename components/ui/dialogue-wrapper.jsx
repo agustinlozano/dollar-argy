@@ -54,16 +54,8 @@ export function DialogueWrapper({ toOpen }) {
       className="fixed inset-0 z-30 flex items-center justify-center bg-black/40 transition-opacity duration-500"
       style={{ opacity: isAnimating ? 1 : 0 }}
     >
-      <audio
-        ref={openSoundRef}
-        src="/sounds/open-close-menu.wav"
-        preload="auto"
-      />
-      <audio
-        ref={closeSoundRef}
-        src="/sounds/open-close-menu.wav"
-        preload="auto"
-      />
+      <audio ref={openSoundRef} src="/sounds/ui-feedback.wav" preload="auto" />
+      <audio ref={closeSoundRef} src="/sounds/ui-feedback.wav" preload="auto" />
       <GothicBackgroundCard>
         <div
           className={`transform transition-all duration-500 ${
