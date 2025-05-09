@@ -2,7 +2,7 @@
 
 import React, { useRef } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, Stats } from "@react-three/drei";
 
 import { PlayerDirectionalLight } from "./game-directional-light";
 
@@ -77,6 +77,7 @@ export function DollarArgyGame() {
           gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         }}
       >
+        <Stats />
         <ambientLight intensity={0.02} />
         {isDancing && danceStartPosition ? (
           <>
