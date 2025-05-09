@@ -63,6 +63,14 @@ export function GameUI({
 
   return (
     <>
+      {/* Background overlay */}
+      {isInventoryOpen && (
+        <div
+          role="presentation"
+          className="pointer-events-none absolute inset-0 bg-black/50"
+          onClick={onInventoryToggle}
+        ></div>
+      )}
       {/* Top UI Elements */}
       <div className="fixed top-0 left-0 right-0 z-50 p-4 flex justify-between items-start">
         <div className="flex items-start gap-4">
@@ -90,17 +98,11 @@ export function GameUI({
 
       {/* Dialogue */}
       {/* create a fixed position on the center of the screen */}
-      <DialogueWrapper toOpen={true} />
+      <DialogueWrapper toOpen={true} variant="metallic-purple" />
 
       {/* Inventory Modal */}
       {isInventoryOpen && (
         <div className="fixed top-0 left-0 h-screen w-screen flex justify-center items-center z-50">
-          {/* Background overlay */}
-          <div
-            role="presentation"
-            className="pointer-events-none absolute inset-0 bg-black/50"
-            onClick={onInventoryToggle}
-          ></div>
           <div className="relative z-10">
             <Inventory
               items={items}
