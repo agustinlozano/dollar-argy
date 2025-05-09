@@ -1,14 +1,15 @@
 import { useEffect, useState, useRef } from "react";
 import { DialogueMenu } from "./dialogue-menu";
 import { GothicBackgroundCard } from "./gothic-background-card";
+import { useSound } from "@/hooks/useSound";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export function DialogueWrapper({ toOpen }) {
   const [visible, setVisible] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const openSoundRef = useRef(null);
-  const closeSoundRef = useRef(null);
+
+  const { play } = useSound("/sounds/ui-feedback.wav");
   // const { dialogueText, characterImage, characterName } = useDialogueStore();
 
   useEffect(() => {
@@ -16,16 +17,7 @@ export function DialogueWrapper({ toOpen }) {
       setIsAnimating(true);
       setVisible(true);
 
-      sleep(200).then(() => {
-        // Play open sound
-        console.log("Playing open sound...", openSoundRef.current);
-        if (openSoundRef.current) {
-          openSoundRef.current.currentTime = 0;
-          openSoundRef.current
-            .play()
-            .catch((e) => console.log("Audio play failed:", e));
-        }
-      });
+      sleep(200).then(() => play());
     }
   }, [toOpen]);
 
@@ -33,17 +25,8 @@ export function DialogueWrapper({ toOpen }) {
     setIsAnimating(false);
 
     sleep(200).then(() => {
-      // Play close sound
-      if (closeSoundRef.current) {
-        closeSoundRef.current.currentTime = 0;
-        closeSoundRef.current
-          .play()
-          .catch((e) => console.log("Audio play failed:", e));
-      }
-      // Delay hiding the component until animation completes
-      setTimeout(() => {
-        setVisible(false);
-      }, 500); // Animation duration
+      play();
+      setTimeout(() => setVisible(false), 500);
     });
   };
 
@@ -54,8 +37,6 @@ export function DialogueWrapper({ toOpen }) {
       className="fixed inset-0 z-30 flex items-center justify-center bg-black/40 transition-opacity duration-500"
       style={{ opacity: isAnimating ? 1 : 0 }}
     >
-      <audio ref={openSoundRef} src="/sounds/ui-feedback.wav" preload="auto" />
-      <audio ref={closeSoundRef} src="/sounds/ui-feedback.wav" preload="auto" />
       <GothicBackgroundCard>
         <div
           className={`transform transition-all duration-500 ${
