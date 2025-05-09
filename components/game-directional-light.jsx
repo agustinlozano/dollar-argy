@@ -28,8 +28,8 @@ export function PlayerDirectionalLight() {
         position={[-200, -200, 400]}
         intensity={0.1}
         castShadow
-        shadow-mapSize-width={4096}
-        shadow-mapSize-height={4096}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
         shadow-camera-left={-800}
         shadow-camera-right={800}
         shadow-camera-top={800}
@@ -43,8 +43,8 @@ export function PlayerDirectionalLight() {
         position={[200, 1000, 400]}
         intensity={0.1}
         castShadow
-        shadow-mapSize-width={4096}
-        shadow-mapSize-height={4096}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
         shadow-camera-left={-800}
         shadow-camera-right={800}
         shadow-camera-top={800}
