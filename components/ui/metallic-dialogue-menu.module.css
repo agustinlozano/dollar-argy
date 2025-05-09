@@ -1,0 +1,109 @@
+.metallicContainer {
+  position: relative;
+  height: 320px;
+  width: 818px;
+  transform-style: preserve-3d;
+  transform: translate3d(0, 0, 0);
+  z-index: 30;
+  padding: 16px;
+  overflow: hidden;
+
+  /* Aplicar el fondo con gradiente */
+  background: radial-gradient(
+    ellipse at bottom,
+    rgba(71, 40, 122, 1) 0%,
+    rgb(11, 3, 19) 45%
+  );
+
+  /* Sombra interna */
+  box-shadow: inset 0 0 0 2px rgba(224, 193, 244, 0.2),
+    0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Efecto 3D con ::before */
+/* .metallicContainer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: -12px;
+  background: #36287977;
+  box-shadow: 0 0 0 3px #595064, 0 0.5em 0 1px #180534;
+  transform: translate3d(0, 0.3em, -1em);
+  z-index: -1;
+} */
+
+/* Variante plateada */
+.silver {
+  background: radial-gradient(
+    ellipse at bottom,
+    rgb(63, 62, 62) 0%,
+    rgb(29, 29, 29) 45%
+  );
+  box-shadow: inset 0 0 0 2px rgba(131, 130, 130, 0.3),
+    0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* .silver::before {
+  background: #4a4a4a;
+  box-shadow: 0 0 0 3px #808080, 0 0.5em 0 1px #202020;
+} */
+
+/* Secciones internas */
+.dialogueSection,
+.imageSection {
+  position: relative;
+  background-color: rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 1;
+}
+
+.dialogueSection::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.09) 0%,
+    rgba(255, 255, 255, 0.05) 40%,
+    transparent 80%
+  );
+  z-index: -1;
+}
+
+.imageSection::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(5, 5, 5, 0.05) 40%,
+    transparent 80%
+  );
+  z-index: -1;
+}
+
+/* Estilos adicionales para la variante púrpura */
+.purple .dialogueSection,
+.purple .imageSection {
+  border-color: rgba(122, 78, 190, 0.4);
+}
+
+/* Estilos adicionales para la variante plateada */
+.silver .dialogueSection,
+.silver .imageSection {
+  border-color: rgba(130, 130, 130, 0.4);
+}
+
+/* Efecto de textura ligeramente visible */
+.metallicContainer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/textures/stiff-paint-opt.jpg");
+  background-size: cover;
+  opacity: 0.08;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
