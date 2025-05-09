@@ -4,6 +4,7 @@ import React, {
   useEffect,
   forwardRef,
   useImperativeHandle,
+  useMemo,
 } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
@@ -18,6 +19,15 @@ const BILL_DIMENSIONS = {
   height: 100,
   depth: 5,
   baseHeight: 55,
+};
+
+// Pre-compute easing functions for better performance
+const easeInOutQuad = (t) => {
+  return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+};
+
+const easeOutQuad = (t) => {
+  return t * (2 - t);
 };
 
 export const Player = forwardRef(function PlayerBill({ position }, ref) {
@@ -39,6 +49,8 @@ export const Player = forwardRef(function PlayerBill({ position }, ref) {
     startPosition: { x: 0, y: 0, z: BILL_DIMENSIONS.baseHeight },
     targetPosition: { x: 0, y: 0, z: BILL_DIMENSIONS.baseHeight },
     lastDelta: 0,
+    // Cache for expensive calculations
+    jumpHeightMap: new Map(),
   });
 
   // Expose necessary references to the parent
@@ -97,9 +109,25 @@ export const Player = forwardRef(function PlayerBill({ position }, ref) {
     setIsMoving(true);
   }, [position]);
 
+  // Precompute jump heights for common progress values
+  useEffect(() => {
+    const jumpHeight = 6;
+    const cache = animationState.current.jumpHeightMap;
+
+    // Precompute for 100 steps
+    for (let i = 0; i <= 100; i++) {
+      const progress = i / 100;
+      const jumpProgress = progress < 0.5 ? progress * 2 : 2 - progress * 2;
+      cache.set(progress, easeOutQuad(jumpProgress) * jumpHeight);
+    }
+  }, []);
+
   // Animation frame
   useFrame((state, delta) => {
     if (!isMoving || !animationState.current.running) return;
+
+    // Skip animation frames when tab is not focused
+    if (delta > 0.1) return;
 
     // Smooth out delta to prevent jerky movements
     const smoothDelta = THREE.MathUtils.lerp(
@@ -118,27 +146,21 @@ export const Player = forwardRef(function PlayerBill({ position }, ref) {
     const progress = easeInOutQuad(rawProgress);
 
     if (playerRef.current) {
-      // Interpolate position with smoothing
-      playerRef.current.position.x = THREE.MathUtils.lerp(
-        animationState.current.startPosition.x,
-        animationState.current.targetPosition.x,
-        progress
-      );
-      playerRef.current.position.y = THREE.MathUtils.lerp(
-        animationState.current.startPosition.y,
-        animationState.current.targetPosition.y,
-        progress
-      );
-      playerRef.current.position.z = THREE.MathUtils.lerp(
-        animationState.current.startPosition.z,
-        animationState.current.targetPosition.z,
-        progress
-      );
+      // Interpolate position with optimized lerp
+      const startPos = animationState.current.startPosition;
+      const targetPos = animationState.current.targetPosition;
 
-      // Optimized jump effect with smoother curve
-      const jumpHeight = 6;
-      const jumpProgress = progress < 0.5 ? progress * 2 : 2 - progress * 2;
-      const jumpOffset = easeOutQuad(jumpProgress) * jumpHeight;
+      playerRef.current.position.x =
+        startPos.x + (targetPos.x - startPos.x) * progress;
+      playerRef.current.position.y =
+        startPos.y + (targetPos.y - startPos.y) * progress;
+      playerRef.current.position.z =
+        startPos.z + (targetPos.z - startPos.z) * progress;
+
+      // Optimized jump effect with cached values
+      const roundedProgress = Math.round(progress * 100) / 100;
+      const jumpOffset =
+        animationState.current.jumpHeightMap.get(roundedProgress) || 0;
       playerRef.current.position.z += jumpOffset;
     }
 
@@ -150,24 +172,16 @@ export const Player = forwardRef(function PlayerBill({ position }, ref) {
 
       // Ensure exact final position
       if (playerRef.current) {
-        playerRef.current.position.x = animationState.current.targetPosition.x;
-        playerRef.current.position.y = animationState.current.targetPosition.y;
-        playerRef.current.position.z = animationState.current.targetPosition.z;
+        const targetPos = animationState.current.targetPosition;
+        playerRef.current.position.x = targetPos.x;
+        playerRef.current.position.y = targetPos.y;
+        playerRef.current.position.z = targetPos.z;
       }
     }
   });
 
-  // Easing functions for smoother animations
-  const easeInOutQuad = (t) => {
-    return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-  };
-
-  const easeOutQuad = (t) => {
-    return t * (2 - t);
-  };
-
   // Materials
-  const materials = React.useMemo(
+  const materials = useMemo(
     () => [
       new THREE.MeshLambertMaterial({ color: "#dbad6a" }), // right
       new THREE.MeshLambertMaterial({ color: "#dbad6a" }), // left
