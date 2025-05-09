@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useHelper } from "@react-three/drei";
 import { useGameStore } from "@/stores/useGameState";
@@ -16,35 +16,48 @@ export function TorchLight({
   const pointLightRef = useRef();
   const isTorchActive = useGameStore((state) => state.isTorchActive);
 
-  // State for flickering effect - increased base intensity
+  // State for flickering effect - reduced base intensity
   const [baseIntensity] = useState(100);
   const flickerRef = useRef({
     timer: 0,
     intensity: baseIntensity,
+    nextUpdate: 0,
   });
 
-  // Use helper properly - always call it, but only enable when conditions are met
+  // Use helper only in test environment
   useHelper(
     enviroment === "test" && isTorchActive ? pointLightRef : null,
     THREE.PointLightHelper,
-    20,
+    10,
     "orange"
   );
 
-  // Update light position to follow player and add flickering effect
-  useFrame((state, delta) => {
-    if (pointLightRef.current && isTorchActive) {
-      // Flickering effect
-      flickerRef.current.timer += delta;
+  // Create light once and update properties
+  useEffect(() => {
+    if (pointLightRef.current) {
+      // Reduce shadow quality for better performance
+      pointLightRef.current.shadow.mapSize.width = 100;
+      pointLightRef.current.shadow.mapSize.height = 100;
 
-      // Random flickering calculation
-      if (flickerRef.current.timer > 0.1) {
-        flickerRef.current.timer = 0;
-        // Create a subtle random flicker effect
-        const flicker = baseIntensity * (0.85 + Math.random() * 0.3);
-        pointLightRef.current.intensity = flicker;
-      }
+      // Smaller area for better performance
+      pointLightRef.current.distance = 150;
     }
+  }, []);
+
+  // Update light with reduced flickering frequency
+  useFrame((state, delta) => {
+    if (!pointLightRef.current || !isTorchActive) return;
+
+    // Skip frames to improve performance (only update every 5 frames)
+    flickerRef.current.nextUpdate -= delta;
+    if (flickerRef.current.nextUpdate > 0) return;
+
+    // Reset counter and do update less frequently
+    flickerRef.current.nextUpdate = 0.25;
+
+    // Create a subtle random flicker effect
+    const flicker = baseIntensity * (0.9 + Math.random() * 0.2);
+    pointLightRef.current.intensity = flicker;
   });
 
   // Don't render if torch is not active
@@ -56,15 +69,15 @@ export function TorchLight({
       <pointLight
         ref={pointLightRef}
         intensity={baseIntensity}
-        distance={400}
+        distance={150}
         decay={decay}
         color="#ff9c40"
         castShadow
-        shadow-mapSize-width={512}
-        shadow-mapSize-height={512}
+        shadow-mapSize-width={100}
+        shadow-mapSize-height={100}
         shadow-camera-near={1}
-        shadow-camera-far={400}
-        power={power} // Add power to increase overall light intensity
+        shadow-camera-far={200}
+        power={power}
       >
         {/* Torch object */}
         {hideTorchObj ? null : <GameObjTorch initialPosition={[0, 0, 0]} />}
