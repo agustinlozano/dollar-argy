@@ -3,10 +3,9 @@ import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ItemGrid } from "@/components/ui/inventory/item-grid";
 import { SpellGrid } from "@/components/ui/inventory/spell-grid";
-import { DetailPanel } from "@/components/ui/inventory/panel";
-import { cn } from "@/lib/utils";
-import { X } from "lucide-react";
 import { BgGradient } from "@/components/ui/bg-gradient";
+import { CloseButton } from "@/components/ui/close-button";
+import { cn } from "@/lib/utils";
 // import "./linear-gradrient.css";
 
 export function Inventory({ items, spells, onClose }) {
@@ -39,14 +38,7 @@ export function Inventory({ items, spells, onClose }) {
       <div className={cn("relative grow max-w-4xl px-6 pt-8")}>
         <div className="absolute inset-0 bg-[url('/textures/stiff-paint-opt.jpg')] bg-cover opacity-100"></div>
 
-        {onClose && (
-          <button
-            onClick={onClose}
-            className="absolute top-2 right-2 z-50 p-1 rounded-full border bg-card/50 hover:bg-opacity-80 transition-colors"
-          >
-            <X size={20} className="opacity-75" />
-          </button>
-        )}
+        {onClose && <CloseButton onClick={onClose} />}
 
         <Tabs
           value={activeTab}
