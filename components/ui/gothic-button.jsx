@@ -8,10 +8,17 @@ export function GothicButton({
   variant = "purple",
   children,
   className,
-  soundUrl = "/sounds/ui-feedback.wav",
+  soundUrl = "/sounds/ui-hovers.wav",
   volume = 0.5,
+  useFragment = true, // use a fragment of the sound
+  startTime = 1.8,
+  endTime = 2.4,
 }) {
-  const { play } = useSound(soundUrl, { volume });
+  // if useFragment is true, use the specific fragment
+  const { play } = useSound(soundUrl, {
+    volume,
+    ...(useFragment ? { startTime, endTime } : {}),
+  });
 
   const handleClick = (event) => {
     play();
