@@ -69,7 +69,6 @@ export function GameUI({
           <FoundTracker />
         </div>
         <div className="flex items-start gap-2">
-          {/* <TorchToggleButton /> */}
           <InventoryToggleButton
             onClick={onInventoryToggle}
             isOpen={isInventoryOpen}
