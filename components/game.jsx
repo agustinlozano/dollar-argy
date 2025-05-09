@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useMemo, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Stats } from "@react-three/drei";
+import * as THREE from "three";
 
 import { PlayerDirectionalLight } from "./game-directional-light";
 
@@ -35,6 +36,7 @@ import { useInventoryUIStore } from "@/stores/useInventoryUIState";
 
 import { useResizeEffect } from "./game.hooks";
 import { GAME_CONSTANTS } from "@/lib/consts";
+import { DevCamera } from "./dev-camera";
 
 // Main game component
 // Dollar Argy is a game where a thousand Peso Argentino bill fights against a One Dollar Bill.
@@ -42,12 +44,14 @@ export function DollarArgyGame() {
   const {
     playerPosition,
     rows,
+    visibleRows,
     activeSpells,
     movePlayer,
     castSpell,
     removeSpell,
     isDancing,
     danceStartPosition,
+    updateVisibleRows,
   } = useGameStore();
 
   const { items, spells } = useInventoryStore();
@@ -58,6 +62,11 @@ export function DollarArgyGame() {
 
   // Handle window resize
   const canvasSize = useResizeEffect(containerRef);
+
+  // Actualizar filas visibles cuando cambia la posición
+  useEffect(() => {
+    updateVisibleRows();
+  }, [playerPosition, updateVisibleRows]);
 
   return (
     <div
@@ -95,7 +104,7 @@ export function DollarArgyGame() {
         {/* <TorchLight position={[0, -30, 6.5]} rotation={[Math.PI / 2, 0, 0]} /> */}
         {/* <ArgyFlag position={[GAME_CONSTANTS.tileSize * 2, 0, 0]} />
         <GameTile position={[0, 0, 0]} /> */}
-        <GameZonePlayerBase position={[-180, -42, 0]} />
+        {/* <GameZonePlayerBase position={[-180, -42, 0]} /> */}
 
         <Player ref={playerRef} position={playerPosition} />
         <PlayerDirectionalLight />
@@ -109,8 +118,8 @@ export function DollarArgyGame() {
           />
         ))}
 
-        {/* Map rows */}
-        {rows.map((row) => {
+        {/* Map rows - Ahora con visibleRows para mejor rendimiento */}
+        {visibleRows.map((row) => {
           if (row.type === "road") {
             return (
               <Road
@@ -190,16 +199,7 @@ export function DollarArgyGame() {
         {/* Optional - For debugging */}
         <axesHelper args={[100]} />
 
-        {enviroment === "test" && (
-          <OrbitControls
-            makeDefault
-            minDistance={100}
-            maxZoom={2}
-            minZoom={0.1}
-            maxPolarAngle={Math.PI / 2}
-            enablePan={true}
-          />
-        )}
+        {enviroment === "test" && <DevCamera />}
       </Canvas>
 
       <GameUI

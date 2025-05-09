@@ -12,6 +12,7 @@ const MOVEMENT_COOLDOWN = 200; // Ms between allowed movements
 const QUEUE_SIZE_LIMIT = 1; // Maximum number of moves in queue
 const FRIST_ROW = 0;
 const BASE_ROWS = 9;
+const VISIBLE_RANGE = 10; // [Performance Optimization: visible rows]
 
 export const useGameStore = create((set, get) => ({
   // Player State
@@ -25,6 +26,7 @@ export const useGameStore = create((set, get) => ({
   // Game State
   score: 0,
   rows: [],
+  visibleRows: [], // [Performance Optimization: visible rows]
   activeSpells: [],
 
   // Torch Light State
@@ -122,7 +124,24 @@ export const useGameStore = create((set, get) => ({
       }
     }
 
-    set({ rows: initialRows });
+    // [Performance Optimization: Only render visible rows]
+    set({
+      rows: initialRows,
+      visibleRows: initialRows, // Initialize visible rows
+    });
+  },
+
+  // [Performance Optimization: Only render visible rows]
+  updateVisibleRows: () => {
+    const { rows, currentPosition } = get();
+    const currentRow = currentPosition.currentRow;
+
+    // filter only visible rows within the range
+    const visibleRows = rows.filter(
+      (row) => Math.abs(row.rowIndex - currentRow) <= VISIBLE_RANGE
+    );
+
+    set({ visibleRows });
   },
 
   // Toggle torch light
