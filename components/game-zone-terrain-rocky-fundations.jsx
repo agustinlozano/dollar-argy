@@ -122,7 +122,7 @@ export const FoundationsRockyZone = ({
         geometry={geometry}
         material={rockMaterial}
         castShadow
-        receiveShadow
+        // receiveShadow
       />
     </group>
   );

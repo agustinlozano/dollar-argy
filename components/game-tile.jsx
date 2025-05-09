@@ -79,7 +79,7 @@ export const GameTile = ({
       geometry={geometry}
       material={material}
       castShadow
-      receiveShadow
+      // receiveShadow
     />
   );
 };
