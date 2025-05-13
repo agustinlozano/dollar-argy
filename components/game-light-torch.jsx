@@ -11,7 +11,6 @@ export function TorchLight({
   rotation = [0, 0, 0],
   hideTorchObj = false,
   decay = 1.4,
-  power = 14,
 }) {
   const pointLightRef = useRef();
   const isTorchActive = useGameStore((state) => state.isTorchActive);
@@ -69,7 +68,7 @@ export function TorchLight({
       <pointLight
         ref={pointLightRef}
         intensity={baseIntensity}
-        distance={150}
+        distance={80}
         decay={decay}
         color="#ff9c40"
         castShadow
@@ -77,7 +76,6 @@ export function TorchLight({
         shadow-mapSize-height={100}
         shadow-camera-near={1}
         shadow-camera-far={200}
-        power={power}
       >
         {/* Torch object */}
         {hideTorchObj ? null : <GameObjTorch initialPosition={[0, 0, 0]} />}
