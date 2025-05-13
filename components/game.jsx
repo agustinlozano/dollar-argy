@@ -87,7 +87,7 @@ export function DollarArgyGame() {
         }}
       >
         <Stats />
-        <ambientLight intensity={0.02} />
+        <ambientLight intensity={0.08} />
         {isDancing && danceStartPosition ? (
           <>
             <DanceCamera position={danceStartPosition} />
@@ -104,7 +104,7 @@ export function DollarArgyGame() {
         {/* <TorchLight position={[0, -30, 6.5]} rotation={[Math.PI / 2, 0, 0]} /> */}
         {/* <ArgyFlag position={[GAME_CONSTANTS.tileSize * 2, 0, 0]} />
         <GameTile position={[0, 0, 0]} /> */}
-        {/* <GameZonePlayerBase position={[-180, -42, 0]} /> */}
+        <GameZonePlayerBase position={[-180, -42, 0]} />
 
         <Player ref={playerRef} position={playerPosition} />
         <PlayerDirectionalLight />
@@ -197,7 +197,7 @@ export function DollarArgyGame() {
         })}
 
         {/* Optional - For debugging */}
-        <axesHelper args={[100]} />
+        {/* <axesHelper args={[100]} /> */}
 
         {enviroment === "test" && <DevCamera />}
       </Canvas>
