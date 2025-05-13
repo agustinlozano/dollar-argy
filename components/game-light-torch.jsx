@@ -16,12 +16,14 @@ export function TorchLight({
   const isTorchActive = useGameStore((state) => state.isTorchActive);
 
   // State for flickering effect - reduced base intensity
-  const [baseIntensity] = useState(100);
-  const flickerRef = useRef({
+  const flickerState = useRef({
+    values: Array.from({ length: 20 }, () => 80 + Math.random() * 40),
+    currentIndex: 0,
     timer: 0,
-    intensity: baseIntensity,
-    nextUpdate: 0,
-  });
+    transitionProgress: 0,
+    currentIntensity: 100,
+    targetIntensity: 100,
+  }).current;
 
   // Use helper only in test environment
   useHelper(
@@ -44,19 +46,34 @@ export function TorchLight({
   }, []);
 
   // Update light with reduced flickering frequency
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     if (!pointLightRef.current || !isTorchActive) return;
 
-    // Skip frames to improve performance (only update every 5 frames)
-    flickerRef.current.nextUpdate -= delta;
-    if (flickerRef.current.nextUpdate > 0) return;
+    flickerState.timer += delta;
 
-    // Reset counter and do update less frequently
-    flickerRef.current.nextUpdate = 0.25;
+    // Cambiar target cada 0.3 segundos
+    if (flickerState.timer >= 0.3) {
+      flickerState.timer = 0;
+      flickerState.currentIntensity = flickerState.targetIntensity;
+      flickerState.currentIndex =
+        (flickerState.currentIndex + 1) % flickerState.values.length;
+      flickerState.targetIntensity =
+        flickerState.values[flickerState.currentIndex];
+      flickerState.transitionProgress = 0;
+    }
 
-    // Create a subtle random flicker effect
-    const flicker = baseIntensity * (0.9 + Math.random() * 0.2);
-    pointLightRef.current.intensity = flicker;
+    // Transición suave entre valores
+    flickerState.transitionProgress = Math.min(
+      1,
+      flickerState.transitionProgress + delta * 5
+    );
+    const intensity = THREE.MathUtils.lerp(
+      flickerState.currentIntensity,
+      flickerState.targetIntensity,
+      flickerState.transitionProgress
+    );
+
+    pointLightRef.current.intensity = intensity;
   });
 
   // Don't render if torch is not active
@@ -67,7 +84,7 @@ export function TorchLight({
       {/* Main torch light */}
       <pointLight
         ref={pointLightRef}
-        intensity={baseIntensity}
+        intensity={100}
         distance={80}
         decay={decay}
         color="#ff9c40"
