@@ -12,7 +12,6 @@ import { useTexture } from "@react-three/drei";
 import { useGameStore } from "@/stores/useGameState";
 // import { PivotControls } from "@react-three/drei";
 import { M16M1 } from "./game-weapon-m16";
-import { TorchLight } from "./game-light-torch";
 
 const BILL_DIMENSIONS = {
   width: 41.2,
@@ -214,9 +213,14 @@ export const Player = forwardRef(function PlayerBill({ position }, ref) {
 
         {/* Add M16 weapon object */}
         <M16M1 position={[30, 25, 5]} rotation={[0, Math.PI / 2, 0]} />
-        {/* Add torch light object */}
-        <TorchLight position={[0, 0, 30]} hideTorchObj />
-        {/* <TorchLight position={[0, 0, -15]} hideTorchObj /> */}
+        {/* Add a point light */}
+        <pointLight
+          intensity={100}
+          distance={100}
+          decay={1.3}
+          color="#ff9c40"
+          position={[0, 0, 25]}
+        />
       </group>
       {/* </PivotControls> */}
     </group>
