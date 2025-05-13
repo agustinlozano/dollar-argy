@@ -29,10 +29,6 @@ export function GameObjTorch({
       }),
       ember: new THREE.MeshBasicMaterial({
         color: "#FF4500",
-        emissive: "#FF4500",
-        emissiveIntensity: 0.5,
-        roughness: 0.7,
-        metalness: 0.3,
       }),
       flame: new THREE.MeshStandardMaterial({
         color: "#FFA500",
