@@ -2,8 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { DialogueMenu } from "./dialogue-menu";
 import { GothicBackgroundCard } from "./gothic-background-card";
 import { useSound } from "@/hooks/useSound";
-
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+import { sleep } from "@/lib/utils";
 
 export function DialogueWrapper({ toOpen }) {
   const [visible, setVisible] = useState(false);
