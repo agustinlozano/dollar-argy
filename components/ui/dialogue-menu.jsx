@@ -17,11 +17,13 @@ export function DialogueMenu({
 
         {/* Right side - Character Image */}
         <div className="flex flex-col items-center border bg-primary/10 w-52">
-          <div className="p-2">
+          <div className="p-2 w-full">
             <img
               src={characterImage || "/placeholder.svg"}
               alt={characterName}
-              className="w-full border"
+              className="w-full h-full border object-cover"
+              width={190.7}
+              height={190.7}
             />
           </div>
           <div className="w-full text-center p-2 font">
