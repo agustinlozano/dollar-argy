@@ -5,15 +5,15 @@ import { useGLTF } from "@react-three/drei";
 
 // NPC Dimensions - now based on BILL_DIMENSIONS, about 80% of player size
 const NPC_DIMENSIONS = {
-  headRadius: 12, // larger head for stylization
+  headRadius: 10, // larger head for stylization
   torsoWidth: 25, // 80% of player width
-  torsoHeight: 55, // 60% of player height
+  torsoHeight: 38, // reduced for shorter NPC
   torsoDepth: 10, // slightly less than player depth
   armWidth: 7,
   armHeight: 38,
   armDepth: 10,
-  legWidth: 8,
-  legHeight: 40,
+  legWidth: 10,
+  legHeight: 35, // reduced for shorter NPC
   legDepth: 10,
   baseHeight: 55, // match player baseHeight so feet are on ground
 };
@@ -236,7 +236,7 @@ export const HumanNPC = ({
         <mesh
           castShadow
           position={[
-            -NPC_DIMENSIONS.legWidth,
+            -NPC_DIMENSIONS.legWidth + 3,
             0,
             -NPC_DIMENSIONS.torsoHeight / 2 - NPC_DIMENSIONS.legHeight / 2,
           ]}
@@ -255,7 +255,7 @@ export const HumanNPC = ({
         <mesh
           castShadow
           position={[
-            NPC_DIMENSIONS.legWidth,
+            NPC_DIMENSIONS.legWidth - 3,
             0,
             -NPC_DIMENSIONS.torsoHeight / 2 - NPC_DIMENSIONS.legHeight / 2,
           ]}
