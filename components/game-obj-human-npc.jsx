@@ -16,11 +16,14 @@ const NPC_DIMENSIONS = {
   legHeight: 35, // reduced for shorter NPC
   legDepth: 10,
   baseHeight: 55, // match player baseHeight so feet are on ground
+  neckWidth: 3,
+  neckDepth: 3,
+  neckHeight: 6,
 };
 
 // Colors for NPC parts
 const NPC_COLORS = {
-  skin: "#e0ac69", // Base skin tone
+  skin: "#F6C9B9", // Base skin tone
   shirt: "#5d8aa8", // Blue shirt
   pants: "#36454f", // Dark pants
   shoes: "#4b3621", // Brown shoes
@@ -193,6 +196,22 @@ export const HumanNPC = ({
         >
           <sphereGeometry args={[NPC_DIMENSIONS.headRadius, 8, 6]} />
         </mesh>
+        {/* Neck */}
+        <mesh
+          castShadow
+          position={[0, 0, NPC_DIMENSIONS.torsoHeight / 2]}
+          rotation={[Math.PI / 2, 0, 0]}
+          material={materials.skin}
+        >
+          <cylinderGeometry
+            args={[
+              NPC_DIMENSIONS.neckWidth,
+              NPC_DIMENSIONS.neckDepth,
+              NPC_DIMENSIONS.neckHeight,
+              6,
+            ]}
+          />
+        </mesh>
 
         {/* Right Arm */}
         <mesh
@@ -285,7 +304,7 @@ export const HumanNPC = ({
         <mesh
           castShadow
           position={[
-            -NPC_DIMENSIONS.legWidth,
+            -NPC_DIMENSIONS.legWidth + 3,
             NPC_DIMENSIONS.legDepth / 2,
             -NPC_DIMENSIONS.torsoHeight / 2 - NPC_DIMENSIONS.legHeight - 1,
           ]}
@@ -300,7 +319,7 @@ export const HumanNPC = ({
         <mesh
           castShadow
           position={[
-            NPC_DIMENSIONS.legWidth,
+            NPC_DIMENSIONS.legWidth - 3,
             NPC_DIMENSIONS.legDepth / 2,
             -NPC_DIMENSIONS.torsoHeight / 2 - NPC_DIMENSIONS.legHeight - 1,
           ]}
