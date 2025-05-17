@@ -123,7 +123,7 @@ export function GameUI({
         <MetallicDialogueMenu
           dialogueText="¡Bienvenido a mi mundo! Soy un NPC con características humanas y estoy aquí para ayudarte en tu aventura."
           characterName="Humano NPC"
-          variant="silver"
+          variant="brown"
           onClose={() => {
             setShowDialogue(false);
           }}
