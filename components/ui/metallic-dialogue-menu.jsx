@@ -6,7 +6,7 @@ export function MetallicDialogueMenu({
   dialogueText = '"La gente me rechaza, merezco una oportunidad digna."',
   characterImage = "/characters/hornero-portrait.png",
   characterName = "Hornero Peso Argentino 🇦🇷",
-  variant = "purple", // 'purple' o 'silver'
+  variant = "purple", // 'purple', 'silver' o 'brown'
   onClose,
 }) {
   return (
@@ -14,7 +14,11 @@ export function MetallicDialogueMenu({
       className={cn(
         styles.metallicContainer,
         "rounded-lg",
-        variant === "silver" ? styles.silver : styles.purple
+        variant === "silver"
+          ? styles.silver
+          : variant === "brown"
+          ? styles.brown
+          : styles.purple
       )}
     >
       {onClose && (
