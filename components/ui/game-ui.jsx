@@ -1,9 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { Controls } from "./game-controls";
 import { Inventory } from "./inventory/inventory";
 import { FoundTracker } from "./game-found-tracker";
 import { InventoryToggleButton } from "./inventory/inventory-toggle-button";
+import { MetallicDialogueMenu } from "./metallic-dialogue-menu";
 
 import { useGameStore } from "@/stores/useGameState";
 import { useInventoryStore } from "@/stores/useInventoryState";
@@ -17,6 +18,7 @@ import * as magicItems from "@/lib/items.magic";
 
 import { GothicButton } from "./gothic-button";
 import { DialogueWrapper } from "./dialogue-wrapper";
+import { sleep } from "@/lib/utils";
 
 export function GameUI({
   items,
@@ -28,6 +30,14 @@ export function GameUI({
 }) {
   const addToInventory = useInventoryStore((state) => state.addNew);
   const initializeRows = useGameStore((state) => state.initializeRows);
+  // Estado para controlar la visibilidad del diálogo
+  const [showDialogue, setShowDialogue] = useState(false); // Hardcodeado a true para mostrar inmediatamente
+
+  useEffect(() => {
+    sleep(2000).then(() => {
+      setShowDialogue(true);
+    });
+  }, []);
 
   // Initialize rows when the component mounts
   useEffect(() => {
@@ -96,9 +106,44 @@ export function GameUI({
         />
       </div>
 
-      {/* Dialogue */}
-      {/* create a fixed position on the center of the screen */}
-      <DialogueWrapper toOpen={true} variant="metallic-purple" />
+      {/* Dialogue - MetallicDialogueMenu con animación */}
+      <div
+        className={`fixed left-1/2 transform -translate-x-1/2 z-50 max-w-3xl w-full transition-all duration-700 ease-out ${
+          showDialogue
+            ? "opacity-100 scale-100 translate-y-0"
+            : "opacity-0 scale-95 translate-y-20"
+        }`}
+        style={{
+          bottom: "calc(100vh / 6)",
+          width: "90%",
+          maxWidth: "800px",
+          transitionProperty: "transform, opacity, scale",
+          transformOrigin: "bottom",
+          boxShadow: showDialogue
+            ? "0 22px 70px 4px rgba(0, 0, 0, 0.56), 0 0 30px rgba(128, 0, 128, 0.3)"
+            : "none",
+          pointerEvents: showDialogue ? "auto" : "none",
+        }}
+      >
+        <div
+          className={`w-full h-full transition-all duration-700 ${
+            showDialogue ? "translate-y-0 rotate-0" : "translate-y-10 rotate-2"
+          }`}
+          style={{
+            transitionDelay: showDialogue ? "100ms" : "0ms",
+          }}
+        >
+          <MetallicDialogueMenu
+            dialogueText="¡Bienvenido a mi mundo! Soy un NPC con características humanas y estoy aquí para ayudarte en tu aventura."
+            characterName="Humano NPC"
+            variant="purple"
+            onClose={() => {
+              // Agregamos un efecto de cierre elegante
+              setShowDialogue(false);
+            }}
+          />
+        </div>
+      </div>
 
       {/* Inventory Modal */}
       {isInventoryOpen && (
