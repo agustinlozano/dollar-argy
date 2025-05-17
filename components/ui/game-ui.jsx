@@ -106,43 +106,28 @@ export function GameUI({
         />
       </div>
 
-      {/* Dialogue - MetallicDialogueMenu con animación */}
+      {/* Dialogue - MetallicDialogueMenu con animación simplificada */}
       <div
-        className={`fixed left-1/2 transform -translate-x-1/2 z-50 max-w-3xl w-full transition-all duration-700 ease-out ${
+        className={`fixed left-1/2 transform -translate-x-1/2 z-50 max-w-3xl w-full ${
           showDialogue
-            ? "opacity-100 scale-100 translate-y-0"
-            : "opacity-0 scale-95 translate-y-20"
+            ? "animate-in fade-in slide-in-from-bottom duration-300 fill-mode-forwards ease-out"
+            : "animate-out fade-out slide-out-to-bottom duration-300 fill-mode-forwards ease-in"
         }`}
         style={{
           bottom: "calc(100vh / 6)",
           width: "90%",
           maxWidth: "800px",
-          transitionProperty: "transform, opacity, scale",
-          transformOrigin: "bottom",
-          boxShadow: showDialogue
-            ? "0 22px 70px 4px rgba(0, 0, 0, 0.56), 0 0 30px rgba(128, 0, 128, 0.3)"
-            : "none",
           pointerEvents: showDialogue ? "auto" : "none",
         }}
       >
-        <div
-          className={`w-full h-full transition-all duration-700 ${
-            showDialogue ? "translate-y-0 rotate-0" : "translate-y-10 rotate-2"
-          }`}
-          style={{
-            transitionDelay: showDialogue ? "100ms" : "0ms",
+        <MetallicDialogueMenu
+          dialogueText="¡Bienvenido a mi mundo! Soy un NPC con características humanas y estoy aquí para ayudarte en tu aventura."
+          characterName="Humano NPC"
+          variant="silver"
+          onClose={() => {
+            setShowDialogue(false);
           }}
-        >
-          <MetallicDialogueMenu
-            dialogueText="¡Bienvenido a mi mundo! Soy un NPC con características humanas y estoy aquí para ayudarte en tu aventura."
-            characterName="Humano NPC"
-            variant="purple"
-            onClose={() => {
-              // Agregamos un efecto de cierre elegante
-              setShowDialogue(false);
-            }}
-          />
-        </div>
+        />
       </div>
 
       {/* Inventory Modal */}
