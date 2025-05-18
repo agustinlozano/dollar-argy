@@ -1,8 +1,9 @@
 import { useFrame } from "@react-three/fiber";
 import { FoundationsRockyZone } from "./game-zone-terrain-rocky-fundations";
 import { TorchLight } from "./game-light-torch";
-import { HumanNPCObject } from "./game-obj-human-npc";
 import { DialogueTrigger } from "./dialogue-trigger";
+import { dialogues } from "@/lib/dialogues";
+import { GrumpyManObj } from "./game-obj-grumpy-man";
 
 export const FirstZone = ({ position }) => {
   // Animación o lógica para el Enclave (e.g., brillo en el mapa)
@@ -20,11 +21,11 @@ export const FirstZone = ({ position }) => {
       </group>
       <FoundationsRockyZone position={[0, -150, -5]} gridSize={[3, 3]} />
       <DialogueTrigger
-        dialogueId="greet-fiscalist-paladin"
+        dialogueId={dialogues["greet-grumpy-man"].id}
         position={[150, 0, 0]}
         interactionDistance={100}
       >
-        <HumanNPCObject position={[0, 0, 8]} rotation={[0, 0, Math.PI]} />
+        <GrumpyManObj position={[0, 0, 8]} rotation={[0, 0, Math.PI]} />
       </DialogueTrigger>
     </group>
   );
