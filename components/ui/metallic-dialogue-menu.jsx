@@ -39,10 +39,10 @@ export function MetallicDialogueMenu({
           </p>
           <div className="flex justify-end">
             <button
-              className="border px-2 py-1 flex items-center gap-x-2"
+              className="border px-2 py-1 flex items-center gap-x-2 hover:bg-primary/20 transition-colors"
               onClick={onClick}
             >
-              Continuar ▶
+              continuar ▶
             </button>
           </div>
         </div>
