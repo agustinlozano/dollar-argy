@@ -47,11 +47,11 @@
 .brown {
   background: radial-gradient(
     ellipse at bottom,
-    rgb(94, 65, 47) 0%,
-    rgb(33, 20, 10) 45%
+    rgb(74, 45, 27) 0%,
+    rgb(23, 10, 0) 45%
   );
-  box-shadow: inset 0 0 0 2px rgba(145, 103, 67, 0.3),
-    0 4px 8px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 0 0 2px rgba(125, 83, 47, 0.3),
+    0 4px 8px rgba(0, 0, 0, 0.6);
 }
 
 /* .silver::before {
