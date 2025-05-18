@@ -1,6 +1,6 @@
 import { CloseButton } from "./close-button";
-import styles from "./metallic-dialogue-menu.module.css";
 import { cn } from "@/lib/utils";
+import styles from "./metallic-dialogue-menu.module.css";
 
 export function MetallicDialogueMenu({
   dialogueText = '"La gente me rechaza, merezco una oportunidad digna."',
@@ -8,6 +8,7 @@ export function MetallicDialogueMenu({
   characterName = "Hornero Peso Argentino 🇦🇷",
   variant = "purple", // 'purple', 'silver' o 'brown'
   onClose,
+  onClick,
 }) {
   return (
     <div
@@ -29,13 +30,21 @@ export function MetallicDialogueMenu({
         {/* Left side - Dialogue */}
         <div
           className={cn(
-            "p-8 border border-primary/20 grow",
+            "p-8 border border-primary/20 w-xl flex flex-col justify-between",
             styles.dialogueSection
           )}
         >
-          <p className="text-primary/90 font-mono relative z-10">
+          <p className="text-primary/90 font-mono font-light relative z-10 grow w-full text-2xl">
             {dialogueText}
           </p>
+          <div className="flex justify-end">
+            <button
+              className="border px-2 py-1 flex items-center gap-x-2"
+              onClick={onClick}
+            >
+              Continuar ▶
+            </button>
+          </div>
         </div>
 
         {/* Right side - Character Image */}
@@ -53,7 +62,7 @@ export function MetallicDialogueMenu({
             />
           </div>
           <div className="w-full text-center p-2 z-10 relative">
-            <p className="font-cormorant text-lg text-white drop-shadow-md">
+            <p className="font-cormorant text-xl text-white drop-shadow-md">
               {characterName}
             </p>
           </div>
