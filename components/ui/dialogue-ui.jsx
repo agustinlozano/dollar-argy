@@ -44,7 +44,7 @@ export function DialogueUI() {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
-      <div className="w-[800px] max-w-[90vw] pointer-events-auto">
+      <div className="pointer-events-auto">
         <MetallicDialogueMenu
           dialogueText={dialogueText}
           characterImage={characterImage}
@@ -53,16 +53,6 @@ export function DialogueUI() {
           onClose={handleClose}
           onClick={handleContinue}
         />
-
-        {/* Continue prompt */}
-        <div className="text-center mt-4 text-white">
-          <button
-            onClick={handleContinue}
-            className="bg-primary/20 hover:bg-primary/30 px-4 py-2 rounded-md transition-colors"
-          >
-            Continuar ▶
-          </button>
-        </div>
       </div>
     </div>
   );
