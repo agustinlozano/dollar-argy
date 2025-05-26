@@ -3,9 +3,11 @@
 import { useEffect } from "react";
 import { GameButton } from "@/components/ui/game-button";
 import { useDanceAnimation } from "@/hooks/useDanceAnimation";
+import { useDialogueStore } from "@/stores/useDialogueStore";
 
 export function Controls({ onMove, onCastSpell, isInventoryOpen }) {
   const { startDance, stopDance } = useDanceAnimation();
+  const { isDialogueActive } = useDialogueStore();
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -45,7 +47,7 @@ export function Controls({ onMove, onCastSpell, isInventoryOpen }) {
     };
 
     const handleMouseDown = (e) => {
-      if (e.button === 0 && !isInventoryOpen) {
+      if (e.button === 0 && !isInventoryOpen && !isDialogueActive) {
         // Left click
         stopDance();
         onCastSpell();
@@ -59,7 +61,14 @@ export function Controls({ onMove, onCastSpell, isInventoryOpen }) {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("mousedown", handleMouseDown);
     };
-  }, [onMove, onCastSpell, isInventoryOpen, startDance, stopDance]);
+  }, [
+    onMove,
+    onCastSpell,
+    isInventoryOpen,
+    isDialogueActive,
+    startDance,
+    stopDance,
+  ]);
 
   return (
     <div className="absolute bottom-5 w-full flex justify-center items-end">
