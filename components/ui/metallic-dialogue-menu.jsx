@@ -23,7 +23,7 @@ export function MetallicDialogueMenu({
       )}
     >
       {onClose && (
-        <CloseButton onClick={onClose} className="!absolute !top-4 !right-4" />
+        <CloseButton onClick={onClose} className="absolute top-0 right-0" />
       )}
 
       <div className="relative flex h-full w-full z-10">
