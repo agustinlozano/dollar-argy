@@ -8,6 +8,8 @@ export function GrumpyManObj(props) {
     return null;
   }
 
+  materials.CustomMaterial.emissiveIntensity = 2;
+
   return (
     <group {...props} dispose={null}>
       <mesh
