@@ -38,34 +38,6 @@ export const FirstZone = ({ position }) => {
           <GrumpyManObj position={[0, 0, 8]} rotation={[0, 0, Math.PI]} />
         </Suspense>
       </DialogueTrigger>
-
-      <DialogueTrigger
-        dialogueId={dialogues["greet-melancholic-woman"].id}
-        position={[250, 0, 0]}
-        interactionDistance={100}
-      >
-        <Suspense
-          fallback={
-            <ObjFallback position={[0, 0, 8]} rotation={[0, 0, Math.PI]} />
-          }
-        >
-          <ElderlyWomanObj position={[0, 0, 8]} rotation={[0, 0, Math.PI]} />
-        </Suspense>
-      </DialogueTrigger>
-
-      <DialogueTrigger
-        dialogueId={dialogues["greet-mad-hologram-woman"].id}
-        position={[350, 0, 0]}
-        interactionDistance={100}
-      >
-        <Suspense
-          fallback={
-            <ObjFallback position={[0, 0, 8]} rotation={[0, 0, Math.PI]} />
-          }
-        >
-          <HologramMadwoman position={[0, 0, 8]} rotation={[0, 0, Math.PI]} />
-        </Suspense>
-      </DialogueTrigger>
     </group>
   );
 };
