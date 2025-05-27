@@ -23,4 +23,4 @@ export function GrumpyManObj(props) {
 }
 
 // Precarga el modelo para evitar delays
-useGLTF.preload("/characters/grumpy-man-model/base.glb");
+useGLTF.preload("/characters/grumpy-man/model.glb");
