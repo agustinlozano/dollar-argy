@@ -30,17 +30,18 @@ export function MetallicDialogueMenu({
         {/* Left side - Dialogue */}
         <div
           className={cn(
-            "p-8 border border-primary/20 w-xl flex flex-col justify-between",
+            "px-8 pt-8 pb-4 border border-primary/20 w-xl flex flex-col justify-between",
             styles.dialogueSection
           )}
         >
-          <p className="text-primary/90 font-mono font-light relative z-10 grow w-full text-2xl">
+          <p className="text-primary/90 font-mono font-light relative z-10 grow w-full text-xl">
             {dialogueText}
           </p>
           <div className="flex justify-end">
             <button
               className="border px-2 py-1 flex items-center gap-x-2 hover:bg-primary/20 transition-colors"
               onClick={onClick}
+              autoFocus
             >
               continuar ▶
             </button>
@@ -50,7 +51,7 @@ export function MetallicDialogueMenu({
         {/* Right side - Character Image */}
         <div
           className={cn(
-            "flex flex-col items-center border border-primary/20 w-52",
+            "flex flex-col items-center border border-primary/20 w-54",
             styles.imageSection
           )}
         >
