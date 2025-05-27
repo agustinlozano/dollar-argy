@@ -54,14 +54,14 @@ export const FoundationsRockyZone = ({
       const nextAngle = ((i + 1) / points) * Math.PI * 2;
 
       // Current and next point coordinates
-      const x1 = centerX + baseRadius * Math.cos(angle);
-      const y1 = centerY + baseRadius * Math.sin(angle);
+      // const x1 = centerX + baseRadius * Math.cos(angle);
+      // const y1 = centerY + baseRadius * Math.sin(angle);
       const x2 = centerX + baseRadius * Math.cos(nextAngle);
       const y2 = centerY + baseRadius * Math.sin(nextAngle);
 
       // Midpoint for the gothic arch
       const midAngle = (angle + nextAngle) / 2;
-      const archDepth = 0.3; // Depth of the gothic arch
+      // const archDepth = 0.3; // Depth of the gothic arch
 
       // Inner point of the arch
       const archX = centerX + innerRadius * Math.cos(midAngle);
