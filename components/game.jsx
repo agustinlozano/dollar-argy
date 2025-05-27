@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useRef, useMemo, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Stats } from "@react-three/drei";
-import * as THREE from "three";
+import { Stats } from "@react-three/drei";
 
 import { PlayerDirectionalLight } from "./game-directional-light";
 
@@ -19,6 +18,7 @@ import Road from "./game-terrain-road";
 
 import { TerrainSection } from "./game-terrain-section";
 import { FirstZone } from "./game-zone-begin";
+import { SanctuaryZone } from "./game-zone-sanctuary";
 import { GameZonePlayerBase } from "./game-zone-player-base";
 
 import { ObstacleObj } from "./game-obj-tree";
@@ -43,7 +43,7 @@ import { DevCamera } from "./dev-camera";
 export function DollarArgyGame() {
   const {
     playerPosition,
-    rows,
+    currentPosition,
     visibleRows,
     activeSpells,
     movePlayer,
@@ -87,7 +87,7 @@ export function DollarArgyGame() {
         }}
       >
         <Stats />
-        <ambientLight intensity={0.08} />
+        <ambientLight intensity={0.05} />
         {isDancing && danceStartPosition ? (
           <>
             <DanceCamera position={danceStartPosition} />
@@ -131,7 +131,12 @@ export function DollarArgyGame() {
           } else if (row.type === "special") {
             return (
               <TerrainSection key={row.rowIndex} rowIndex={row.rowIndex}>
-                <FirstZone position={[0, 0, 0]} />
+                {row.component === "FirstZone" && (
+                  <FirstZone position={[0, 0, 0]} />
+                )}
+                {row.component === "SanctuaryZone" && (
+                  <SanctuaryZone position={[0, 0, 0]} />
+                )}
               </TerrainSection>
             );
           } else {

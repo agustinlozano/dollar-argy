@@ -69,13 +69,28 @@ export const useGameStore = create((set, get) => ({
           chests: [],
         });
       } else if (i === 20) {
-        // Special campaign zone at row 6
+        // Special campaign zone at row 20
         initialRows.push({
           type: "special",
           rowIndex: i,
           component: "FirstZone",
         });
       } else if (i === 21 || i === 22) {
+        initialRows.push({
+          type: "grass",
+          rowIndex: i,
+          trees: [],
+          rewards: [],
+          chests: [],
+        });
+      } else if (i === 42) {
+        // Special sanctuary zone at row 30
+        initialRows.push({
+          type: "special",
+          rowIndex: i,
+          component: "SanctuaryZone",
+        });
+      } else if (i === 41 || i === 43) {
         initialRows.push({
           type: "grass",
           rowIndex: i,
