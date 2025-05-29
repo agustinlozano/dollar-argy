@@ -84,13 +84,28 @@ export const useGameStore = create((set, get) => ({
           chests: [],
         });
       } else if (i === 42) {
-        // Special sanctuary zone at row 30
+        // Special sanctuary zone at row 42
         initialRows.push({
           type: "special",
           rowIndex: i,
           component: "SanctuaryZone",
         });
       } else if (i === 41 || i === 43) {
+        initialRows.push({
+          type: "grass",
+          rowIndex: i,
+          trees: [],
+          rewards: [],
+          chests: [],
+        });
+      } else if (i === 60) {
+        // Special melancholy garden zone at row 60
+        initialRows.push({
+          type: "special",
+          rowIndex: i,
+          component: "MelancholyGarden",
+        });
+      } else if (i === 59 || i === 61) {
         initialRows.push({
           type: "grass",
           rowIndex: i,
@@ -214,7 +229,7 @@ export const useGameStore = create((set, get) => ({
 
     // Check movement limits
     const isWithinLimits =
-      newTile >= -10 && newTile <= 10 && newRow >= -10 && newRow <= 40;
+      newTile >= -10 && newTile <= 10 && newRow >= -10 && newRow <= 100;
 
     if (!isWithinLimits) {
       // Solo removemos el movimiento actual y continuamos con el siguiente
