@@ -1,6 +1,6 @@
 import React from "react";
 import { useDialogueStore } from "@/stores/useDialogueStore";
-import { MetallicDialogueMenu } from "./metallic-dialogue-menu";
+import { MetallicDialogueMenu } from "./dialogue-menu";
 import { DialogueSpeaker } from "@/lib/dialogue.consts";
 
 export function DialogueUI() {
