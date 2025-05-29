@@ -39,7 +39,7 @@ export function MetallicDialogueMenu({
           </p>
           <div className="flex justify-end">
             <button
-              className="border px-2 py-1 flex items-center gap-x-2 hover:bg-primary/20 transition-colors"
+              className="border px-2 py-1 flex items-center gap-x-2 hover:bg-primary/20 transition-colors select-none"
               onClick={onClick}
               autoFocus
             >
@@ -59,7 +59,7 @@ export function MetallicDialogueMenu({
             <img
               src={characterImage || "/placeholder.svg"}
               alt={characterName}
-              className="w-full border border-primary/20"
+              className="w-full border border-primary/20 select-none"
             />
           </div>
           <div className="w-full text-center p-2 z-10 relative">
