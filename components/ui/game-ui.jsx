@@ -5,6 +5,7 @@ import { Inventory } from "./inventory/inventory";
 import { FoundTracker } from "./game-found-tracker";
 import { InventoryToggleButton } from "./inventory/inventory-toggle-button";
 import { DialogueUI } from "./dialogue-ui";
+import { AudioPlayer } from "./audio-player";
 
 import { useGameStore } from "@/stores/useGameState";
 import { useInventoryStore } from "@/stores/useInventoryState";
@@ -98,6 +99,9 @@ export function GameUI({
 
       {/* Dialogue UI from dialogue store */}
       <DialogueUI />
+
+      {/* Audio Player */}
+      <AudioPlayer />
 
       {/* Inventory Modal */}
       {isInventoryOpen && (
