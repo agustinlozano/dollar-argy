@@ -19,6 +19,7 @@ import Road from "./game-terrain-road";
 import { TerrainSection } from "./game-terrain-section";
 import { FirstZone } from "./game-zone-begin";
 import { SanctuaryZone } from "./game-zone-sanctuary";
+import { MelancholyGarden } from "./game-zone-melancholy-garden";
 import { GameZonePlayerBase } from "./game-zone-player-base";
 
 import { ObstacleObj } from "./game-obj-tree";
@@ -136,6 +137,9 @@ export function DollarArgyGame() {
                 )}
                 {row.component === "SanctuaryZone" && (
                   <SanctuaryZone position={[0, 0, 0]} />
+                )}
+                {row.component === "MelancholyGarden" && (
+                  <MelancholyGarden position={[0, 0, 0]} />
                 )}
               </TerrainSection>
             );
