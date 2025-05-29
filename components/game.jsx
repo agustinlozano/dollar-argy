@@ -36,6 +36,7 @@ import { useInventoryStore } from "@/stores/useInventoryState";
 import { useInventoryUIStore } from "@/stores/useInventoryUIState";
 
 import { useResizeEffect } from "./game.hooks";
+import { useGameAudio } from "@/hooks/useGameAudio";
 import { GAME_CONSTANTS } from "@/lib/consts";
 import { DevCamera } from "./dev-camera";
 
@@ -57,6 +58,9 @@ export function DollarArgyGame() {
 
   const { items, spells } = useInventoryStore();
   const { isInventoryOpen, toggleInventory } = useInventoryUIStore();
+
+  // Initialize audio system
+  useGameAudio();
 
   const playerRef = useRef();
   const containerRef = useRef();
