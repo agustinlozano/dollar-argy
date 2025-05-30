@@ -18,16 +18,12 @@ export function ScreenWithDialogue({
     );
   }
 
-  // Calcular posición del diálogo relativa a la pantalla
-  const [x, y, z] = position;
-  const dialoguePosition = [x + 50, y + 50, z + 20];
-
   return (
-    <group>
-      <ScreenFrameObj position={position} rotation={rotation} scale={scale} />
+    <group position={position} rotation={rotation} scale={scale}>
+      <ScreenFrameObj position={[0, 0, 0]} scale={scale} />
       <ScreenFrameDialogue
         dialogue={dialogue}
-        position={dialoguePosition}
+        position={[10, 0, -50]}
         speaker={dialogue.participants.npc.name}
         onDialogueEnd={onDialogueEnd}
       />
