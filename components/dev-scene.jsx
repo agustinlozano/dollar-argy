@@ -20,6 +20,7 @@ import { useResizeEffect } from "./game.hooks";
 import { ModeToggle } from "@/app/theme-toggle";
 import { GameObjTorch } from "./game-obj-torch";
 import { GameZonePlayerBase } from "./game-zone-player-base";
+import { MelancholyGarden } from "./game-zone-melancholy-garden";
 // Hardcoded scene data
 const hardcodedScene = {
   // 4 rows of grass (0-3)
@@ -143,6 +144,7 @@ export function DevScene() {
 
         {/* Zones */}
         <FirstZone position={[0, 380, 0]} />
+        <MelancholyGarden position={[-280, 380, 0]} />
 
         <GameObjTorch />
 
