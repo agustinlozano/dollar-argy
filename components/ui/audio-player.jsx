@@ -1,6 +1,5 @@
 import { useAudioStore } from "@/stores/useAudioStore";
 import { Badge } from "./badge";
-import { GothicButton } from "./gothic-button";
 import {
   Volume2,
   VolumeX,
@@ -55,7 +54,7 @@ export function AudioPlayer() {
         {/* Progress Bar */}
         {trackInfo.duration > 0 && (
           <div className="mb-2">
-            <div className="flex justify-between text-xs text-amber-200/70 mb-1">
+            <div className="flex justify-between text-xs text-amber-200/70 mb-1 select-none">
               <span>{formatTime(trackInfo.currentTime)}</span>
               <span>{formatTime(trackInfo.duration)}</span>
             </div>
@@ -71,13 +70,13 @@ export function AudioPlayer() {
         {/* Controls */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1">
-            <button
+            {/* <button
               onClick={playPrevious}
               className="p-1 text-amber-200 hover:text-amber-100 transition-colors"
               title="Previous track"
             >
               <SkipBack size={16} />
-            </button>
+            </button> */}
 
             <button
               onClick={togglePlayback}
@@ -94,13 +93,13 @@ export function AudioPlayer() {
               )}
             </button>
 
-            <button
+            {/* <button
               onClick={playNext}
               className="p-1 text-amber-200 hover:text-amber-100 transition-colors"
               title="Next track"
             >
               <SkipForward size={16} />
-            </button>
+            </button> */}
           </div>
 
           {/* Volume Control */}
