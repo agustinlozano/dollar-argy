@@ -27,7 +27,7 @@ export function FoundTracker() {
 
       <div
         aria-label="amount"
-        className="flex items-center gap-2 font-bold text-lg"
+        className="flex items-center gap-2 font-bold text-lg select-none"
       >
         <span>{found || 0}</span>
       </div>
