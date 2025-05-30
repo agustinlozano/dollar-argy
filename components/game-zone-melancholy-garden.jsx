@@ -6,8 +6,7 @@ import { DialogueTrigger } from "./dialogue-trigger";
 import { dialogues } from "@/lib/dialogues";
 import { ElderlyWomanObj } from "./game-obj-elderly-woman";
 import { ObjFallback } from "./game-obj-fallback";
-import * as THREE from "three";
-import { useMemo } from "react";
+import { ScreenWithDialogue } from "./screen-with-dialogue";
 
 // Gentle Rain Particles Component
 // const RainParticles = () => {
@@ -91,6 +90,12 @@ export const MelancholyGarden = ({ position }) => {
     <group position={position}>
       {/* Gentle rain particles across the zone */}
       {/* <RainParticles /> */}
+
+      <ScreenWithDialogue
+        position={[-150, 0, 100]}
+        rotation={[Math.PI / 2, 0, 0]}
+        dialogueId="greet-agustin"
+      />
 
       {/* Use the new teardrop foundations */}
       <FoundationsTeardropZone position={[0, -150, -5]} gridSize={[3, 3]} />
