@@ -1,6 +1,7 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { useTexture } from "@react-three/drei";
 import { DialogueSpeaker, DialogueActionType } from "@/lib/dialogue.consts";
+import { ObjFallback } from "./game-obj-fallback";
 
 export const DialogueWithAgustin = {
   "greet-agustin": {
@@ -29,7 +30,7 @@ export const DialogueWithAgustin = {
   },
 };
 
-export function ScreenFrameObj(props) {
+function ScreenFrameContent(props) {
   const frameThickness = 4;
   const screenWidth = 80;
   const screenHeight = 160;
@@ -121,5 +122,13 @@ export function ScreenFrameObj(props) {
         <meshStandardMaterial color="#444444" metalness={0.9} roughness={0.1} />
       </mesh>
     </group>
+  );
+}
+
+export function ScreenFrameObj(props) {
+  return (
+    <Suspense fallback={<ObjFallback />}>
+      <ScreenFrameContent {...props} />
+    </Suspense>
   );
 }
