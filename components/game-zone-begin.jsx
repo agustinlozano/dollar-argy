@@ -5,11 +5,9 @@ import { TorchLight } from "./game-light-torch";
 import { DialogueTrigger } from "./dialogue-trigger";
 import { dialogues } from "@/lib/dialogues";
 import { GrumpyManObj } from "./game-obj-grumpy-man";
-import { ElderlyWomanObj } from "./game-obj-elderly-woman";
-import { HologramMadwoman } from "./game-obj-mad-hologram-woman";
 import { ObjFallback } from "./game-obj-fallback";
 
-export const FirstZone = ({ position }) => {
+export function FirstZone({ position = [0, 0, 0] }) {
   // Animación o lógica para el Enclave (e.g., brillo en el mapa)
   useFrame(() => {
     // Lógica para actualizar efectos visuales, como un aura o partículas
@@ -40,4 +38,4 @@ export const FirstZone = ({ position }) => {
       </DialogueTrigger>
     </group>
   );
-};
+}
