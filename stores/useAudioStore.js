@@ -18,7 +18,7 @@ export const useAudioStore = create((set, get) => ({
   isPlaying: false,
   currentTrack: null,
   currentTime: 0,
-  volume: 0.7,
+  volume: 0.2,
   isMuted: false,
 
   // Cola de reproducción
@@ -93,7 +93,8 @@ export const useAudioStore = create((set, get) => ({
 
   // Comenzar la música tras la primera interacción del usuario
   startMusic: async () => {
-    const { audioRef, currentTrack, hasUserInteracted, isInitialized } = get();
+    const { audioRef, currentTrack, hasUserInteracted, isInitialized, volume } =
+      get();
 
     if (!hasUserInteracted) {
       set({ hasUserInteracted: true });
@@ -105,8 +106,16 @@ export const useAudioStore = create((set, get) => ({
 
     if (audioRef && currentTrack) {
       try {
+        // Guardar el volumen original
+        const originalVolume = volume;
+
+        // Comenzar con volumen 0 para el fade-in
+        audioRef.volume = 0;
         audioRef.src = currentTrack.file;
         await audioRef.play();
+
+        // Aplicar fade-in de 1.5 segundos
+        get().fadeVolume(originalVolume, 1500);
       } catch (error) {
         console.error("Error starting music:", error);
       }
@@ -132,7 +141,7 @@ export const useAudioStore = create((set, get) => ({
 
   // Reproducir canción específica
   playTrack: async (trackId) => {
-    const { audioRef, playlist } = get();
+    const { audioRef, playlist, volume } = get();
     const track = playlist.find((t) => t.id === trackId);
 
     if (!track || !audioRef) return;
@@ -146,8 +155,16 @@ export const useAudioStore = create((set, get) => ({
     });
 
     try {
+      // Guardar el volumen original
+      const originalVolume = volume;
+
+      // Comenzar con volumen 0 para el fade-in
+      audioRef.volume = 0;
       audioRef.src = track.file;
       await audioRef.play();
+
+      // Aplicar fade-in de 1.5 segundos
+      get().fadeVolume(originalVolume, 1500);
     } catch (error) {
       console.error("Error playing track:", error);
       set({ isLoading: false });
