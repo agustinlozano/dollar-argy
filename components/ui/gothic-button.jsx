@@ -31,6 +31,7 @@ export function GothicButton({
         "font-cormorant relative px-4 py-1 border-b bg-purple-200 flex items-center justify-center",
         s.inventoryButton3d,
         variant === "silver" && s.silver,
+        variant === "amber" && s.amber,
         className
       )}
       onClick={handleClick}
