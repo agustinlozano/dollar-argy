@@ -4,7 +4,7 @@ import styles from "./metallic-dialogue-menu.module.css";
 
 export function MetallicDialogueMenu({
   dialogueText = '"La gente me rechaza, merezco una oportunidad digna."',
-  characterImage = "/characters/hornero-portrait.png",
+  characterImage = "/characters/hornero-portrait.jpg",
   characterName = "Hornero Peso Argentino 🇦🇷",
   variant = "purple", // 'purple', 'silver' o 'brown'
   onClose,
