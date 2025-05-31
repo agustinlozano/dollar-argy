@@ -1,5 +1,6 @@
 import { CloseButton } from "./close-button";
 import { cn } from "@/lib/utils";
+import { useTypewriter } from "@/hooks/useTypewriter";
 import styles from "./metallic-dialogue-menu.module.css";
 
 export function MetallicDialogueMenu({
@@ -10,6 +11,17 @@ export function MetallicDialogueMenu({
   onClose,
   onClick,
 }) {
+  const { displayedText, isTyping, skipToEnd } = useTypewriter(dialogueText, {
+    speed: 40, // milliseconds between characters
+    startDelay: 200,
+  });
+
+  const handleTextClick = () => {
+    if (isTyping) {
+      skipToEnd();
+    }
+  };
+
   return (
     <>
       {onClose && (
@@ -34,8 +46,17 @@ export function MetallicDialogueMenu({
               styles.dialogueSection
             )}
           >
-            <div className="text-primary/90 font-mono font-light relative z-10 grow w-full overflow-auto">
-              <p>{dialogueText}</p>
+            <div
+              className="text-primary/90 font-mono font-light relative z-10 grow w-full overflow-auto cursor-pointer"
+              onClick={handleTextClick}
+              title={isTyping ? "Click para saltar" : ""}
+            >
+              <p>
+                {displayedText}
+                {isTyping && (
+                  <span className="inline-block animate-pulse ml-1">|</span>
+                )}
+              </p>
             </div>
             <div className="flex justify-end">
               <button
