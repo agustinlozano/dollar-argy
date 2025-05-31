@@ -5,6 +5,7 @@ import { ItemGrid } from "@/components/ui/inventory/item-grid";
 import { SpellGrid } from "@/components/ui/inventory/spell-grid";
 import { BgGradient } from "@/components/ui/bg-gradient";
 import { CloseButton } from "@/components/ui/close-button";
+import { useSound } from "@/hooks/useSound";
 import { cn } from "@/lib/utils";
 // import "./linear-gradrient.css";
 
@@ -12,6 +13,11 @@ export function Inventory({ items, spells, onClose }) {
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedSpell, setSelectedSpell] = useState(null);
   const [activeTab, setActiveTab] = useState("items");
+  const { play: playUiSound } = useSound("/sounds/ui-minimal-feedback.wav", {
+    volume: 0.5,
+    startTime: 2,
+    endTime: 2.4,
+  });
 
   useEffect(() => {
     if (activeTab === "items") {
@@ -45,7 +51,10 @@ export function Inventory({ items, spells, onClose }) {
 
         <Tabs
           value={activeTab}
-          onValueChange={setActiveTab}
+          onValueChange={(value) => {
+            playUiSound();
+            setActiveTab(value);
+          }}
           defaultValue="items"
           className="p-0"
         >
@@ -69,18 +78,30 @@ export function Inventory({ items, spells, onClose }) {
           <div className="relative grid grid-cols-1 gap-2 z-40">
             <div className="inventory-scroll">
               <TabsContent value="items" className="mt-0 rounded-none">
-                <ItemGrid
-                  items={items}
-                  selectedItem={selectedItem}
-                  onSelectItem={setSelectedItem}
-                />
+                {items?.length === 0 ? (
+                  <div className="text-center text-lg text-muted-foreground mt-10 font-cormorant">
+                    No items in inventory
+                  </div>
+                ) : (
+                  <ItemGrid
+                    items={items}
+                    selectedItem={selectedItem}
+                    onSelectItem={setSelectedItem}
+                  />
+                )}
               </TabsContent>
               <TabsContent value="spells" className="mt-0 rounded-none">
-                <SpellGrid
-                  spells={spells}
-                  selectedSpell={selectedSpell}
-                  onSelectSpell={setSelectedSpell}
-                />
+                {spells?.length === 0 ? (
+                  <div className="text-center text-lg text-muted-foreground mt-10 font-cormorant">
+                    No spells in inventory
+                  </div>
+                ) : (
+                  <SpellGrid
+                    spells={spells}
+                    selectedSpell={selectedSpell}
+                    onSelectSpell={setSelectedSpell}
+                  />
+                )}
               </TabsContent>
             </div>
 
