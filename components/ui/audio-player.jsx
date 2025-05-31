@@ -1,5 +1,6 @@
 import { useAudioStore } from "@/stores/useAudioStore";
 import { Badge } from "./badge";
+import { useState } from "react";
 import {
   Volume2,
   VolumeX,
@@ -7,9 +8,13 @@ import {
   Pause,
   SkipForward,
   SkipBack,
+  ChevronUp,
+  ChevronDown,
 } from "lucide-react";
 
 export function AudioPlayer() {
+  const [isCollapsed, setIsCollapsed] = useState(true);
+
   const {
     currentTrack,
     isPlaying,
@@ -38,17 +43,64 @@ export function AudioPlayer() {
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
+  // Vista colapsada - solo controles básicos
+  if (isCollapsed) {
+    return (
+      <div className="fixed bottom-4 left-4 z-50 pointer-events-auto">
+        <div className="bg-black/80 backdrop-blur-md border border-amber-500/30 rounded-lg p-2 flex items-center gap-2">
+          <button
+            onClick={togglePlayback}
+            disabled={isLoading}
+            className="p-1.5 bg-amber-600/20 hover:bg-amber-600/30 border border-amber-500/30 rounded text-amber-100 transition-colors disabled:opacity-50"
+            title={isPlaying ? "Pause" : "Play"}
+          >
+            {isLoading ? (
+              <div className="size-3 border-2 border-amber-300 border-t-transparent rounded-full animate-spin" />
+            ) : isPlaying ? (
+              <Pause size={16} />
+            ) : (
+              <Play size={16} />
+            )}
+          </button>
+
+          <div className="text-amber-100 text-sm font-cormorant truncate max-w-[120px]">
+            {currentTrack.title}
+          </div>
+
+          <button
+            onClick={() => setIsCollapsed(false)}
+            className="p-1 text-amber-200 hover:text-amber-100 transition-colors"
+            title="Expand player"
+          >
+            <ChevronUp size={16} />
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Vista expandida - controles completos
   return (
     <div className="fixed bottom-4 left-4 z-50 pointer-events-auto">
       <div className="bg-black/80 backdrop-blur-md border border-amber-500/30 rounded-lg p-3 min-w-[280px]">
-        {/* Track Info */}
-        <div className="text-amber-100 mb-2">
-          <div className="font-semibold text-sm truncate font-cormorant">
-            {currentTrack.title}
+        {/* Header con botón de colapsar */}
+        <div className="flex items-center justify-between mb-2">
+          <div className="text-amber-100">
+            <div className="font-semibold text-sm truncate font-cormorant">
+              {currentTrack.title}
+            </div>
+            <div className="text-xs text-amber-200/70 truncate">
+              by {currentTrack.artist}
+            </div>
           </div>
-          <div className="text-xs text-amber-200/70 truncate">
-            by {currentTrack.artist}
-          </div>
+
+          <button
+            onClick={() => setIsCollapsed(true)}
+            className="p-1 text-amber-200 hover:text-amber-100 transition-colors"
+            title="Collapse player"
+          >
+            <ChevronDown size={16} />
+          </button>
         </div>
 
         {/* Progress Bar */}
