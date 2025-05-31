@@ -3,8 +3,9 @@ import { useFrame } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import { useGameStore } from "@/stores/useGameState";
 import { useInventoryStore } from "@/stores/useInventoryState";
-import * as THREE from "three";
 import { itemSlugs, itemTypes } from "@/lib/consts";
+import { useSound } from "@/hooks/useSound";
+import * as THREE from "three";
 
 export function GoldCoin({ position = [0, 0, 0] }) {
   const coinRef = useRef(null);
@@ -15,6 +16,8 @@ export function GoldCoin({ position = [0, 0, 0] }) {
 
   const playerPosition = useGameStore((state) => state.playerPosition);
   const addToInventory = useInventoryStore((state) => state.add);
+
+  const { play: playCoinCollect } = useSound("/sounds/pickup-coins.wav");
 
   // Memo geometría y material
   const coinGeometry = useMemo(
@@ -69,6 +72,7 @@ export function GoldCoin({ position = [0, 0, 0] }) {
       if (e.key.toLowerCase() === "e") {
         setIsCollected(true);
         addToInventory({ slug: itemSlugs.goldCoins, type: itemTypes.coins });
+        playCoinCollect();
       }
     };
 
