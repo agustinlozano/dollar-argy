@@ -64,7 +64,13 @@ function ScreenFrameContent(props) {
             frameDepth,
           ]}
         />
-        <meshStandardMaterial color="#d1c1c1" metalness={0.7} roughness={0.3} />
+        <meshStandardMaterial
+          color="#d1c1c1"
+          metalness={0.7}
+          roughness={0.3}
+          emissive="#444444"
+          emissiveIntensity={0.25}
+        />
       </mesh>
 
       {/* Pantalla interior - inner screen */}
