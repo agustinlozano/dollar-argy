@@ -43,7 +43,7 @@ export function AudioPlayer() {
       <div className="bg-black/80 backdrop-blur-md border border-amber-500/30 rounded-lg p-3 min-w-[280px]">
         {/* Track Info */}
         <div className="text-amber-100 mb-2">
-          <div className="font-semibold text-sm truncate">
+          <div className="font-semibold text-sm truncate font-cormorant">
             {currentTrack.title}
           </div>
           <div className="text-xs text-amber-200/70 truncate">
