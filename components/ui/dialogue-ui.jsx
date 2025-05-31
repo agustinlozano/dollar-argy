@@ -43,7 +43,7 @@ export function DialogueUI() {
   };
 
   return (
-    <div className="fixed bottom-5 left-1/2 -translate-x-1/2 flex items-center justify-center z-50 pointer-events-none">
+    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 flex items-center justify-center z-50 pointer-events-none">
       <div className="pointer-events-auto">
         <MetallicDialogueMenu
           dialogueText={dialogueText}
