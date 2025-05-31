@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Html } from "@react-three/drei";
 import { ScreenFrameObj, DialogueWithAgustin } from "./game-obj-screen-frame";
 import { ScreenFrameDialogue } from "./screen-frame-dialogue";
 import { XIcon } from "./ui/icons";
 import { Popover, PopoverTrigger, PopoverContent } from "./ui/popover";
+import { useSound } from "@/hooks/useSound";
 
 export function ScreenWithDialogue({
   position = [0, 0, 0],
@@ -12,6 +13,12 @@ export function ScreenWithDialogue({
   dialogueId = "greet-agustin",
   onDialogueEnd,
 }) {
+  const { play: playChestOpen } = useSound("/sounds/ui-hovers.wav", {
+    volume: 0.5,
+    startTime: 1.8,
+    endTime: 2.4,
+  });
+
   const dialogue = DialogueWithAgustin[dialogueId];
 
   if (!dialogue) {
@@ -33,7 +40,12 @@ export function ScreenWithDialogue({
 
       {/* Botón de perfil de Twitter */}
       <Html position={[0, -35, 10]} transform center distanceFactor={100}>
-        <Popover>
+        <Popover
+          onOpenChange={(open) => {
+            if (!open) return;
+            playChestOpen();
+          }}
+        >
           <PopoverTrigger asChild>
             <button
               className="size-12 bg-background border-2 rounded-full flex items-center justify-center transition-colors hover:ring-2 hover:ring-amber-700/80 focus:outline-none"
