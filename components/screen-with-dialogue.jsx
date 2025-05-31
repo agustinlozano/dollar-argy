@@ -1,6 +1,9 @@
 import React from "react";
+import { Html } from "@react-three/drei";
 import { ScreenFrameObj, DialogueWithAgustin } from "./game-obj-screen-frame";
 import { ScreenFrameDialogue } from "./screen-frame-dialogue";
+import { XIcon } from "./ui/icons";
+import { Popover, PopoverTrigger, PopoverContent } from "./ui/popover";
 
 export function ScreenWithDialogue({
   position = [0, 0, 0],
@@ -27,6 +30,45 @@ export function ScreenWithDialogue({
         speaker={dialogue.participants.npc.name}
         onDialogueEnd={onDialogueEnd}
       />
+
+      {/* Botón de perfil de Twitter */}
+      <Html position={[0, -35, 10]} transform center distanceFactor={100}>
+        <Popover>
+          <PopoverTrigger asChild>
+            <button className="w-10 h-10 bg-black/80 hover:bg-black/60 border border-amber-500/30 rounded-full flex items-center justify-center transition-colors backdrop-blur-sm">
+              <XIcon className="size-5 text-amber-100" />
+            </button>
+          </PopoverTrigger>
+          <PopoverContent className="flex gap-x-4 items-center w-80 bg-black/90 border-amber-500/30 backdrop-blur-md">
+            <div>
+              <img
+                src="/characters/my-emoji-no-borders.webp"
+                alt="Agustin's Twitter profile picture"
+                className="size-20 rounded-md object-cover"
+              />
+            </div>
+
+            <div className="space-y-3">
+              <p className="text-sm text-primary/75">
+                Guy from Argentina doin' software
+              </p>
+              <div className="space-y-2">
+                <a
+                  href="https://x.com/gustinlzn"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block p-2 bg-amber-600/10 hover:bg-amber-600/20 border border-amber-500/20 rounded text-amber-100 transition-colors"
+                >
+                  <div className="flex items-center gap-2">
+                    <XIcon className="size-4" />
+                    <span className="text-sm text-primary/75">@gustinlzn</span>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
+      </Html>
     </group>
   );
 }
