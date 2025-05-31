@@ -65,7 +65,7 @@ export function ScreenWithDialogue({
 
             <div className="space-y-3">
               <p className="text-xs text-primary/75 text-balance">
-                Guy from Argentina doin' software
+                Guy from Argentina doin' software.
               </p>
               <div className="space-y-2">
                 <a
