@@ -12,7 +12,7 @@ export function MetallicDialogueMenu({
   onClick,
 }) {
   const { displayedText, isTyping, skipToEnd } = useTypewriter(dialogueText, {
-    speed: 40, // milliseconds between characters
+    speed: 5,
     startDelay: 200,
   });
 
@@ -51,12 +51,7 @@ export function MetallicDialogueMenu({
               onClick={handleTextClick}
               title={isTyping ? "Click para saltar" : ""}
             >
-              <p>
-                {displayedText}
-                {isTyping && (
-                  <span className="inline-block animate-pulse ml-1">|</span>
-                )}
-              </p>
+              <p>{displayedText}</p>
             </div>
             <div className="flex justify-end">
               <button
