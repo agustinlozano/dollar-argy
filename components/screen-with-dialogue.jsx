@@ -5,6 +5,7 @@ import { ScreenFrameDialogue } from "./screen-frame-dialogue";
 import { XIcon } from "./ui/icons";
 import { Popover, PopoverTrigger, PopoverContent } from "./ui/popover";
 import { useSound } from "@/hooks/useSound";
+import { enviroment } from "@/lib/env-vars";
 
 export function ScreenWithDialogue({
   position = [0, 0, 0],
@@ -57,7 +58,11 @@ export function ScreenWithDialogue({
           <PopoverContent className="flex gap-x-4 items-center w-64 bg-black/90 border-amber-500/30 backdrop-blur-md">
             <div>
               <img
-                src="/characters/butters.jpg"
+                src={
+                  enviroment === "development"
+                    ? "/characters/butters.jpg"
+                    : "https://pbs.twimg.com/profile_images/1874790612605538304/DV_71ZqI_400x400.jpg"
+                }
                 alt="Agustin's Twitter profile picture"
                 className="size-20 rounded-md object-cover"
               />
