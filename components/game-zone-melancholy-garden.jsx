@@ -92,7 +92,7 @@ export const MelancholyGarden = ({ position }) => {
       {/* <RainParticles /> */}
 
       <ScreenWithDialogue
-        position={[-150, 0, 100]}
+        position={[-150, 0, 80]}
         rotation={[Math.PI / 2, 0, 0]}
         dialogueId="greet-agustin"
       />
