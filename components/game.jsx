@@ -102,13 +102,8 @@ export function DollarArgyGame() {
           <GameCamera target={playerRef} />
         )}
 
-        {/* debug grid */}
-        {/* <DebugGrid /> */}
-
         {/* Scenario stuff */}
-        {/* <TorchLight position={[0, -30, 6.5]} rotation={[Math.PI / 2, 0, 0]} /> */}
-        {/* <ArgyFlag position={[GAME_CONSTANTS.tileSize * 2, 0, 0]} />
-        <GameTile position={[0, 0, 0]} /> */}
+        {/* <GameTile position={[0, 0, 0]} /> */}
         <GameZonePlayerBase position={[-180, -42, 0]} />
 
         <Player ref={playerRef} position={playerPosition} />
@@ -208,9 +203,6 @@ export function DollarArgyGame() {
             );
           }
         })}
-
-        {/* Optional - For debugging */}
-        {/* <axesHelper args={[100]} /> */}
 
         {enviroment === "test" && <DevCamera />}
       </Canvas>
