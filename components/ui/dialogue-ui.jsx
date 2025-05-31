@@ -30,7 +30,7 @@ export function DialogueUI() {
   // Default to a placeholder if no image provided
   const characterImage = characterInfo.avatar
     ? `/characters/${characterInfo.avatar}`
-    : "/characters/hornero-portrait.png";
+    : "/characters/hornero-portrait.jpg";
 
   // Handle dialogue advancement
   const handleContinue = () => {
