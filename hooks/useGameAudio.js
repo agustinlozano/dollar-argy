@@ -1,5 +1,6 @@
 import { useEffect, useCallback } from "react";
 import { useAudioStore } from "@/stores/useAudioStore";
+import { enviroment } from "@/lib/env-vars";
 
 export const useGameAudio = () => {
   const {
@@ -28,7 +29,7 @@ export const useGameAudio = () => {
   const handleFirstInteraction = useCallback(async () => {
     if (!hasUserInteracted) {
       try {
-        await startMusic();
+        enviroment === "development" ? null : await startMusic();
       } catch (error) {
         console.error("Error al iniciar la música:", error);
       }
