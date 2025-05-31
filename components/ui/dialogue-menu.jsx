@@ -63,7 +63,7 @@ export function MetallicDialogueMenu({
               />
             </div>
             <div className="w-full text-center px-2 pb-2 z-10 relative">
-              <p className="font-cormorant text-white drop-shadow-md leading-tight">
+              <p className="font-cormorant drop-shadow-md leading-tight">
                 {characterName}
               </p>
             </div>
