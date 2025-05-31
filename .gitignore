@@ -1,4 +1,4 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+ww# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
 /node_modules
@@ -51,3 +51,23 @@ public/textures/stiff-paint.jpg
 public/textures/grunge-frame.jpg
 public/sprite-1-original.png
 public/sprite-1.jpg
+public/front-view-to-top.mp4
+public/first-load.mp4
+app/image-viewer/page.jsx
+app/showroom/page.jsx
+app/image-viewer/page.jsx
+public/characters/gemini-paladin.png
+public/characters/grumpy-man-model/Pbr/base_basic_pbr.glb
+public/characters/grumpy-man/grumpy-man-front.png
+public/characters/grumpy-man/grumpy-man-back.png
+public/characters/grumpy-man/grumpy-man-side.png
+public/characters/grumpy-man/Pbr/base_basic_pbr.glb
+public/characters/gemini-old-woman.png
+public/characters/gemini-man.png
+public/characters/elderly-woman/Pbr/base_basic_pbr.glb
+public/characters/elderly-woman-front.png
+public/characters/seniora-holograma.png
+public/characters/hologram-woman/Pbr/base_basic_pbr.glb
+hooks/useGameLoader.js
+public/characters/my-emoji-no-borders.png
+public/cabin-transformed.glb
