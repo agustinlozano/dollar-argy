@@ -32,8 +32,8 @@ export const DialogueWithAgustin = {
 
 function ScreenFrameContent(props) {
   const frameThickness = 4;
-  const screenWidth = 80;
-  const screenHeight = 160;
+  const screenWidth = 60;
+  const screenHeight = 130;
   const frameDepth = 8;
 
   // Cargar la textura del emoji
@@ -56,7 +56,7 @@ function ScreenFrameContent(props) {
   return (
     <group {...props}>
       {/* Marco exterior - frame border */}
-      <mesh position={[0, 0, 0]} castShadow receiveShadow>
+      <mesh position={[0, 0, 0]}>
         <boxGeometry
           args={[
             screenWidth + frameThickness * 2,
@@ -74,7 +74,7 @@ function ScreenFrameContent(props) {
       </mesh>
 
       {/* Pantalla interior - inner screen */}
-      <mesh position={[0, 0, frameDepth / 2 + 0.1]} castShadow>
+      <mesh position={[0, 0, frameDepth / 2 + 0.1]}>
         <boxGeometry args={[screenWidth, screenHeight, 0.5]} />
         <meshStandardMaterial
           color="#000815"
@@ -98,8 +98,6 @@ function ScreenFrameContent(props) {
       {/* Base/stand */}
       <mesh
         position={[0, -screenHeight / 2 - frameThickness - 5, -frameDepth / 2]}
-        castShadow
-        receiveShadow
       >
         <boxGeometry args={[20, 10, 15]} />
         <meshStandardMaterial color="#1a1a1a" metalness={0.8} roughness={0.2} />
@@ -112,8 +110,6 @@ function ScreenFrameContent(props) {
           -screenHeight / 2 - frameThickness / 2,
           -frameDepth / 2 - 2,
         ]}
-        castShadow
-        receiveShadow
       >
         <boxGeometry args={[3, frameThickness, 8]} />
         <meshStandardMaterial color="#1a1a1a" metalness={0.8} roughness={0.2} />
@@ -122,7 +118,6 @@ function ScreenFrameContent(props) {
       {/* Pequeños detalles decorativos en el marco */}
       <mesh
         position={[0, screenHeight / 2 + frameThickness, frameDepth / 2 + 0.2]}
-        castShadow
       >
         <boxGeometry args={[15, 1, 0.5]} />
         <meshStandardMaterial color="#444444" metalness={0.9} roughness={0.1} />
