@@ -11,7 +11,7 @@ import { useFrame } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
 import { useGameStore } from "@/stores/useGameState";
 // import { PivotControls } from "@react-three/drei";
-import { M16M1 } from "./game-weapon-m16";
+// import { M16M1 } from "./game-weapon-m16";
 
 const BILL_DIMENSIONS = {
   width: 41.2,
@@ -212,7 +212,7 @@ export const Player = forwardRef(function PlayerBill({ position }, ref) {
         </mesh>
 
         {/* Add M16 weapon object */}
-        <M16M1 position={[30, 25, 5]} rotation={[0, Math.PI / 2, 0]} />
+        {/* <M16M1 position={[30, 25, 5]} rotation={[0, Math.PI / 2, 0]} /> */}
         {/* Add a point light */}
         <pointLight
           intensity={100}
