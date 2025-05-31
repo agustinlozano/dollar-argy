@@ -35,11 +35,14 @@ export function ScreenWithDialogue({
       <Html position={[0, -35, 10]} transform center distanceFactor={100}>
         <Popover>
           <PopoverTrigger asChild>
-            <button className="w-10 h-10 bg-black/80 hover:bg-black/60 border border-amber-500/30 rounded-full flex items-center justify-center transition-colors backdrop-blur-sm">
+            <button
+              className="size-12 bg-background border-2 rounded-full flex items-center justify-center transition-colors hover:ring-2 hover:ring-amber-700/80 focus:outline-none"
+              type="button"
+            >
               <XIcon className="size-5 text-amber-100" />
             </button>
           </PopoverTrigger>
-          <PopoverContent className="flex gap-x-4 items-center w-80 bg-black/90 border-amber-500/30 backdrop-blur-md">
+          <PopoverContent className="flex gap-x-4 items-center w-64 bg-black/90 border-amber-500/30 backdrop-blur-md">
             <div>
               <img
                 src="/characters/my-emoji-no-borders.webp"
@@ -49,7 +52,7 @@ export function ScreenWithDialogue({
             </div>
 
             <div className="space-y-3">
-              <p className="text-sm text-primary/75">
+              <p className="text-xs text-primary/75 text-balance">
                 Guy from Argentina doin' software
               </p>
               <div className="space-y-2">
