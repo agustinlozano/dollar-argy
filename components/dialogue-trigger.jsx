@@ -19,7 +19,7 @@ export function DialogueTrigger({
   const playerPosition = useGameStore((state) => state.playerPosition);
   const { play: playSound } = useSound("/sounds/ui-hovers.wav", {
     volume: 1,
-    startTime: 1.8,
+    startTime: 2,
     endTime: 2.4,
   });
 

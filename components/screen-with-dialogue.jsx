@@ -15,7 +15,7 @@ export function ScreenWithDialogue({
 }) {
   const { play: playChestOpen } = useSound("/sounds/ui-hovers.wav", {
     volume: 0.5,
-    startTime: 1.8,
+    startTime: 2,
     endTime: 2.4,
   });
 

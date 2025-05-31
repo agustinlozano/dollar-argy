@@ -11,7 +11,7 @@ export function GothicButton({
   soundUrl = "/sounds/ui-hovers.wav",
   volume = 1,
   useFragment = true, // use a fragment of the sound
-  startTime = 1.8,
+  startTime = 2,
   endTime = 2.4,
 }) {
   // if useFragment is true, use the specific fragment
