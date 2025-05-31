@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Html } from "@react-three/drei";
 import { useGameStore } from "@/stores/useGameState";
 import { useDialogueStore } from "@/stores/useDialogueStore";
+import { useSound } from "@/hooks/useSound";
 import * as THREE from "three";
 
 export function DialogueTrigger({
@@ -16,6 +17,11 @@ export function DialogueTrigger({
   const triggerDialogue = useDialogueStore((state) => state.triggerDialogue);
   const isDialogueActive = useDialogueStore((state) => state.isDialogueActive);
   const playerPosition = useGameStore((state) => state.playerPosition);
+  const { play: playSound } = useSound("/sounds/ui-hovers.wav", {
+    volume: 1,
+    startTime: 1.8,
+    endTime: 2.4,
+  });
 
   const npcRef = useRef();
 
@@ -50,6 +56,7 @@ export function DialogueTrigger({
       if (e.key.toLowerCase() === "e") {
         setIsTalking(true);
         triggerDialogue({ slug: dialogueId });
+        playSound();
       }
     };
 
