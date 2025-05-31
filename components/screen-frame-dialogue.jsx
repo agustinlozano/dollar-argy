@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Html } from "@react-three/drei";
+import { cn } from "@/lib/utils";
 
 export function ScreenFrameDialogue({
   dialogue,
@@ -48,34 +49,22 @@ export function ScreenFrameDialogue({
       position={position}
       center
       style={{
-        background: "rgba(0, 0, 0, 0.85)",
-        padding: "12px",
-        borderRadius: "8px",
-        color: "white",
-        fontSize: "16px",
-        fontFamily: "Arial, sans-serif",
-        userSelect: "none",
-        whiteSpace: "nowrap",
         maxWidth: "280px",
-        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
-        border: "2px solid rgba(255, 255, 255, 0.1)",
         transition: "opacity 0.3s ease-in-out",
       }}
-      className={fadeClass}
+      className={cn(
+        fadeClass,
+        "font-cormorant bg-background border-2 p-3 rounded-md text-nowrap select-none"
+      )}
     >
-      <div
-        style={{
-          fontWeight: "bold",
-          color: "rgb(180, 83, 9)",
-        }}
-      >
+      <strong className="text-xs uppercase text-amber-700 font-bold">
         {speaker}
-      </div>
-      <div>
+      </strong>
+      <p className="text-sm italic">
         {Array.isArray(currentStep.text)
-          ? currentStep.text.join(" ")
-          : currentStep.text}
-      </div>
+          ? `"${currentStep.text.join(" ")}"`
+          : `"${currentStep.text}"`}
+      </p>
     </Html>
   );
 }
