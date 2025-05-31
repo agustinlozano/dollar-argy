@@ -8,7 +8,7 @@ export function CloseButton({
   soundUrl = "/sounds/ui-feedback.wav",
   size = 20,
 }) {
-  const { play } = useSound(soundUrl, { volume: 0.5 });
+  const { play } = useSound(soundUrl, { volume: 0.1 });
 
   const handleClick = (event) => {
     play();
