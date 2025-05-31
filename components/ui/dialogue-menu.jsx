@@ -30,11 +30,11 @@ export function MetallicDialogueMenu({
         {/* Left side - Dialogue */}
         <div
           className={cn(
-            "px-8 pt-8 pb-4 border border-primary/20 w-xl flex flex-col justify-between",
+            "px-4 pt-4 pb-4 border border-primary/20 w-lg flex flex-col justify-between",
             styles.dialogueSection
           )}
         >
-          <div className="text-primary/90 font-mono font-light relative z-10 grow w-full text-xl max-h-80 overflow-auto">
+          <div className="text-primary/90 font-mono font-light relative z-10 grow w-full overflow-auto">
             <p>{dialogueText}</p>
           </div>
           <div className="flex justify-end">
@@ -51,7 +51,7 @@ export function MetallicDialogueMenu({
         {/* Right side - Character Image */}
         <div
           className={cn(
-            "flex flex-col items-center border border-primary/20 w-44",
+            "flex flex-col items-center border w-40 border-primary/20",
             styles.imageSection
           )}
         >
@@ -62,8 +62,8 @@ export function MetallicDialogueMenu({
               className="w-full border border-primary/20 select-none"
             />
           </div>
-          <div className="w-full text-center p-2 z-10 relative">
-            <p className="font-cormorant text-xl text-white drop-shadow-md">
+          <div className="w-full text-center px-2 pb-2 z-10 relative">
+            <p className="font-cormorant text-white drop-shadow-md leading-tight">
               {characterName}
             </p>
           </div>
