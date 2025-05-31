@@ -8,8 +8,6 @@ export function HologramMadwoman(props) {
     return null;
   }
 
-  console.log(materials.CustomMaterial);
-
   // Adjusting emissiveIntensity of the material
   materials.CustomMaterial.emissiveIntensity = 0.7;
 
