@@ -3,6 +3,7 @@ import { useFrame } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import { useGameStore } from "@/stores/useGameState";
 import * as THREE from "three";
+import { useSound } from "@/hooks/useSound";
 
 export function MoneyChest({ position = [0, 0, 0] }) {
   const chestRef = useRef();
@@ -14,6 +15,11 @@ export function MoneyChest({ position = [0, 0, 0] }) {
   const [isLooted, setIsLooted] = useState(false);
 
   const playerPosition = useGameStore((state) => state.playerPosition);
+
+  const { play: playChestOpen } = useSound("/sounds/chest-opening.wav", {
+    volume: 0.5,
+    endTime: 2,
+  });
 
   // Memoized geometries and materials
   const baseGeometry = useMemo(() => new THREE.BoxGeometry(30, 20, 20), []);
@@ -50,6 +56,7 @@ export function MoneyChest({ position = [0, 0, 0] }) {
     const handleKeyPress = (e) => {
       if (e.key.toLowerCase() === "e" && isNearby && !isLooted) {
         setIsOpen(true);
+        playChestOpen();
         setTimeout(() => setIsLooted(true), 1000);
       }
     };
@@ -58,7 +65,7 @@ export function MoneyChest({ position = [0, 0, 0] }) {
       window.addEventListener("keydown", handleKeyPress);
       return () => window.removeEventListener("keydown", handleKeyPress);
     }
-  }, [isNearby, isLooted]);
+  }, [isNearby, isLooted, playChestOpen]);
 
   // Chest opening animation
   useFrame((_, delta) => {
