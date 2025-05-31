@@ -36,7 +36,10 @@ export function Inventory({ items, spells, onClose }) {
       <div className="absolute inset-0 opacity-55 z-10 texture-fade bg-[url('/textures/grunge-frame-2.png')] bg-cover bg-center rounded invert"></div>
       <BgGradient />
       <div className={cn("relative grow max-w-4xl px-6 pt-8")}>
-        <div className="absolute inset-0 bg-[url('/textures/stiff-paint-opt.jpg')] bg-cover opacity-100"></div>
+        <div
+          className="absolute inset-0 bg-[url('/textures/stiff-paint-opt.jpg')] bg-cover opacity-100"
+          style={{ filter: "hue-rotate(100deg) brightness(90%)" }}
+        ></div>
 
         {onClose && <CloseButton onClick={onClose} />}
 
