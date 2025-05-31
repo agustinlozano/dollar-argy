@@ -1,7 +1,7 @@
 .metallicContainer {
   position: relative;
-  height: 280px;
-  width: 778px;
+  height: 240px;
+  width: 680px;
   transform-style: preserve-3d;
   transform: translate3d(0, 0, 0);
   z-index: 30;
