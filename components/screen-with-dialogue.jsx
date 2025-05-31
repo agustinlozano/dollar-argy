@@ -57,7 +57,7 @@ export function ScreenWithDialogue({
           <PopoverContent className="flex gap-x-4 items-center w-64 bg-black/90 border-amber-500/30 backdrop-blur-md">
             <div>
               <img
-                src="/characters/my-emoji-no-borders.webp"
+                src="/characters/butters.jpg"
                 alt="Agustin's Twitter profile picture"
                 className="size-20 rounded-md object-cover"
               />
@@ -65,7 +65,7 @@ export function ScreenWithDialogue({
 
             <div className="space-y-3">
               <p className="text-xs text-primary/75 text-balance">
-                Guy from Argentina doin' software.
+                Guy from 🇦🇷 Argentina doin' software.
               </p>
               <div className="space-y-2">
                 <a
