@@ -25,7 +25,7 @@ export function GameUI({
   isInventoryOpen,
   onInventoryToggle,
   onMove,
-  onCastSpell,
+  // onCastSpell,
 }) {
   const addToInventory = useInventoryStore((state) => state.addNew);
   const initializeRows = useGameStore((state) => state.initializeRows);
@@ -92,7 +92,7 @@ export function GameUI({
       <div className="fixed inset-0 z-40 pointer-events-none flex items-center justify-center">
         <Controls
           onMove={onMove}
-          onCastSpell={onCastSpell}
+          // onCastSpell={onCastSpell}
           isInventoryOpen={isInventoryOpen}
         />
       </div>

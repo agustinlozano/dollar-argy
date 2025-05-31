@@ -49,7 +49,7 @@ export function DollarArgyGame() {
     visibleRows,
     activeSpells,
     movePlayer,
-    castSpell,
+    // castSpell,
     removeSpell,
     isDancing,
     danceStartPosition,
@@ -221,7 +221,7 @@ export function DollarArgyGame() {
         isInventoryOpen={isInventoryOpen}
         onInventoryToggle={toggleInventory}
         onMove={movePlayer}
-        onCastSpell={castSpell}
+        // onCastSpell={castSpell}
       />
     </div>
   );

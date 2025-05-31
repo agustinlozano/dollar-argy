@@ -5,7 +5,7 @@ import { GameButton } from "@/components/ui/game-button";
 import { useDanceAnimation } from "@/hooks/useDanceAnimation";
 import { useDialogueStore } from "@/stores/useDialogueStore";
 
-export function Controls({ onMove, onCastSpell, isInventoryOpen }) {
+export function Controls({ onMove, isInventoryOpen }) {
   const { startDance, stopDance } = useDanceAnimation();
   const { isDialogueActive } = useDialogueStore();
 
@@ -50,7 +50,7 @@ export function Controls({ onMove, onCastSpell, isInventoryOpen }) {
       if (e.button === 0 && !isInventoryOpen && !isDialogueActive) {
         // Left click
         stopDance();
-        onCastSpell();
+        // onCastSpell();
       }
     };
 
@@ -61,14 +61,7 @@ export function Controls({ onMove, onCastSpell, isInventoryOpen }) {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("mousedown", handleMouseDown);
     };
-  }, [
-    onMove,
-    onCastSpell,
-    isInventoryOpen,
-    isDialogueActive,
-    startDance,
-    stopDance,
-  ]);
+  }, [onMove, isInventoryOpen, isDialogueActive, startDance, stopDance]);
 
   return (
     <div className="absolute bottom-5 w-full flex justify-center items-end">
