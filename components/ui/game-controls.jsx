@@ -11,6 +11,8 @@ export function Controls({ onMove, isInventoryOpen }) {
 
   useEffect(() => {
     const handleKeyDown = (e) => {
+      if (isInventoryOpen || isDialogueActive) return;
+
       const key = e.key.toLowerCase();
 
       // Check for dance command (OPTION+COMMAND+T)
@@ -46,20 +48,20 @@ export function Controls({ onMove, isInventoryOpen }) {
       }
     };
 
-    const handleMouseDown = (e) => {
-      if (e.button === 0 && !isInventoryOpen && !isDialogueActive) {
-        // Left click
-        stopDance();
-        // onCastSpell();
-      }
-    };
+    // const handleMouseDown = (e) => {
+    //   if (e.button === 0 && !isInventoryOpen && !isDialogueActive) {
+    //     // Left click
+    //     stopDance();
+    //     onCastSpell();
+    //   }
+    // };
 
     window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("mousedown", handleMouseDown);
+    // window.addEventListener("mousedown", handleMouseDown);
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("mousedown", handleMouseDown);
+      // window.removeEventListener("mousedown", handleMouseDown);
     };
   }, [onMove, isInventoryOpen, isDialogueActive, startDance, stopDance]);
 
