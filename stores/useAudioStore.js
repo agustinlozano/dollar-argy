@@ -18,7 +18,7 @@ export const useAudioStore = create((set, get) => ({
   isPlaying: false,
   currentTrack: null,
   currentTime: 0,
-  volume: 0.2,
+  volume: 0.05,
   isMuted: false,
 
   // Cola de reproducción
