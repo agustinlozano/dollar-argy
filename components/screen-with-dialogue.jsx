@@ -13,7 +13,7 @@ export function ScreenWithDialogue({
   dialogueId = "greet-agustin",
   onDialogueEnd,
 }) {
-  const { play: playChestOpen } = useSound("/sounds/ui-hovers.wav", {
+  const { play: playChestOpen } = useSound("/sounds/ui-minimal-feedback.wav", {
     volume: 0.5,
     startTime: 2,
     endTime: 2.4,

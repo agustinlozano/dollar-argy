@@ -17,7 +17,7 @@ export function DialogueTrigger({
   const triggerDialogue = useDialogueStore((state) => state.triggerDialogue);
   const isDialogueActive = useDialogueStore((state) => state.isDialogueActive);
   const playerPosition = useGameStore((state) => state.playerPosition);
-  const { play: playSound } = useSound("/sounds/ui-hovers.wav", {
+  const { play: playSound } = useSound("/sounds/ui-minimal-feedback.wav", {
     volume: 1,
     startTime: 2,
     endTime: 2.4,

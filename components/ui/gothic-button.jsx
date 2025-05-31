@@ -8,7 +8,7 @@ export function GothicButton({
   variant = "purple",
   children,
   className,
-  soundUrl = "/sounds/ui-hovers.wav",
+  soundUrl = "/sounds/ui-minimal-feedback.wav",
   volume = 1,
   useFragment = true, // use a fragment of the sound
   startTime = 2,
