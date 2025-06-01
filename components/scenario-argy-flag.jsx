@@ -86,7 +86,8 @@ const FlagStripes = memo(({ position, materials }) => (
 
 FlagStripes.displayName = "FlagStripes";
 
-// Function to load texture once and reuse
+// NOTE: we use a custom loader bc here uses a
+// different repeat pattern than tiles.
 const loadTexture = (path) => {
   const textureLoader = new THREE.TextureLoader();
   return textureLoader.load(path);
