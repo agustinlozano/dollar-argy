@@ -60,14 +60,6 @@ export const useGameStore = create((set, get) => ({
           rewards: [],
           chests: [],
         });
-      } else if (i === 18 || i === 19) {
-        initialRows.push({
-          type: "grass",
-          rowIndex: i,
-          trees: [],
-          rewards: [],
-          chests: [],
-        });
       } else if (i === 20) {
         // Special campaign zone at row 20
         initialRows.push({
@@ -75,7 +67,7 @@ export const useGameStore = create((set, get) => ({
           rowIndex: i,
           component: "FirstZone",
         });
-      } else if (i === 21 || i === 22) {
+      } else if (i === 18 || i === 19 || i === 21 || i === 22) {
         initialRows.push({
           type: "grass",
           rowIndex: i,
@@ -90,7 +82,7 @@ export const useGameStore = create((set, get) => ({
           rowIndex: i,
           component: "SanctuaryZone",
         });
-      } else if (i === 41 || i === 43) {
+      } else if (i === 40 || i === 41 || i === 43 || i === 44) {
         initialRows.push({
           type: "grass",
           rowIndex: i,
@@ -105,7 +97,7 @@ export const useGameStore = create((set, get) => ({
           rowIndex: i,
           component: "MelancholyGarden",
         });
-      } else if (i === 59 || i === 61) {
+      } else if (i === 58 || i === 59 || i === 61 || i === 62) {
         initialRows.push({
           type: "grass",
           rowIndex: i,
