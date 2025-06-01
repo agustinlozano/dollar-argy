@@ -1,14 +1,10 @@
 import * as THREE from "three";
 import { useMemo } from "react";
 import { useLoader } from "@react-three/fiber";
+import { createRockMaterial } from "./game.utils";
+import { RockyMaterial } from "./game.materials";
 
-export const GameTile = ({
-  position = [0, 0, 0],
-  size = 50,
-  height = 4,
-  isSelected = false,
-  isHovered = false,
-}) => {
+export const GameTile = ({ position = [0, 0, 0], size = 50, height = 4 }) => {
   // Use R3F's useLoader for automatic caching
   const stonyTexture = useLoader(THREE.TextureLoader, "/textures/stony.jpg");
 
@@ -50,17 +46,11 @@ export const GameTile = ({
     stonyTexture.minFilter = THREE.NearestFilter;
     stonyTexture.repeat.set(0.03, 0.03);
 
-    return new THREE.MeshStandardMaterial({
-      color: isHovered ? "#686868" : "#575757",
-      roughness: 0.9,
-      metalness: 0.1,
-      map: stonyTexture,
-      flatShading: true,
-      // Add slight emissive for selected state
-      emissive: isSelected ? "#404040" : "#000000",
-      emissiveIntensity: 0.2,
-    });
-  }, [stonyTexture, isHovered, isSelected]);
+    RockyMaterial.map = stonyTexture;
+    RockyMaterial.needsUpdate = true;
+
+    return RockyMaterial;
+  }, [stonyTexture]);
 
   return (
     <mesh
@@ -68,7 +58,6 @@ export const GameTile = ({
       geometry={geometry}
       material={material}
       castShadow
-      // receiveShadow
     />
   );
 };
