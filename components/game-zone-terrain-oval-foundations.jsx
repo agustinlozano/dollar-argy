@@ -1,26 +1,15 @@
 import * as THREE from "three";
 import { useMemo } from "react";
-
-// Create a texture loader and cache for reuse
-const textureLoader = new THREE.TextureLoader();
-const textureCache = {};
-
-// Function to load texture once and reuse
-const loadTexture = (path) => {
-  if (!textureCache[path]) {
-    textureCache[path] = textureLoader.load(path);
-    // Apply optimizations to the texture
-    textureCache[path].wrapS = textureCache[path].wrapT = THREE.RepeatWrapping;
-    textureCache[path].anisotropy = 4; // Improve texture quality at angles
-  }
-  return textureCache[path];
-};
+import { useLoader } from "@react-three/fiber";
 
 // Create an oval-shaped base
 export const FoundationsOvalZone = ({
   position = [0, 0, 5],
   gridSize = [3, 3],
 }) => {
+  // Use R3F's useLoader for automatic caching
+  const stonyTexture = useLoader(THREE.TextureLoader, "/textures/stony.jpg");
+
   // Create an oval shape
   const baseShape = useMemo(() => {
     const shape = new THREE.Shape();
@@ -62,14 +51,16 @@ export const FoundationsOvalZone = ({
 
   // Material with marble-like texture for elegant appearance
   const ovalMaterial = useMemo(() => {
-    const texture = loadTexture("/textures/stony.jpg");
-    texture.repeat.set(0.008, 0.008);
+    // Configure texture properties
+    stonyTexture.wrapS = stonyTexture.wrapT = THREE.RepeatWrapping;
+    stonyTexture.anisotropy = 4;
+    stonyTexture.repeat.set(0.008, 0.008);
 
     return new THREE.MeshStandardMaterial({
       color: "#6B7280", // Elegant gray tone
       roughness: 0.7, // Smoother than rocky terrain
       metalness: 0.2,
-      map: texture,
+      map: stonyTexture,
       flatShading: false, // Smooth shading for elegant appearance
       emissive: "#404040",
       emissiveIntensity: 0.25,
@@ -79,7 +70,7 @@ export const FoundationsOvalZone = ({
       depthWrite: true,
       depthTest: true,
     });
-  }, []);
+  }, [stonyTexture]);
 
   // Return the oval mesh
   return (

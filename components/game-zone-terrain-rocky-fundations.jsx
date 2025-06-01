@@ -1,26 +1,15 @@
 import * as THREE from "three";
 import { useMemo } from "react";
-
-// Create a texture loader and cache for reuse
-const textureLoader = new THREE.TextureLoader();
-const textureCache = {};
-
-// Function to load texture once and reuse
-const loadTexture = (path) => {
-  if (!textureCache[path]) {
-    textureCache[path] = textureLoader.load(path);
-    // Apply optimizations to the texture
-    textureCache[path].wrapS = textureCache[path].wrapT = THREE.RepeatWrapping;
-    textureCache[path].anisotropy = 4; // Improve texture quality at angles
-  }
-  return textureCache[path];
-};
+import { useLoader } from "@react-three/fiber";
 
 // Create a unique base with a gothic shape
 export const FoundationsRockyZone = ({
   position = [0, 0, 5],
   gridSize = [3, 3],
 }) => {
+  // Use R3F's useLoader for automatic caching
+  const stonyTexture = useLoader(THREE.TextureLoader, "/textures/stony.jpg");
+
   // Create a symmetrical gothic shape
   const baseShape = useMemo(() => {
     const shape = new THREE.Shape();
@@ -95,14 +84,16 @@ export const FoundationsRockyZone = ({
 
   // Material with stone texture with a darker and older appearance
   const rockMaterial = useMemo(() => {
-    const texture = loadTexture("/textures/stony.jpg");
-    texture.repeat.set(0.01, 0.01);
+    // Configure texture properties
+    stonyTexture.wrapS = stonyTexture.wrapT = THREE.RepeatWrapping;
+    stonyTexture.anisotropy = 4;
+    stonyTexture.repeat.set(0.01, 0.01);
 
     return new THREE.MeshStandardMaterial({
       color: "#575757",
       roughness: 0.9, // Más rugoso para simular piedra antigua
       metalness: 0.15,
-      map: texture,
+      map: stonyTexture,
       flatShading: true,
       emissive: "#303030",
       emissiveIntensity: 0.35,
@@ -112,7 +103,7 @@ export const FoundationsRockyZone = ({
       depthWrite: true,
       depthTest: true,
     });
-  }, []);
+  }, [stonyTexture]);
 
   // Return a unique mesh with the combined geometry
   return (

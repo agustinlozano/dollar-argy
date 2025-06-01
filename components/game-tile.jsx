@@ -1,23 +1,6 @@
 import * as THREE from "three";
 import { useMemo } from "react";
-
-// Create a texture loader and cache for reuse
-const textureLoader = new THREE.TextureLoader();
-const textureCache = {};
-
-// Function to load texture once and reuse
-const loadTexture = (path) => {
-  if (!textureCache[path]) {
-    textureCache[path] = textureLoader.load(path);
-    // Apply optimizations to the texture
-    textureCache[path].wrapS = textureCache[path].wrapT = THREE.RepeatWrapping;
-    textureCache[path].anisotropy = 4; // Improve texture quality at angles
-    // Make texture more pixel-art like
-    textureCache[path].magFilter = THREE.NearestFilter;
-    textureCache[path].minFilter = THREE.NearestFilter;
-  }
-  return textureCache[path];
-};
+import { useLoader } from "@react-three/fiber";
 
 export const GameTile = ({
   position = [0, 0, 0],
@@ -26,6 +9,9 @@ export const GameTile = ({
   isSelected = false,
   isHovered = false,
 }) => {
+  // Use R3F's useLoader for automatic caching
+  const stonyTexture = useLoader(THREE.TextureLoader, "/textures/stony.jpg");
+
   // Create tile geometry with beveled edges for a gothic look
   const geometry = useMemo(() => {
     const shape = new THREE.Shape();
@@ -57,21 +43,24 @@ export const GameTile = ({
 
   // Material with stone texture and pixel-art optimization
   const material = useMemo(() => {
-    const texture = loadTexture("/textures/stony.jpg");
-    // Make texture repeat more for pixel-art feel
-    texture.repeat.set(0.03, 0.03);
+    // Configure texture properties
+    stonyTexture.wrapS = stonyTexture.wrapT = THREE.RepeatWrapping;
+    stonyTexture.anisotropy = 4;
+    stonyTexture.magFilter = THREE.NearestFilter;
+    stonyTexture.minFilter = THREE.NearestFilter;
+    stonyTexture.repeat.set(0.03, 0.03);
 
     return new THREE.MeshStandardMaterial({
       color: isHovered ? "#686868" : "#575757",
       roughness: 0.9,
       metalness: 0.1,
-      map: texture,
+      map: stonyTexture,
       flatShading: true,
       // Add slight emissive for selected state
       emissive: isSelected ? "#404040" : "#000000",
       emissiveIntensity: 0.2,
     });
-  }, [isHovered, isSelected]);
+  }, [stonyTexture, isHovered, isSelected]);
 
   return (
     <mesh
