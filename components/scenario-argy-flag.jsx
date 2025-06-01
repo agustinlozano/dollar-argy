@@ -33,19 +33,14 @@ const FlagSun = memo(({ position, sunMaterial }) => {
   return (
     <group position={position}>
       {/* Center sun */}
-      <mesh castShadow>
+      <mesh>
         <circleGeometry args={[4, 32]} />
         <meshStandardMaterial {...sunMaterial} />
       </mesh>
 
       {/* Sun rays */}
       {MEMOIZED_SUN_RAYS.map((ray, i) => (
-        <mesh
-          key={i}
-          position={ray.position}
-          rotation={ray.rotation}
-          castShadow
-        >
+        <mesh key={i} position={ray.position} rotation={ray.rotation}>
           <boxGeometry args={[1.5, 0.4, 0.1]} />
           <meshStandardMaterial {...sunMaterial} />
         </mesh>
@@ -90,7 +85,13 @@ FlagStripes.displayName = "FlagStripes";
 // different repeat pattern than tiles.
 const loadTexture = (path) => {
   const textureLoader = new THREE.TextureLoader();
-  return textureLoader.load(path);
+  const texture = textureLoader.load(path);
+
+  texture.repeat.set(3, 3);
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+
+  return texture;
 };
 
 // FlagPole component memoized
@@ -117,7 +118,7 @@ const FlagPole = memo(({ materials }) => {
       </mesh>
 
       {/* Ornament or finial */}
-      <mesh position={[0, -175, 0]} castShadow>
+      <mesh position={[0, -175, 0]}>
         <sphereGeometry args={[3, 16, 16]} />
         <meshStandardMaterial {...materials.ornament} />
       </mesh>
