@@ -1,26 +1,16 @@
 import * as THREE from "three";
 import { useMemo } from "react";
-
-// Create a texture loader and cache for reuse
-const textureLoader = new THREE.TextureLoader();
-const textureCache = {};
-
-// Function to load texture once and reuse
-const loadTexture = (path) => {
-  if (!textureCache[path]) {
-    textureCache[path] = textureLoader.load(path);
-    // Apply optimizations to the texture
-    textureCache[path].wrapS = textureCache[path].wrapT = THREE.RepeatWrapping;
-    textureCache[path].anisotropy = 4; // Improve texture quality at angles
-  }
-  return textureCache[path];
-};
+import { useLoader } from "@react-three/fiber";
+import { RockyMaterial } from "./game.materials";
 
 // Create a unique teardrop-shaped base for melancholic atmosphere
 export const FoundationsTeardropZone = ({
   position = [0, 0, 5],
   gridSize = [3, 3],
 }) => {
+  // Use R3F's useLoader for automatic caching
+  const stonyTexture = useLoader(THREE.TextureLoader, "/textures/stony.jpg");
+
   // Create a teardrop shape
   const baseShape = useMemo(() => {
     const shape = new THREE.Shape();
@@ -96,26 +86,11 @@ export const FoundationsTeardropZone = ({
     return new THREE.ExtrudeGeometry(baseShape, extrudeSettings);
   }, [baseShape]);
 
-  // Material with melancholic blue-gray tones
-  const teardropMaterial = useMemo(() => {
-    const texture = loadTexture("/textures/stony.jpg");
-    texture.repeat.set(0.006, 0.006); // Finer texture repeat
-
-    return new THREE.MeshStandardMaterial({
-      color: "#4A5568", // Melancholic blue-gray
-      roughness: 0.6, // Moderate roughness for soft appearance
-      metalness: 0.1, // Low metalness for stone-like feel
-      map: texture,
-      flatShading: false, // Smooth shading for flowing appearance
-      emissive: "#2D3748", // Subtle dark blue emissive
-      emissiveIntensity: 0.15,
-      polygonOffset: true,
-      polygonOffsetFactor: 1,
-      polygonOffsetUnits: 1,
-      depthWrite: true,
-      depthTest: true,
-    });
-  }, []);
+  const material = useMemo(() => {
+    RockyMaterial.map = stonyTexture;
+    RockyMaterial.needsUpdate = true;
+    return RockyMaterial;
+  }, [stonyTexture]);
 
   // Return the teardrop mesh
   return (
@@ -123,9 +98,8 @@ export const FoundationsTeardropZone = ({
       <mesh
         rotation={[0, 0, 0]}
         geometry={geometry}
-        material={teardropMaterial}
+        material={material}
         castShadow
-        receiveShadow
       />
     </group>
   );

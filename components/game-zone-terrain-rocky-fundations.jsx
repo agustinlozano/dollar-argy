@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { useMemo } from "react";
 import { useLoader } from "@react-three/fiber";
+import { RockyMaterial } from "./game.materials";
 
 // Create a unique base with a gothic shape
 export const FoundationsRockyZone = ({
@@ -84,25 +85,9 @@ export const FoundationsRockyZone = ({
 
   // Material with stone texture with a darker and older appearance
   const rockMaterial = useMemo(() => {
-    // Configure texture properties
-    stonyTexture.wrapS = stonyTexture.wrapT = THREE.RepeatWrapping;
-    stonyTexture.anisotropy = 4;
-    stonyTexture.repeat.set(0.01, 0.01);
-
-    return new THREE.MeshStandardMaterial({
-      color: "#575757",
-      roughness: 0.9, // Más rugoso para simular piedra antigua
-      metalness: 0.15,
-      map: stonyTexture,
-      flatShading: true,
-      emissive: "#303030",
-      emissiveIntensity: 0.35,
-      polygonOffset: true,
-      polygonOffsetFactor: 1,
-      polygonOffsetUnits: 1,
-      depthWrite: true,
-      depthTest: true,
-    });
+    RockyMaterial.map = stonyTexture;
+    RockyMaterial.needsUpdate = true;
+    return RockyMaterial;
   }, [stonyTexture]);
 
   // Return a unique mesh with the combined geometry
@@ -113,7 +98,6 @@ export const FoundationsRockyZone = ({
         geometry={geometry}
         material={rockMaterial}
         castShadow
-        // receiveShadow
       />
     </group>
   );

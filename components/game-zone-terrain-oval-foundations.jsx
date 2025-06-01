@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { useMemo } from "react";
 import { useLoader } from "@react-three/fiber";
+import { RockyBrighterMaterial } from "./game.materials";
 
 // Create an oval-shaped base
 export const FoundationsOvalZone = ({
@@ -51,25 +52,9 @@ export const FoundationsOvalZone = ({
 
   // Material with marble-like texture for elegant appearance
   const ovalMaterial = useMemo(() => {
-    // Configure texture properties
-    stonyTexture.wrapS = stonyTexture.wrapT = THREE.RepeatWrapping;
-    stonyTexture.anisotropy = 4;
-    stonyTexture.repeat.set(0.008, 0.008);
-
-    return new THREE.MeshStandardMaterial({
-      color: "#6B7280", // Elegant gray tone
-      roughness: 0.7, // Smoother than rocky terrain
-      metalness: 0.2,
-      map: stonyTexture,
-      flatShading: false, // Smooth shading for elegant appearance
-      emissive: "#404040",
-      emissiveIntensity: 0.25,
-      polygonOffset: true,
-      polygonOffsetFactor: 1,
-      polygonOffsetUnits: 1,
-      depthWrite: true,
-      depthTest: true,
-    });
+    RockyBrighterMaterial.map = stonyTexture;
+    RockyBrighterMaterial.needsUpdate = true;
+    return RockyBrighterMaterial;
   }, [stonyTexture]);
 
   // Return the oval mesh
