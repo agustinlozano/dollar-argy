@@ -104,7 +104,6 @@ export function DollarArgyGame() {
 
         {/* Scenario stuff */}
         {/* <GameTile position={[0, 0, 0]} /> */}
-        <GameZonePlayerBase position={[-180, -42, 0]} />
 
         <Player ref={playerRef} position={playerPosition} />
         <PlayerDirectionalLight />
@@ -139,6 +138,9 @@ export function DollarArgyGame() {
                 )}
                 {row.component === "MelancholyGarden" && (
                   <MelancholyGarden position={[0, 0, 0]} />
+                )}
+                {row.component === "GameZonePlayerBase" && (
+                  <GameZonePlayerBase position={[-180, 0, 0]} />
                 )}
               </TerrainSection>
             );

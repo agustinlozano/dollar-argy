@@ -44,7 +44,13 @@ export const useGameStore = create((set, get) => ({
     const initialRows = [];
 
     for (let i = -BASE_ROWS; i <= GAME_CONSTANTS.initialRows + BASE_ROWS; i++) {
-      if (i < FRIST_ROW - 2) {
+      if (i === -1) {
+        initialRows.push({
+          type: "special",
+          rowIndex: i,
+          component: "GameZonePlayerBase",
+        });
+      } else if (i < FRIST_ROW - 2) {
         initialRows.push({
           type: "grass",
           rowIndex: i,
@@ -52,7 +58,7 @@ export const useGameStore = create((set, get) => ({
           rewards: [],
           chests: [],
         });
-      } else if (i === -2 || i === -1 || i === 0 || i === 1) {
+      } else if (i === -2 || i === 0 || i === 1) {
         initialRows.push({
           type: "grass",
           rowIndex: i,
@@ -61,7 +67,6 @@ export const useGameStore = create((set, get) => ({
           chests: [],
         });
       } else if (i === 20) {
-        // Special campaign zone at row 20
         initialRows.push({
           type: "special",
           rowIndex: i,
@@ -76,7 +81,6 @@ export const useGameStore = create((set, get) => ({
           chests: [],
         });
       } else if (i === 42) {
-        // Special sanctuary zone at row 42
         initialRows.push({
           type: "special",
           rowIndex: i,
@@ -91,7 +95,6 @@ export const useGameStore = create((set, get) => ({
           chests: [],
         });
       } else if (i === 60) {
-        // Special melancholy garden zone at row 60
         initialRows.push({
           type: "special",
           rowIndex: i,
