@@ -91,7 +91,8 @@ export function DollarArgyGame() {
           gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         }}
       >
-        {enviroment === "development" && <Stats />}
+        {/* {enviroment === "development" && <Stats />} */}
+        {enviroment === "production" && <Stats />}
         <ambientLight intensity={0.05} />
         {isDancing && danceStartPosition ? (
           <>
@@ -128,7 +129,9 @@ export function DollarArgyGame() {
               />
             );
           } else if (row.type === "special") {
-            return (
+            return <Grass rowIndex={row.rowIndex} />;
+            {
+              /* return (
               <TerrainSection key={row.rowIndex} rowIndex={row.rowIndex}>
                 {row.component === "FirstZone" && (
                   <FirstZone position={[0, 0, 0]} />
@@ -143,7 +146,8 @@ export function DollarArgyGame() {
                   <GameZonePlayerBase position={[-180, 0, 0]} />
                 )}
               </TerrainSection>
-            );
+            ); */
+            }
           } else {
             return (
               <group key={row.rowIndex}>
