@@ -101,8 +101,8 @@ export const MelancholyGarden = ({ position }) => {
       <FoundationsTeardropZone position={[0, -150, -5]} gridSize={[3, 3]} />
 
       <group position={[0, -40, 0]}>
-        <TorchLight position={[85, 0, 20]} rotation={[Math.PI / 2, 0, 0]} />
-        <TorchLight position={[230, 0, 20]} rotation={[Math.PI / 2, 0, 0]} />
+        {/* <TorchLight position={[85, 0, 20]} rotation={[Math.PI / 2, 0, 0]} />
+        <TorchLight position={[230, 0, 20]} rotation={[Math.PI / 2, 0, 0]} /> */}
       </group>
 
       {/* The melancholic woman in the center */}

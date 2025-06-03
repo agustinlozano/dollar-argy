@@ -17,10 +17,10 @@ export const SanctuaryZone = ({ position }) => {
     <group position={position}>
       <group position={[0, -150, 0]}>
         {/* Softer torch lighting arrangement for sanctuary atmosphere */}
-        <TorchLight position={[100, 80, 25]} rotation={[Math.PI / 2, 0, 0]} />
+        {/* <TorchLight position={[100, 80, 25]} rotation={[Math.PI / 2, 0, 0]} />
         <TorchLight position={[100, 190, 25]} rotation={[Math.PI / 2, 0, 0]} />
         <TorchLight position={[215, 80, 25]} rotation={[Math.PI / 2, 0, 0]} />
-        <TorchLight position={[215, 190, 25]} rotation={[Math.PI / 2, 0, 0]} />
+        <TorchLight position={[215, 190, 25]} rotation={[Math.PI / 2, 0, 0]} /> */}
       </group>
 
       {/* Use the new oval foundations */}

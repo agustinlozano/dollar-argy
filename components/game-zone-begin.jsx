@@ -16,7 +16,7 @@ export function FirstZone({ position = [0, 0, 0] }) {
   return (
     <group position={position}>
       <group position={[0, -150, 0]}>
-        <TorchLight
+        {/* <TorchLight
           decay={1.2}
           position={[85, 60, 20]}
           rotation={[Math.PI / 2, 0, 0]}
@@ -35,7 +35,7 @@ export function FirstZone({ position = [0, 0, 0] }) {
           decay={1.2}
           position={[230, 210, 20]}
           rotation={[Math.PI / 2, 0, 0]}
-        />
+        /> */}
       </group>
       <FoundationsRockyZone position={[0, -150, -5]} gridSize={[3, 3]} />
 
